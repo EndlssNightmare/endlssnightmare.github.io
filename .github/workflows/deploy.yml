@@ -28,18 +28,10 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20 # Use uma versão mais recente do Node
-      - name: Install dependencies with specific versions
+      - name: Install dependencies
         run: |
           npm cache clean --force
-          rm -rf node_modules package-lock.json
           npm install --legacy-peer-deps
-          npm install @babel/core@7.28.3 semver@6.3.1 --save-exact --legacy-peer-deps
-      - name: Verify semver installation
-        run: |
-          echo "=== Checking semver module ==="
-          ls -la node_modules/semver/
-          echo "=== Testing semver require ==="
-          node -e "console.log('Semver version:', require('semver').version)"
       - name: Build
         run: npm run build
       - name: Setup Pages
