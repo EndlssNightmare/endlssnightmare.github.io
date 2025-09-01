@@ -29,8 +29,10 @@ jobs:
         with:
           node-version: 18 # Use a versão do Node que seu projeto usa
           cache: 'npm'
+      - name: Clear npm cache
+        run: npm cache clean --force
       - name: Install dependencies
-        run: npm install
+        run: npm ci
       - name: Build
         run: npm run build
       - name: Setup Pages
