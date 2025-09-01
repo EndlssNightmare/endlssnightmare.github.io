@@ -1,0 +1,21 @@
+POST /certificados/validar HTTP/1.1
+Host: unibpa.bomprincipioalimentos.com.br
+Cookie: cf_clearance=DCBUA840JJbqOLVnCI3tR7q04SeIPu95Ba2qiYrOlvE-1756575428-1.2.1.1-zd.JYlQwT963tCJo76sJ8p1QOjSoeYYrQgXfmVewTTMmKyp4xuYhKVlc.EpO8c6y1KsuoFLPJrg3Ymd5WqvX8nzX43RoMg_t.QFMuIVOwHFu0_cY.WXurq79DE_nDfMDkHQPPlQypelwTvW4q2cuhCHxiTlJvznA7CCb_Bqhp6rciB1ZqdHGvt.9iuye.e0N4gpv6idpkkNfSwF7WgUmu2bY_.Pbl678zFqAp5fabdE; _ga_L8EZTGLHEZ=GS2.1.s1756574680$o2$g1$t1756575680$j42$l0$h0; _ga=GA1.1.689052990.1756569413; _ss_app=zn1zVrZrUoCzvx%2FpCBI1j%2BxE%2FRQBiPyl4ucegqTa%2FNgutrscMhnZu%2FGBXB2TWtAAEWW2PoS3GnBR9hmehuXVf3%2BneIl2ryA1hKDOenhO%2BFjm2IWaF9gYFyF2vcycaHrwFTvtimAuOBcmg%2BmVk2%2FMx8kivYft%2Fr%2FlaLqBpoHAxyPXOKX2z7Fj1SEfcLmgqHskXGSM0srxVBMn%2FT9ZuyfkjedeI68ZUgnjT7oapBoBVIuMzwNJZePnqFgIipLfPeQ5K05X1fQRMnpudNFTv0Crmq%2FfVaeutBONuY1kLLYcZ0cH2%2BG8ldLp4Vm9yJMVFq59gMW%2BYfuZQw6cVaSvatbjeIODQFCVX1NeriLeqk5Jxh4yV7Kkm3IKvbVZ9VXl%2FJeP8%2FQt00FmYAv0XcOdeDnkhaAURsk6TnLki2%2FHD7%2Bl4eq8oolQQoTRivqRwXpEnzVkw0%2FziDFHs0rVO7F73Nb%2B59lgqFdvrZO8yPDxvmwB2dI3%2BgD4z8EH7UFyW%2FWzPBvHVK8Lv2OytyG0OKH9Q76587fYfFLm0qDXXfTwBOH9TVcqW1a9SpifmGgU42AzWBstDAXf6quPpVi3hekcQeR5Mip7Pf63HhodBXdflyyFMu6v5vp74snVk2ulWOeVRjybDMGNX9hS8Lvqk4dEf4fq94k9JoSe6VvnVwFEzBkbUIDzfJE7m12XqOvuY4WJHNhJ%2BCjVzkZkH0TDlrRMt8ynKkVJy4%2BEx9DunkTDsgDl5ej18jtNoQGY%2BSPLCfiztmxYijEJ2yXUAVwHsX5QA%2BeiNxctUMont9qxpVKXTyKUVco%3D; AdoptVisitorId=AwUwxgTGBGAswFoIE4AmAOBswDNHtghy1QGZgBWEC2ARnVoqA===; AdoptConsent=N4Ig7gpgRgzglgFwgSQCIgFwgGYBZsAmAzAEzYkC0A7LgBwBsFdJtFAhkbpQKz0Cc2IgGNutbhCJUQAGhAA3OPAQB7AE7ICmEAAYIQkkKi5tFEnwKtcQ7CdpdsTYtvHdcARlpvuMkMoAOCMgAdgAqbADmMJgA2gC6sv4IAPIArghhkTHxIELKQTAQQYGaWBTKFABKALJyPhByhekAnn4QWmC0UHAAEgBeEAByPrn5jQBqEKrweZjasil+BGxIBACCCFok2iTcFNqsRNohblQYkhhubgB0fCRuAFogAL5AA==; _ga_10329Q1N2W=GS2.1.s1756575434$o1$g0$t1756575448$j46$l0$h0
+User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:142.0) Gecko/20100101 Firefox/142.0
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate, br
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 88
+Origin: https://unibpa.bomprincipioalimentos.com.br
+Referer: https://unibpa.bomprincipioalimentos.com.br/certificados/validar
+Upgrade-Insecure-Requests: 1
+Sec-Fetch-Dest: document
+Sec-Fetch-Mode: navigate
+Sec-Fetch-Site: same-origin
+Sec-Fetch-User: ?1
+Priority: u=0, i
+Te: trailers
+Connection: keep-alive
+
+csrf_form_token_validar_certificado=bb4ba1fa89966fab9d9e1b28f646950e&chave-certificado=a

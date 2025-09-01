@@ -1,0 +1,201 @@
+import React, { useState, useEffect } from 'react';
+import { motion } from 'framer-motion';
+import { FaClock, FaSearch, FaFilter } from 'react-icons/fa';
+import Card from '../components/Card';
+import './Home.css';
+
+const Home = () => {
+  const [searchTerm, setSearchTerm] = useState('');
+  const [filterCategory, setFilterCategory] = useState('');
+  const [filteredPosts, setFilteredPosts] = useState([]);
+
+  // Recent posts data
+  const recentPosts = [
+    {
+    id: 2,
+    title: 'DC02 Walkthrough',
+    excerpt: 'This Windows Domain Controller (DC01) in the SOUPEDECODE.LOCAL domain was discovered via internal network scanning. Enumeration revealed multiple Active Directory services and valid SMB credentials (charlie:charlie). AS-REP roasting against zximena448 yielded the password internet, granting Backup Operators group privileges.',
+    date: 'Aug 12, 2025',
+    category: 'writeup',
+    tags: ["hmv", "windows", "ad", "asreproast", "dcsync", "backup-operators", "password-cracking", "smb", "ldap"],
+    image: '/images/writeups/dc02-machine.png',
+    link: '/writeups/dc02-walkthrough',
+    os: 'Windows'
+    },
+    {
+    id: 1,
+    title: 'Knock-Tool',
+    excerpt: 'A network reconnaissance tool designed for port knocking techniques and stealthy network enumeration. Features advanced scanning capabilities with customizable timing and protocol support.',
+    date: 'Aug 10, 2025',
+    category: 'project',
+    tags: ['python', 'network', 'security'],
+    image: '/images/projects/Knock-Tool.png',
+    link: 'https://github.com/EndlssNightmare/Knock-Tool',
+    github: 'https://github.com/EndlssNightmare/Knock-Tool'
+    },
+    {
+    id: 4,
+    title: 'Digispark Scripts',
+    excerpt: 'Collection of Arduino Digispark payloads and scripts for penetration testing and security research. Includes various USB attack vectors and automation scripts for ethical hacking assessments.',
+    date: 'Aug 5, 2025',
+    category: 'project',
+    tags: ['arduino', 'usb', 'pentesting'],
+    image: '/images/projects/digispark_scripts.png',
+    link: 'https://github.com/EndlssNightmare/Digispark-scripts',
+    github: 'https://github.com/EndlssNightmare/Digispark-scripts'
+    },
+    {
+    id: 5,
+    title: 'MullvScript',
+    excerpt: 'Automated VPN configuration and management script for Mullvad VPN. Streamlines the setup process and provides enhanced privacy features for secure network connections.',
+    date: 'Aug 1, 2025',
+    category: 'project',
+    tags: ['bash', 'vpn'],
+    image: '/images/projects/MullvScript.png',
+    link: 'https://github.com/EndlssNightmare/MullvScript',
+    github: 'https://github.com/EndlssNightmare/MullvScript'
+    },
+    {
+    id: 6,
+    title: 'zsh-configs',
+    excerpt: 'Custom zsh configuration files and aliases optimized for penetration testing workflows. Includes specialized functions for common security tools and enhanced terminal productivity features.',
+    date: 'Jul 28, 2025',
+    category: 'project',
+    tags: ['zsh', 'shell', 'pentesting'],
+    image: '/images/projects/zshconf.png',
+    link: 'https://github.com/EndlssNightmare/zsh-configs',
+    github: 'https://github.com/EndlssNightmare/zsh-configs'
+    }];
+
+  useEffect(() => {
+    const filtered = recentPosts.filter(post => {
+      const matchesSearch = post.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                           post.excerpt.toLowerCase().includes(searchTerm.toLowerCase());
+      const matchesCategory = !filterCategory || post.category === filterCategory;
+      return matchesSearch && matchesCategory;
+    });
+    
+    // Remove duplicates based on ID
+    const uniqueFiltered = filtered.filter((post, index, self) => 
+      index === self.findIndex(p => p.id === post.id)
+    );
+    
+    setFilteredPosts(uniqueFiltered);
+  }, [searchTerm, filterCategory, recentPosts]);
+
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1
+      }
+    }
+  };
+
+  const itemVariants = {
+    hidden: { y: 20, opacity: 0 },
+    visible: {
+      y: 0,
+      opacity: 1,
+      transition: {
+        duration: 0.6
+      }
+    }
+  };
+
+  return (
+    <motion.div 
+      className="home-page"
+      initial="hidden"
+      animate="visible"
+      variants={containerVariants}
+    >
+      <motion.div className="page-header" variants={itemVariants}>
+        <div className="header-content">
+          <FaClock className="header-icon" />
+          <h1>Recent Posts</h1>
+        </div>
+      </motion.div>
+
+      <motion.div className="search-filter-section" variants={itemVariants}>
+        <div className="search-container">
+          <div className="search-input-group">
+            <FaSearch className="search-icon" />
+            <input
+              type="text"
+              placeholder="Search posts..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="search-input"
+            />
+          </div>
+          
+          <div className="filter-container">
+            <FaFilter className="filter-icon" />
+            <select
+              value={filterCategory}
+              onChange={(e) => setFilterCategory(e.target.value)}
+              className="filter-select"
+            >
+              <option value="">All Categories</option>
+              <option value="writeup">Writeups</option>
+              <option value="project">Projects</option>
+            </select>
+          </div>
+        </div>
+      </motion.div>
+
+      <motion.div className="posts-grid" variants={containerVariants}>
+        {filteredPosts.length > 0 ? (
+          filteredPosts.map((post, index) => (
+            <motion.div
+              key={post.id}
+              variants={itemVariants}
+              whileHover={{ scale: 1.02 }}
+              transition={{ duration: 0.3 }}
+            >
+              <Card
+                title={post.title}
+                excerpt={post.excerpt}
+                date={post.date}
+                tags={post.tags}
+                image={post.image}
+                link={post.link}
+                category={post.category}
+                os={post.os}
+                github={post.github}
+              />
+            </motion.div>
+          ))
+        ) : (
+          <motion.div 
+            className="no-results"
+            variants={itemVariants}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+          >
+            <div className="no-results-content">
+              <FaSearch className="no-results-icon" />
+              <h3>No posts found</h3>
+              <p>Try adjusting your search or filter criteria.</p>
+              <button 
+                className="clear-filters-btn"
+                onClick={() => {
+                  setSearchTerm('');
+                  setFilterCategory('');
+                }}
+              >
+                Clear Filters
+              </button>
+            </div>
+          </motion.div>
+        )}
+      </motion.div>
+
+
+    </motion.div>
+  );
+};
+
+export default Home;

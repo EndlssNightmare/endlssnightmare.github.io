@@ -1,0 +1,126 @@
+.table-of-contents {
+  position: sticky;
+  top: 100px;
+  width: 280px;
+  background: var(--sidebar-bg);
+  border-left: 1px solid var(--border-color);
+  padding: 2rem 1.5rem;
+  max-height: calc(100vh - 100px);
+  overflow-y: auto;
+  flex-shrink: 0;
+  transition: background-color var(--theme-transition), border-color var(--theme-transition);
+}
+
+.toc-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.toc-icon {
+  color: var(--primary-color);
+  font-size: 1.2rem;
+}
+
+.toc-header h3 {
+  color: var(--primary-color);
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+.toc-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.toc-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 0;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  border-radius: 0;
+}
+
+.toc-item:hover {
+  background: rgba(255, 0, 0, 0.1);
+  color: var(--text-primary);
+  transform: translateX(4px);
+  padding-left: 0.5rem;
+}
+
+.toc-item.active {
+  background: var(--primary-color);
+  color: white;
+  font-weight: 500;
+  padding-left: 0.5rem;
+}
+
+.toc-level-1 {
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.toc-level-2 {
+  margin-left: 1rem;
+  font-size: 0.85rem;
+}
+
+.toc-level-3 {
+  margin-left: 2rem;
+  font-size: 0.8rem;
+}
+
+.toc-arrow {
+  color: var(--primary-color);
+  font-size: 0.8rem;
+  font-weight: bold;
+}
+
+.toc-text {
+  flex: 1;
+  line-height: 1.4;
+}
+
+/* Scrollbar styling */
+.table-of-contents::-webkit-scrollbar {
+  width: 6px;
+}
+
+.table-of-contents::-webkit-scrollbar-track {
+  background: var(--bg-secondary);
+  border-radius: 3px;
+}
+
+.table-of-contents::-webkit-scrollbar-thumb {
+  background: var(--border-color);
+  border-radius: 3px;
+}
+
+.table-of-contents::-webkit-scrollbar-thumb:hover {
+  background: var(--primary-color);
+}
+
+/* Responsive design */
+@media (max-width: 1200px) {
+  .table-of-contents {
+    width: 240px;
+  }
+}
+
+@media (max-width: 768px) {
+  .table-of-contents {
+    position: static;
+    width: 100%;
+    margin-top: 0;
+    max-height: none;
+  }
+}

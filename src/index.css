@@ -1,0 +1,213 @@
+/* Reset and base styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --primary-color: #FF0000;
+  --secondary-color: #950101;
+  --success-color: #198754;
+  --info-color: #0dcaf0;
+  --warning-color: #ffc107;
+  --danger-color: #dc3545;
+  --dark-color: #000000;
+  --light-color: #f8f9fa;
+  --accent-1: #FF0000;
+  --accent-2: #950101;
+  
+  /* Font families */
+  --font-display: 'Space Grotesk', sans-serif;
+  --font-subtitle: 'Exo 2', sans-serif;
+  --font-body: 'Inter', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+  
+  /* Dark theme colors (default) */
+  --bg-primary: #000000;
+  --bg-secondary: #3D0000;
+  --bg-card: #3D0000;
+  --text-primary: #e6e6e6;
+  --text-secondary: #ffffff;
+  --border-color: #950101;
+  --navbar-bg: #3D0000;
+  --sidebar-bg: #000000;
+  
+  /* Theme transition duration */
+  --theme-transition: 0.5s ease;
+}
+
+/* Light theme colors - Dark grey/black palette */
+[data-theme="light"] {
+  --bg-primary: #242323; /* Raisin Black */
+  --bg-secondary: #3D2C20; /* Bistre */
+  --bg-card: #2D190C; /* Zinnwaldite Brown */
+  --text-primary: #ffffff;
+  --text-secondary: #e6e6e6;
+  --border-color: #754721; /* Brown-Nose */
+  --navbar-bg: #242323; /* Dark grey like the image */
+  --sidebar-bg: #242323; /* Raisin Black */
+}
+
+body {
+  font-family: var(--font-body);
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  line-height: 1.6;
+  padding-top: 72px; /* Account for fixed navbar */
+  transition: background-color 0.5s ease, color 0.5s ease;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-primary);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--primary-color);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--secondary-color);
+}
+
+/* Text selection */
+::selection {
+  background: rgba(117, 71, 33, 0.35); /* Brown-Nose with opacity */
+  color: #ffffff;
+}
+
+/* Animation keyframes */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+/* Utility classes */
+.fade-in-up {
+  animation: fadeInUp 0.6s ease;
+}
+
+.slide-in-left {
+  animation: slideInLeft 0.6s ease;
+}
+
+.pulse {
+  animation: pulse 2s infinite;
+}
+
+/* Responsive utilities */
+@media (max-width: 768px) {
+  .container {
+    padding: 0 1rem;
+  }
+}
+
+/* Footer specific overrides to use theme colors */
+footer,
+.footer {
+  background-color: var(--navbar-bg) !important;
+  color: var(--text-secondary) !important;
+}
+
+footer *,
+.footer * {
+  color: inherit;
+}
+
+footer h3,
+.footer h3 {
+  color: var(--primary-color) !important;
+}
+
+footer a:hover,
+.footer a:hover {
+  color: var(--primary-color) !important;
+}
+
+/* Typography styles */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  letter-spacing: 0.3px;
+}
+
+h1 {
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+h2, h3 {
+  font-weight: 600;
+  letter-spacing: 0.4px;
+}
+
+h4, h5, h6 {
+  font-family: var(--font-subtitle);
+  font-weight: 600;
+  letter-spacing: 0.3px;
+}
+
+/* Code and pre elements */
+code, pre {
+  font-family: var(--font-mono);
+  font-weight: 500;
+}
+
+/* Buttons and interactive elements */
+button, .btn {
+  font-family: var(--font-subtitle);
+  font-weight: 500;
+  letter-spacing: 0.3px;
+}
+
+/* Navigation elements */
+nav, .navbar, .sidebar {
+  font-family: var(--font-subtitle);
+  font-weight: 500;
+}
+
+/* Cards and content areas */
+.card-title, .content-title {
+  font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+.card-subtitle, .content-subtitle {
+  font-family: var(--font-subtitle);
+  font-weight: 600;
+  letter-spacing: 0.3px;
+}
