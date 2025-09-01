@@ -28,10 +28,15 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20 # Use uma versão mais recente do Node
+      - name: Configure npm
+        run: |
+          npm config set legacy-peer-deps true
+          npm config set strict-ssl false
       - name: Install dependencies
         run: |
           npm cache clean --force
-          npm install --legacy-peer-deps
+          rm -rf node_modules package-lock.json
+          npm install
       - name: Build
         run: npm run build
       - name: Setup Pages
