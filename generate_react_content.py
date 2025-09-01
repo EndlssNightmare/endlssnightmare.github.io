@@ -738,7 +738,7 @@ This machine demonstrated various {data['os_type']} exploitation techniques and 
                 transition={{{{ delay: 0.3 + index * 0.1, duration: 0.3 }}}}
                 whileHover={{{{ scale: 1.1 }}}}
                 style={{{{ cursor: 'pointer' }}}}
-                onClick={{() => window.location.href = `/tags/${{tag}}`}}
+                onClick={{() => window.location.href = `/#/tags/${{{{tag}}}}`}}
               >
                 {{tag}}
               </motion.span>
@@ -1298,6 +1298,14 @@ export default {data['machine_name'].replace('-', '').title()}Walkthrough;
                 content,
                 flags=re.DOTALL
             )
+            
+            # If the regex didn't work, try a simpler approach
+            if mapping_entry not in content:
+                # Find the closing brace of writeupComponents and add before it
+                content = content.replace(
+                    "};",
+                    f",\n  {mapping_entry}\n}};"
+                )
         
         with open(writeup_detail_js, 'w') as f:
             f.write(content)
