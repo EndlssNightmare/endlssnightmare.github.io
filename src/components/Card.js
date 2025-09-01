@@ -24,7 +24,10 @@ const Card = ({ title, excerpt, date, tags, image, link, category, os, github })
   const handleTagClick = (e, tag) => {
     e.preventDefault();
     e.stopPropagation();
-    navigate(`/tags/${tag}`);
+    // Add a small delay to ensure smooth navigation
+    setTimeout(() => {
+      navigate(`/tags/${tag}`);
+    }, 50);
   };
 
   const cardContent = (

@@ -1,7 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { ThemeProvider } from './contexts/ThemeContext';
-import { AnimatePresence } from 'framer-motion';
 import Navbar from './components/Navbar';
 import Sidebar from './components/Sidebar';
 import Footer from './components/Footer';
@@ -16,22 +15,20 @@ import './App.css';
 function App() {
   return (
     <ThemeProvider>
-      <Router basename={process.env.NODE_ENV === 'production' ? '' : ''}>
+      <Router>
         <div className="App">
           <Navbar />
           <div className="main-container">
             <Sidebar />
             <main className="content">
-              <AnimatePresence mode="wait">
-                <Routes>
-                  <Route path="/" element={<Home />} />
-                  <Route path="/writeups" element={<Writeups />} />
-                  <Route path="/projects" element={<Projects />} />
-                  <Route path="/tags" element={<Tags />} />
-                  <Route path="/writeups/:id" element={<WriteupDetail />} />
-                  <Route path="/tags/:tag" element={<TagDetail />} />
-                </Routes>
-              </AnimatePresence>
+              <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/writeups" element={<Writeups />} />
+                <Route path="/projects" element={<Projects />} />
+                <Route path="/tags" element={<Tags />} />
+                <Route path="/writeups/:id" element={<WriteupDetail />} />
+                <Route path="/tags/:tag" element={<TagDetail />} />
+              </Routes>
             </main>
           </div>
           <Footer />

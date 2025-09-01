@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { FaArrowLeft, FaFileAlt, FaCode } from 'react-icons/fa';
@@ -7,6 +7,7 @@ import './TagDetail.css';
 
 const TagDetail = () => {
   const { tag } = useParams();
+  const [isLoading, setIsLoading] = useState(true);
 
   // All available posts data
   const allPosts = [
@@ -82,6 +83,17 @@ const TagDetail = () => {
     posts: uniqueFilteredPosts
   };
 
+  // Handle loading state
+  useEffect(() => {
+    setIsLoading(true);
+    // Simulate loading time to ensure smooth transitions
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 100);
+    
+    return () => clearTimeout(timer);
+  }, [tag]);
+
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
@@ -98,6 +110,22 @@ const TagDetail = () => {
       transition: { duration: 0.6 }
     }
   };
+
+  if (isLoading) {
+    return (
+      <motion.div 
+        className="tag-detail-page"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+      >
+        <div className="loading-container">
+          <div className="loading-spinner"></div>
+          <p>Loading tag content...</p>
+        </div>
+      </motion.div>
+    );
+  }
 
   return (
     <motion.div 

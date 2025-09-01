@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { FaTags, FaSearch } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
@@ -6,6 +6,7 @@ import './Tags.css';
 
 const Tags = () => {
   const [searchTerm, setSearchTerm] = useState('');
+  const [isLoaded, setIsLoaded] = useState(false);
 
   // All available posts data for counting
   const allPosts = [
@@ -76,6 +77,15 @@ const Tags = () => {
     tag.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
+  // Handle loading state
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsLoaded(true);
+    }, 50);
+    
+    return () => clearTimeout(timer);
+  }, []);
+
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
@@ -92,6 +102,21 @@ const Tags = () => {
       transition: { duration: 0.5 }
     }
   };
+
+  if (!isLoaded) {
+    return (
+      <motion.div 
+        className="tags-page"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+      >
+        <div className="loading-container">
+          <div className="loading-spinner"></div>
+          <p>Loading tags...</p>
+        </div>
+      </motion.div>
+    );
+  }
 
   return (
     <motion.div 
