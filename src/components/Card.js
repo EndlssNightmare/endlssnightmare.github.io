@@ -1,20 +1,30 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { FaCalendar, FaTag } from 'react-icons/fa';
 import './Card.css';
 
 const Card = ({ title, excerpt, date, tags, image, link, category, os, github }) => {
+  const navigate = useNavigate();
+
   const handleCardClick = (e) => {
-    // Don't navigate if clicking on a tag
-    if (e.target.closest('.tag-badge')) {
+    // Don't navigate if clicking on a tag or any link
+    if (e.target.closest('.tag-badge') || e.target.closest('a')) {
+      e.stopPropagation();
       return;
     }
     
     if (category === 'project') {
       window.open(link, '_blank', 'noopener,noreferrer');
+    } else if (category === 'writeup') {
+      navigate(link);
     }
-    // For writeups, let the Link component handle navigation
+  };
+
+  const handleTagClick = (e, tag) => {
+    e.preventDefault();
+    e.stopPropagation();
+    navigate(`/tags/${tag}`);
   };
 
   const cardContent = (
@@ -84,18 +94,18 @@ const Card = ({ title, excerpt, date, tags, image, link, category, os, github })
               <FaTag className="tags-icon" />
               <div className="tags-container">
                 {tags.slice(0, 3).map((tag, index) => (
-                  <Link key={index} to={`/tags/${tag}`} style={{ textDecoration: 'none' }}>
-                    <motion.span
-                      className="tag-badge"
-                      initial={{ scale: 0, opacity: 0 }}
-                      animate={{ scale: 1, opacity: 1 }}
-                      transition={{ delay: index * 0.1, duration: 0.3 }}
-                      whileHover={{ scale: 1.1 }}
-                      style={{ cursor: 'pointer' }}
-                    >
-                      {tag}
-                    </motion.span>
-                  </Link>
+                  <motion.div
+                    key={index}
+                    className="tag-badge"
+                    initial={{ scale: 0, opacity: 0 }}
+                    animate={{ scale: 1, opacity: 1 }}
+                    transition={{ delay: index * 0.1, duration: 0.3 }}
+                    whileHover={{ scale: 1.1 }}
+                    style={{ cursor: 'pointer' }}
+                    onClick={(e) => handleTagClick(e, tag)}
+                  >
+                    {tag}
+                  </motion.div>
                 ))}
                 {tags.length > 3 && (
                   <motion.span
@@ -124,15 +134,7 @@ const Card = ({ title, excerpt, date, tags, image, link, category, os, github })
     </motion.div>
   );
 
-  // Wrap in Link for writeups, render directly for projects
-  if (category === 'writeup') {
-    return (
-      <Link to={link} style={{ textDecoration: 'none', color: 'inherit' }}>
-        {cardContent}
-      </Link>
-    );
-  }
-
+  // Always render directly, no Link wrapper
   return cardContent;
 };
 

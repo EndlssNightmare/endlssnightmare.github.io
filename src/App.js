@@ -16,7 +16,7 @@ import './App.css';
 function App() {
   return (
     <ThemeProvider>
-      <Router>
+      <Router basename={process.env.NODE_ENV === 'production' ? '' : ''}>
         <div className="App">
           <Navbar />
           <div className="main-container">

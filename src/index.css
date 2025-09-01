@@ -5,6 +5,24 @@
   box-sizing: border-box;
 }
 
+/* Remove text decoration from all links */
+a {
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: none;
+}
+
+/* Specific override for tag badges */
+.tag-badge {
+  text-decoration: none !important;
+}
+
+.tag-badge:hover {
+  text-decoration: none !important;
+}
+
 :root {
   --primary-color: #FF0000;
   --secondary-color: #950101;
