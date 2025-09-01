@@ -1,5 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import { Link } from 'react-router-dom';
 import { FaCalendar, FaTag } from 'react-icons/fa';
 import './Card.css';
 
@@ -12,17 +13,16 @@ const Card = ({ title, excerpt, date, tags, image, link, category, os, github })
     
     if (category === 'project') {
       window.open(link, '_blank', 'noopener,noreferrer');
-    } else {
-      window.location.href = link;
     }
+    // For writeups, let the Link component handle navigation
   };
 
   const handleTagClick = (e, tag) => {
     e.stopPropagation(); // Prevent card click
-    window.location.href = `/tags/${tag}`;
+    // Let the Link component handle navigation
   };
 
-  return (
+  const cardContent = (
     <motion.div
       className="card"
       whileHover={{ 
@@ -128,6 +128,17 @@ const Card = ({ title, excerpt, date, tags, image, link, category, os, github })
       </div>
     </motion.div>
   );
+
+  // Wrap in Link for writeups, render directly for projects
+  if (category === 'writeup') {
+    return (
+      <Link to={link} style={{ textDecoration: 'none', color: 'inherit' }}>
+        {cardContent}
+      </Link>
+    );
+  }
+
+  return cardContent;
 };
 
 export default Card;
