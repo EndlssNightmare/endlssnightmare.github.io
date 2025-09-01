@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { FaFileAlt, FaSearch, FaFilter } from 'react-icons/fa';
 import Card from '../components/Card';
@@ -10,7 +10,7 @@ const Writeups = () => {
   const [filteredWriteups, setFilteredWriteups] = useState([]);
 
   // Writeups data
-  const writeups = [
+  const writeups = useMemo(() => [
     {
     id: 1,
     title: 'DC02 Walkthrough',
@@ -22,7 +22,7 @@ const Writeups = () => {
     difficulty: 'Medium',
     category: 'writeup',
     os: 'Windows'
-    }];
+    }], []);
 
   const allTags = [...new Set(writeups.flatMap(writeup => writeup.tags))];
 

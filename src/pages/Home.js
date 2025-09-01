@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { FaClock, FaSearch, FaFilter } from 'react-icons/fa';
 import Card from '../components/Card';
@@ -10,7 +10,7 @@ const Home = () => {
   const [filteredPosts, setFilteredPosts] = useState([]);
 
   // Recent posts data
-  const recentPosts = [
+  const recentPosts = useMemo(() => [
     {
     id: 2,
     title: 'DC02 Walkthrough',
@@ -65,7 +65,7 @@ const Home = () => {
     image: '/images/projects/zshconf.png',
     link: 'https://github.com/EndlssNightmare/zsh-configs',
     github: 'https://github.com/EndlssNightmare/zsh-configs'
-    }];
+    }], []);
 
   useEffect(() => {
     const filtered = recentPosts.filter(post => {

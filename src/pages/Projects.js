@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { FaCode, FaSearch, FaFilter } from 'react-icons/fa';
 import Card from '../components/Card';
@@ -9,7 +9,7 @@ const Projects = () => {
   const [filterTech, setFilterTech] = useState('');
   const [filteredProjects, setFilteredProjects] = useState([]);
 
-  const projects = [
+  const projects = useMemo(() => [
     {
       id: 1,
       title: 'Knock-Tool',
@@ -58,7 +58,7 @@ const Projects = () => {
       demo: null,
       category: 'project'
     }
-  ];
+  ], []);
 
   const allTechs = [...new Set(projects.flatMap(project => project.tags))];
 
