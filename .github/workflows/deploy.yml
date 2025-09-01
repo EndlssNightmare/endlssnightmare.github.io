@@ -39,13 +39,19 @@ jobs:
           npm install
       - name: Build
         run: npm run build
+      - name: Copy to docs
+        run: |
+          rm -rf docs
+          cp -r build docs
+          echo "# Redirecting..." > docs/404.html
+          echo "<script>window.location.href = '/';</script>" >> docs/404.html
       - name: Setup Pages
         uses: actions/configure-pages@v5
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          # Faz o upload da pasta 'build'
-          path: './build'
+          # Faz o upload da pasta 'docs'
+          path: './docs'
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
