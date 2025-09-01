@@ -223,18 +223,18 @@ evil-winrm -i 192.168.0.18 -u Administrator -H 8982...
 
           <div className="writeup-tags">
             {writeup.tags.map((tag, index) => (
-              <motion.span
-                key={tag}
-                className="tag-badge"
-                initial={{ scale: 0, opacity: 0 }}
-                animate={{ scale: 1, opacity: 1 }}
-                transition={{ delay: 0.3 + index * 0.1, duration: 0.3 }}
-                whileHover={{ scale: 1.1 }}
-                style={{ cursor: 'pointer' }}
-                onClick={() => window.location.href = `/tags/${tag}`}
-              >
-                {tag}
-              </motion.span>
+              <Link key={tag} to={`/tags/${tag}`}>
+                <motion.span
+                  className="tag-badge"
+                  initial={{ scale: 0, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  transition={{ delay: 0.3 + index * 0.1, duration: 0.3 }}
+                  whileHover={{ scale: 1.1 }}
+                  style={{ cursor: 'pointer' }}
+                >
+                  {tag}
+                </motion.span>
+              </Link>
             ))}
           </div>
 
