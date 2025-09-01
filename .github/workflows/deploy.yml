@@ -27,25 +27,11 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 18 # Use a versão do Node que seu projeto usa
-      - name: Clear everything and install fresh
+          node-version: 20 # Use uma versão mais recente do Node
+      - name: Install dependencies
         run: |
           npm cache clean --force
-          rm -rf node_modules package-lock.json
-          npm install
-          npm install semver@6.3.1 --save-exact
-      - name: Debug semver installation
-        run: |
-          echo "=== Checking semver module ==="
-          ls -la node_modules/semver/
-          echo "=== Package.json content ==="
-          cat node_modules/semver/package.json
-          echo "=== Checking if semver.js exists ==="
-          ls -la node_modules/semver/semver.js
-          echo "=== Testing semver require ==="
-          node -e "console.log(require('semver'))"
-          echo "=== Checking semver versions ==="
-          npm list semver
+          npm install --legacy-peer-deps
       - name: Build
         run: npm run build
       - name: Setup Pages
