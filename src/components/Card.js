@@ -17,11 +17,6 @@ const Card = ({ title, excerpt, date, tags, image, link, category, os, github })
     // For writeups, let the Link component handle navigation
   };
 
-  const handleTagClick = (e, tag) => {
-    e.stopPropagation(); // Prevent card click
-    // Let the Link component handle navigation
-  };
-
   const cardContent = (
     <motion.div
       className="card"
@@ -89,18 +84,18 @@ const Card = ({ title, excerpt, date, tags, image, link, category, os, github })
               <FaTag className="tags-icon" />
               <div className="tags-container">
                 {tags.slice(0, 3).map((tag, index) => (
-                  <motion.span
-                    key={index}
-                    className="tag-badge"
-                    initial={{ scale: 0, opacity: 0 }}
-                    animate={{ scale: 1, opacity: 1 }}
-                    transition={{ delay: index * 0.1, duration: 0.3 }}
-                    whileHover={{ scale: 1.1 }}
-                    onClick={(e) => handleTagClick(e, tag)}
-                    style={{ cursor: 'pointer' }}
-                  >
-                    {tag}
-                  </motion.span>
+                  <Link key={index} to={`/tags/${tag}`} style={{ textDecoration: 'none' }}>
+                    <motion.span
+                      className="tag-badge"
+                      initial={{ scale: 0, opacity: 0 }}
+                      animate={{ scale: 1, opacity: 1 }}
+                      transition={{ delay: index * 0.1, duration: 0.3 }}
+                      whileHover={{ scale: 1.1 }}
+                      style={{ cursor: 'pointer' }}
+                    >
+                      {tag}
+                    </motion.span>
+                  </Link>
                 ))}
                 {tags.length > 3 && (
                   <motion.span
