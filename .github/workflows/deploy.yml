@@ -1,0 +1,46 @@
+# Workflow para fazer deploy de conteúdo estático para o GitHub Pages
+name: Deploy static content to Pages
+
+on:
+  # Roda quando um push é feito para o branch principal
+  push:
+    branches: ['main'] # Mude para 'master' se for o seu branch principal
+
+  # Permite que você rode este workflow manualmente pela aba Actions
+  workflow_dispatch:
+
+# Define as permissões do GITHUB_TOKEN para permitir o deploy no GitHub Pages
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18 # Use a versão do Node que seu projeto usa
+          cache: 'npm'
+      - name: Install dependencies
+        run: npm install
+      - name: Build
+        # Roda o build. A "homepage" no package.json já cuida da URL correta.
+        run: npm run build
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          # Faz o upload da pasta 'build'
+          path: './build'
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
