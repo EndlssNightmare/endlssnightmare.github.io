@@ -226,10 +226,9 @@ evil-winrm -i 192.168.0.18 -u Administrator -H 8982...
               <Link key={tag} to={`/tags/${tag}`}>
                 <motion.span
                   className="tag-badge"
-                  initial={{ scale: 0, opacity: 0 }}
-                  animate={{ scale: 1, opacity: 1 }}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
                   transition={{ delay: 0.3 + index * 0.1, duration: 0.3 }}
-                  whileHover={{ scale: 1.1 }}
                   style={{ cursor: 'pointer' }}
                 >
                   {tag}

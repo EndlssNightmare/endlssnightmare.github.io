@@ -65,8 +65,6 @@ const Navbar = () => {
       <div className="navbar-container">
         <motion.div 
           className="navbar-brand"
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
         >
           <Link to="/" className="brand-link">
             V01
@@ -82,8 +80,6 @@ const Navbar = () => {
               <motion.div
                 key={item.path}
                 className="nav-item"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
               >
                 <Link 
                   to={item.path} 
@@ -107,8 +103,7 @@ const Navbar = () => {
           <motion.button
             className="theme-toggle"
             onClick={toggleTheme}
-            whileHover={{ scale: 1.1, rotate: 180 }}
-            whileTap={{ scale: 0.9 }}
+            whileHover={{ rotate: 180 }}
             transition={{ duration: 0.2 }}
           >
             {theme === 'dark' ? <FaSun /> : <FaMoon />}

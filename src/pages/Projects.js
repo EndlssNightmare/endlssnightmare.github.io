@@ -147,7 +147,7 @@ const Projects = () => {
             <motion.div
               key={project.id}
               variants={itemVariants}
-              whileHover={{ scale: 1.02 }}
+
               transition={{ duration: 0.3 }}
             >
               <Card

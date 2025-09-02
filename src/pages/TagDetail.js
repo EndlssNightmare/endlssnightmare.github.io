@@ -172,7 +172,6 @@ const TagDetail = () => {
             <motion.div
               key={`${tag}-${post.id}`}
               variants={itemVariants}
-              whileHover={{ scale: 1.02 }}
               transition={{ duration: 0.3 }}
             >
               <Card
@@ -214,10 +213,9 @@ const TagDetail = () => {
             return selectedTags.map((relatedTag, index) => (
               <motion.div
                 key={`${tag}-${relatedTag}-${index}`}
-                initial={{ scale: 0, opacity: 0 }}
-                animate={{ scale: 1, opacity: 1 }}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
                 transition={{ delay: 0.5 + index * 0.1, duration: 0.3 }}
-                whileHover={{ scale: 1.05 }}
                 layout
               >
                 <Link to={`/tags/${relatedTag}`} className="related-tag">

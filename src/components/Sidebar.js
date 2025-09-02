@@ -28,7 +28,7 @@ const Sidebar = () => {
         >
           <motion.div 
             className="profile-avatar-container"
-            whileHover={{ scale: 1.05 }}
+    
             transition={{ type: "spring", stiffness: 300 }}
           >
             <img 
@@ -92,8 +92,8 @@ const Sidebar = () => {
                 target="_blank"
                 rel="noopener noreferrer"
                 className="social-link"
-                initial={{ scale: 0, opacity: 0 }}
-                animate={{ scale: 1, opacity: 1 }}
+                        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
                 transition={{ 
                   delay: 0.7 + index * 0.1, 
                   duration: 0.5,
@@ -102,17 +102,10 @@ const Sidebar = () => {
                   damping: 25
                 }}
                 whileHover={{ 
-                  scale: 1.2, 
                   color: 'var(--primary-color)',
                   y: -3,
                   transition: {
                     duration: 0.15  // Zoom rápido ao entrar (0.15s)
-                  }
-                }}
-                whileTap={{ 
-                  scale: 0.9,
-                  transition: {
-                    duration: 0.1
                   }
                 }}
               >

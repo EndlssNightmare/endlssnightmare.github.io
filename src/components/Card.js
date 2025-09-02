@@ -37,7 +37,7 @@ const Card = ({ title, excerpt, date, tags, image, link, category, os, github })
         y: -8,
         transition: { duration: 0.3 }
       }}
-      whileTap={{ scale: 0.98 }}
+      
       onClick={handleCardClick}
       style={{ cursor: 'pointer' }}
     >
@@ -100,10 +100,9 @@ const Card = ({ title, excerpt, date, tags, image, link, category, os, github })
                   <motion.div
                     key={index}
                     className="tag-badge"
-                    initial={{ scale: 0, opacity: 0 }}
-                    animate={{ scale: 1, opacity: 1 }}
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
                     transition={{ delay: index * 0.1, duration: 0.3 }}
-                    whileHover={{ scale: 1.1 }}
                     style={{ cursor: 'pointer' }}
                     onClick={(e) => handleTagClick(e, tag)}
                   >
@@ -113,10 +112,9 @@ const Card = ({ title, excerpt, date, tags, image, link, category, os, github })
                 {tags.length > 3 && (
                   <motion.span
                     className="tag-badge more-tags"
-                    initial={{ scale: 0, opacity: 0 }}
-                    animate={{ scale: 1, opacity: 1 }}
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
                     transition={{ delay: 3 * 0.1, duration: 0.3 }}
-                    whileHover={{ scale: 1.1 }}
                     style={{ cursor: 'pointer' }}
                   >
                     +{tags.length - 3}
@@ -129,8 +127,8 @@ const Card = ({ title, excerpt, date, tags, image, link, category, os, github })
         
         <motion.div 
           className="card-hover-effect"
-          initial={{ opacity: 0, scale: 0.8 }}
-          whileHover={{ opacity: 1, scale: 1 }}
+          initial={{ opacity: 0 }}
+          whileHover={{ opacity: 1 }}
           transition={{ duration: 0.3 }}
         />
       </div>

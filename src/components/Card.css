@@ -39,7 +39,7 @@
 }
 
 .card:hover .card-image {
-  transform: scale(1.02);
+  /* transform: scale(1.02); */
 }
 
 .card-overlay {

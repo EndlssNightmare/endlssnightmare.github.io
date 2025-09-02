@@ -152,7 +152,7 @@ const Home = () => {
             <motion.div
               key={post.id}
               variants={itemVariants}
-              whileHover={{ scale: 1.02 }}
+
               transition={{ duration: 0.3 }}
             >
               <Card

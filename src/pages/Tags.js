@@ -128,10 +128,7 @@ const Tags = () => {
           <motion.div
             key={tag.name}
             variants={itemVariants}
-            whileHover={{ 
-              transition: { duration: 0.2 }
-            }}
-            whileTap={{ scale: 0.95 }}
+
           >
             <Link to={`/tags/${tag.name}`} className="tag-card">
               <div 
