@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { FaTags, FaSearch } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
@@ -6,7 +6,6 @@ import './Tags.css';
 
 const Tags = () => {
   const [searchTerm, setSearchTerm] = useState('');
-  const [isLoaded, setIsLoaded] = useState(false);
 
   // All available posts data for counting
   const allPosts = [
@@ -55,17 +54,18 @@ const Tags = () => {
     image: '/images/projects/zshconf.png',
     link: 'https://github.com/EndlssNightmare/zsh-configs',
     category: 'project'
-    }];
+    }
+  ];
 
   // Calculate actual tag counts
   const calculateTagCount = (tagName) => {
     return allPosts.filter(post => 
-      post.tags.some(postTag => postTag.toLowerCase() === tagName.toLowerCase())
+      Array.isArray(post.tags) && post.tags.some(postTag => postTag.toLowerCase() === tagName.toLowerCase())
     ).length;
   };
 
   // Generate tags dynamically from all posts
-  const allTagNames = [...new Set(allPosts.flatMap(post => post.tags))];
+  const allTagNames = [...new Set(allPosts.flatMap(post => Array.isArray(post.tags) ? post.tags : []))];
   
   const tags = allTagNames.map(tagName => ({
     name: tagName.toLowerCase(),
@@ -76,15 +76,6 @@ const Tags = () => {
   const filteredTags = tags.filter(tag =>
     tag.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
-
-  // Handle loading state
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setIsLoaded(true);
-    }, 50);
-    
-    return () => clearTimeout(timer);
-  }, []);
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -102,21 +93,6 @@ const Tags = () => {
       transition: { duration: 0.5 }
     }
   };
-
-  if (!isLoaded) {
-    return (
-      <motion.div 
-        className="tags-page"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-      >
-        <div className="loading-container">
-          <div className="loading-spinner"></div>
-          <p>Loading tags...</p>
-        </div>
-      </motion.div>
-    );
-  }
 
   return (
     <motion.div 
@@ -149,7 +125,7 @@ const Tags = () => {
       </motion.div>
 
       <motion.div className="tags-grid" variants={containerVariants}>
-        {filteredTags.map((tag, index) => (
+        {filteredTags.map((tag) => (
           <motion.div
             key={tag.name}
             variants={itemVariants}
