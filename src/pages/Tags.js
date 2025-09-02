@@ -86,9 +86,8 @@ const Tags = () => {
   };
 
   const itemVariants = {
-    hidden: { scale: 0, opacity: 0 },
+    hidden: { opacity: 0 },
     visible: {
-      scale: 1,
       opacity: 1,
       transition: { duration: 0.5 }
     }
@@ -130,7 +129,6 @@ const Tags = () => {
             key={tag.name}
             variants={itemVariants}
             whileHover={{ 
-              scale: 1.05,
               transition: { duration: 0.2 }
             }}
             whileTap={{ scale: 0.95 }}
