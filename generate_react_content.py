@@ -19,7 +19,7 @@ class WriteupGenerator:
         self.writeups_dir = self.base_dir / "writeups"
         
         # Ensure directories exist
-        self.images_dir = self.public_dir / "writeup-images"
+        self.images_dir = self.public_dir / "images" / "writeups"
         self.images_dir.mkdir(exist_ok=True)
         
     def generate(self):
@@ -61,11 +61,11 @@ class WriteupGenerator:
             print(f"       ├── {data['machine_name'].replace('-', '').title()}Walkthrough.js")
             print(f"       ├── {data['machine_name'].replace('-', '').title()}Walkthrough.css")
             print(f"       └── images/")
-            print(f"           └── machine.{Path(data.get('image_path', '')).suffix if data.get('image_path') else 'png'}")
-            print(f"   └── public/writeup-images/")
-            print(f"       ├── {data['machine_name']}-machine.{Path(data.get('image_path', '')).suffix if data.get('image_path') else 'png'}")
-            print(f"       └── {data['machine_name']}-images/")
-            print(f"           └── machine.{Path(data.get('image_path', '')).suffix if data.get('image_path') else 'png'}")
+            ext_display = Path(data.get('image_path', '')).suffix.lstrip('.') if data.get('image_path') else 'png'
+            print(f"           └── machine.{ext_display}")
+            print(f"   └── public/images/writeups/")
+            print(f"       └── {data['machine_name']}/")
+            print(f"           └── machine.{ext_display}")
             
         except KeyboardInterrupt:
             print("\n\nGeneration cancelled by user.")
@@ -133,33 +133,34 @@ class WriteupGenerator:
     
     def copy_image(self, image_path, machine_name):
         """Copy and rename the machine image"""
-        if not image_path or not os.path.exists(image_path):
+        if not image_path:
+            return None
+        # Normalize paths
+        src_path = Path(image_path)
+        if not src_path.exists():
             return None
             
         # Determine file extension
-        ext = Path(image_path).suffix.lower()
+        ext = src_path.suffix.lower()
         if ext not in ['.png', '.jpg', '.jpeg', '.gif', '.webp']:
             print(f"Warning: Unsupported image format {ext}")
             return None
             
-        # Create new filename for main image
-        new_filename = f"{machine_name}-machine{ext}"
-        new_path = self.images_dir / new_filename
+        # Create dedicated folder per writeup: public/images/writeups/<machine_name>/machine.ext
+        writeup_folder = self.images_dir / machine_name.lower()
+        writeup_folder.mkdir(parents=True, exist_ok=True)
+        new_filename = f"machine{ext}"
+        new_path = writeup_folder / new_filename
         
         try:
-            shutil.copy2(image_path, new_path)
+            # Avoid copying if source and destination are the same file
+            if src_path.resolve() == new_path.resolve():
+                print(f"Image already in destination: '{new_path}', skipping copy")
+            else:
+                shutil.copy2(str(src_path), str(new_path))
             print(f"✓ Main image copied to: {new_path}")
             
-            # Create images directory for the writeup
-            writeup_images_dir = self.images_dir / f"{machine_name}-images"
-            writeup_images_dir.mkdir(parents=True, exist_ok=True)
-            
-            # Copy to writeup images directory
-            writeup_image_path = writeup_images_dir / f"machine{ext}"
-            shutil.copy2(image_path, writeup_image_path)
-            print(f"✓ Image copied to writeup images directory: {writeup_image_path}")
-            
-            return f"/writeup-images/{new_filename}"
+            return f"/images/writeups/{machine_name.lower()}/{new_filename}"
         except Exception as e:
             print(f"Error copying image: {e}")
             return None
@@ -280,7 +281,7 @@ class WriteupGenerator:
                 </div>
             </div>
             <div>
-                <img src="{data.get('image_url', '/writeup-images/default-machine.png')}" alt="{data['title']}" class="machine-image">
+                <img src="{data.get('image_url', '/images/writeups/default/machine.png')}" alt="{data['title']}" class="machine-image">
             </div>
         </div>
     </div>
@@ -345,9 +346,10 @@ class WriteupGenerator:
         with open(home_js_path, 'r') as f:
             content = f.read()
         
-        # Find the recentPosts array
-        pattern = r'const recentPosts = \[(.*?)\];'
-        match = re.search(pattern, content, re.DOTALL)
+        # Find the recentPosts array (supports both plain and useMemo pattern)
+        pattern_plain = r'const\s+recentPosts\s*=\s*\[(.*?)\];'
+        pattern_memo = r'const\s+recentPosts\s*=\s*useMemo\(\(\)\s*=>\s*\[(.*?)\]\s*,\s*\[\s*\]\s*\);'
+        match = re.search(pattern_plain, content, re.DOTALL) or re.search(pattern_memo, content, re.DOTALL)
         
         if not match:
             print("Error: Could not find recentPosts array in Home.js")
@@ -364,7 +366,7 @@ class WriteupGenerator:
       date: '{datetime.now().strftime('%b %d, %Y')}',
       category: 'writeup',
       tags: {str([tag.lower() for tag in data['tags']])},
-      image: '{data.get('image_url', '/writeup-images/default-machine.png')}',
+      image: '{data.get('image_url', '/images/writeups/default/machine.png')}',
       link: '/writeups/{data['machine_name']}-walkthrough',
       os: '{data['os_type']}'
     }}"""
@@ -375,8 +377,11 @@ class WriteupGenerator:
         else:
             new_posts_content = new_post + '\n  '
         
-        # Replace the content
-        new_content = re.sub(pattern, f'const recentPosts = [{new_posts_content}];', content, flags=re.DOTALL)
+        # Replace the content in whichever pattern matched
+        if re.search(pattern_plain, content, re.DOTALL):
+            new_content = re.sub(pattern_plain, f'const recentPosts = [{new_posts_content}];', content, flags=re.DOTALL)
+        else:
+            new_content = re.sub(pattern_memo, f'const recentPosts = useMemo(() => [{new_posts_content}], []);', content, flags=re.DOTALL)
         
         with open(home_js_path, 'w') as f:
             f.write(new_content)
@@ -395,9 +400,10 @@ class WriteupGenerator:
         with open(writeups_js_path, 'r') as f:
             content = f.read()
         
-        # Find the writeups array
-        pattern = r'const writeups = \[(.*?)\];'
-        match = re.search(pattern, content, re.DOTALL)
+        # Find the writeups array (supports both patterns)
+        pattern_plain = r'const\s+writeups\s*=\s*\[(.*?)\];'
+        pattern_memo = r'const\s+writeups\s*=\s*useMemo\(\(\)\s*=>\s*\[(.*?)\]\s*,\s*\[\s*\]\s*\);'
+        match = re.search(pattern_plain, content, re.DOTALL) or re.search(pattern_memo, content, re.DOTALL)
         
         if not match:
             print("Error: Could not find writeups array in Writeups.js")
@@ -413,7 +419,7 @@ class WriteupGenerator:
       excerpt: '{data['excerpt']}',
       date: '{datetime.now().strftime('%b %d, %Y')}',
       tags: {str(data['tags'])},
-      image: '{data.get('image_url', '/writeup-images/default-machine.png')}',
+      image: '{data.get('image_url', '/images/writeups/default/machine.png')}',
       link: '/writeups/{data['machine_name']}-walkthrough',
       difficulty: '{data['difficulty']}',
       category: 'writeup',
@@ -426,8 +432,11 @@ class WriteupGenerator:
         else:
             new_writeups_content = new_writeup + '\n  '
         
-        # Replace the content
-        new_content = re.sub(pattern, f'const writeups = [{new_writeups_content}];', content, flags=re.DOTALL)
+        # Replace according to pattern
+        if re.search(pattern_plain, content, re.DOTALL):
+            new_content = re.sub(pattern_plain, f'const writeups = [{new_writeups_content}];', content, flags=re.DOTALL)
+        else:
+            new_content = re.sub(pattern_memo, f'const writeups = useMemo(() => [{new_writeups_content}], []);', content, flags=re.DOTALL)
         
         with open(writeups_js_path, 'w') as f:
             f.write(new_content)
@@ -604,7 +613,7 @@ class WriteupGenerator:
       excerpt: '{data['excerpt']}',
       date: '{datetime.now().strftime('%b %d, %Y')}',
       tags: {str([tag.lower() for tag in data['tags']])},
-      image: '{data.get('image_url', f'/writeup-images/{data['machine_name']}-machine.png')}',
+      image: '{data.get('image_url', f"/images/writeups/{data['machine_name'].lower()}/machine.png")}',
       link: '/writeups/{data['machine_name']}-walkthrough',
       category: 'writeup'
     }}"""
@@ -646,13 +655,14 @@ class WriteupGenerator:
         
         # Generate the component content
         component_content = f"""import React from 'react';
-import {{ Link }} from 'react-router-dom';
+import {{ Link, useNavigate }} from 'react-router-dom';
 import {{ motion }} from 'framer-motion';
-import {{ FaArrowLeft, FaCalendar, FaTag, FaServer, FaStar, FaDesktop, FaNetworkWired }} from 'react-icons/fa';
+import {{ FaArrowLeft, FaCalendar, FaServer, FaStar, FaDesktop, FaNetworkWired }} from 'react-icons/fa';
 import TableOfContents from '../../../components/TableOfContents';
 import './{data['machine_name'].replace('-', '').title()}Walkthrough.css';
 
 const {data['machine_name'].replace('-', '').title()}Walkthrough = () => {{
+  const navigate = useNavigate();
   // {data['title']} data
   const writeup = {{
     id: '{data['machine_name']}-walkthrough',
@@ -671,29 +681,40 @@ This writeup documents the discovery and analysis of vulnerabilities, exploitati
 ## Initial Reconnaissance
 
 ### Port Scanning
-![Port Scan Results](/writeup-images/{data['machine_name']}-images/1.png)
+Start with your nmap scan results:
+
+\`\`\`bash
+nmap -sC -sV -p- [TARGET_IP]
+\`\`\`
 
 ### Service Enumeration
-![Service Enumeration](/writeup-images/{data['machine_name']}-images/2.png)
+Document any specific service enumeration you performed.
 
 ## Initial Access
 
 ### Exploitation
-![Initial Access](/writeup-images/{data['machine_name']}-images/3.png)
+How did you gain initial access to the machine?
 
 ### User Flag
-![User Flag](/writeup-images/{data['machine_name']}-images/4.png)
+How did you obtain the user flag?
 
 ## Privilege Escalation
 
 ### Escalation Method
-![Privilege Escalation](/writeup-images/{data['machine_name']}-images/5.png)
+How did you escalate privileges?
 
 ### Root Flag
-![Root Flag](/writeup-images/{data['machine_name']}-images/6.png)
+How did you obtain the root flag?
 
 ## Conclusion
-This machine demonstrated various {data['os_type']} exploitation techniques and privilege escalation methods.`
+This machine demonstrated various {data['os_type']} exploitation techniques and privilege escalation methods.
+
+## Tools Used
+- Nmap - Port scanning and service enumeration
+- Add other tools you used...
+
+## References
+- Add any references, documentation, or resources you used...`
   }};
 
   return (
@@ -722,10 +743,6 @@ This machine demonstrated various {data['os_type']} exploitation techniques and 
               <FaCalendar />
               <span>{{writeup.date}}</span>
             </div>
-            <div className="meta-item">
-              <FaTag />
-              <span>Difficulty: {{writeup.difficulty}}</span>
-            </div>
           </div>
 
           <div className="writeup-tags">
@@ -738,7 +755,7 @@ This machine demonstrated various {data['os_type']} exploitation techniques and 
                 transition={{{{ delay: 0.3 + index * 0.1, duration: 0.3 }}}}
                 whileHover={{{{ scale: 1.1 }}}}
                 style={{{{ cursor: 'pointer' }}}}
-                onClick={{() => window.location.href = `/#/tags/${{{{tag}}}}`}}
+                onClick={{() => navigate(`/tags/${{{{String(tag).toLowerCase()}}}}`)}}
               >
                 {{tag}}
               </motion.span>
@@ -771,7 +788,7 @@ This machine demonstrated various {data['os_type']} exploitation techniques and 
                 </div>
               </div>
               <div className="machine-info-right">
-                <img src="{data.get('image_url', f'/writeup-images/{data['machine_name']}-machine.png')}" alt="{data['title']}" className="machine-image" />
+                <img src="{data.get('image_url', f'/images/writeups/{data['machine_name']}/machine.png')}" alt="{data['title']}" className="machine-image" />
               </div>
             </div>
           </div>
@@ -825,8 +842,7 @@ This machine demonstrated various {data['os_type']} exploitation techniques and 
                     const [, alt, src] = match;
                     elements.push(
                       <div key={{i}} className="image-container">
-                        <img src={{src}} alt={{alt}} className="writeup-image" />
-                        {{alt && <p className="image-caption">{{alt}}</p>}}
+                        <img src={{src}} alt={{alt}} className="content-image" />
                       </div>
                     );
                   }}
@@ -1135,6 +1151,8 @@ export default {data['machine_name'].replace('-', '').title()}Walkthrough;
 .machine-image {{
   max-width: 200px;
   height: auto;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }}
 
 /* Code block styles */
@@ -1286,15 +1304,16 @@ export default {data['machine_name'].replace('-', '').title()}Walkthrough;
                 f"// Import specific writeup components\nimport {component_name} from './writeups/{data['machine_name']}/{component_name}';"
             )
         
-        # Add the writeup to the mapping
+        # Add the writeup to the mapping (ensure proper comma placement)
         mapping_entry = f"    '{data['machine_name']}-walkthrough': {component_name}"
         
         # Find the writeupComponents object and add the new entry
         if mapping_entry not in content:
             # Add to the writeupComponents object
+            # Insert before the closing brace without creating stray commas
             content = re.sub(
-                r'(writeupComponents = \{)(.*?)(\};)',
-                rf'\1\2,\n  {mapping_entry}\3',
+                r"(writeupComponents\s*=\s*\{)([^}]*)\}",
+                lambda m: f"{m.group(1)}{m.group(2).rstrip()}\n  ,{mapping_entry}\n}}",
                 content,
                 flags=re.DOTALL
             )
@@ -1302,10 +1321,7 @@ export default {data['machine_name'].replace('-', '').title()}Walkthrough;
             # If the regex didn't work, try a simpler approach
             if mapping_entry not in content:
                 # Find the closing brace of writeupComponents and add before it
-                content = content.replace(
-                    "};",
-                    f",\n  {mapping_entry}\n}};"
-                )
+                content = content.replace("};", f"\n  ,{mapping_entry}\n}};")
         
         with open(writeup_detail_js, 'w') as f:
             f.write(content)
@@ -1320,7 +1336,7 @@ class WriteupRemover:
     def __init__(self):
         self.base_dir = Path.cwd()
         self.src_dir = self.base_dir / "src"
-        self.images_dir = self.base_dir / "public" / "writeup-images"
+        self.images_dir = self.base_dir / "public" / "images" / "writeups"
         self.writeups_dir = self.base_dir / "writeups"
     
     def remove(self):
@@ -1367,13 +1383,24 @@ class WriteupRemover:
             except Exception as e:
                 print(f"❌ Error removing {file_path}: {e}")
         
-        # Remove from JS files
+        # Remove from JS files and any lingering imports/mappings
         self.remove_from_js_files(machine_name)
+        self.remove_from_writeup_detail_mapping(machine_name)
+        self.remove_from_tag_detail_js(machine_name)
         
         # Recalculate tag counts after removal
         self.recalculate_tag_counts('src/pages/Tags.js')
         
         print(f"\n✅ Successfully removed {removed_count} files/directories for '{machine_name}'")
+        
+        # Also remove the public images directory for the machine (lowercase)
+        lower_dir = self.images_dir / machine_name.lower()
+        if lower_dir.exists():
+            try:
+                shutil.rmtree(lower_dir)
+                print(f"✓ Removed directory: {lower_dir}")
+            except Exception as e:
+                print(f"❌ Error removing {lower_dir}: {e}")
     
     def recalculate_tag_counts(self, tags_js_path):
         """Recalculate tag counts based on actual posts"""
@@ -1513,7 +1540,7 @@ class WriteupRemover:
         self.remove_from_tag_detail_js(machine_name)
     
     def remove_from_js_file(self, file_path, array_name, machine_name):
-        """Remove machine entry from a JS file array"""
+        """Remove machine entry from a JS file array (supports plain and useMemo arrays)."""
         if not file_path.exists():
             print(f"Warning: {file_path.name} not found")
             return False
@@ -1521,61 +1548,49 @@ class WriteupRemover:
         with open(file_path, 'r') as f:
             content = f.read()
         
-        # Find the array
-        pattern = rf'const {array_name} = \[(.*?)\];'
-        match = re.search(pattern, content, re.DOTALL)
+        # Support both plain arrays and useMemo(() => [...], []) forms
+        pattern_plain = rf'const\s+{array_name}\s*=\s*\[(.*?)\];'
+        pattern_memo = rf'const\s+{array_name}\s*=\s*useMemo\(\(\)\s*=>\s*\[(.*?)\]\s*,\s*\[\s*\]\s*\);'
+        match_plain = re.search(pattern_plain, content, re.DOTALL)
+        match_memo = re.search(pattern_memo, content, re.DOTALL)
         
+        match = match_plain or match_memo
         if not match:
             print(f"Error: Could not find {array_name} array in {file_path.name}")
             return False
         
         array_content = match.group(1)
         
-        # Parse the array content to find the machine entry
-        lines = array_content.split('\n')
-        new_lines = []
-        skip_next = False
-        in_object = False
-        object_lines = []
+        # Parse the array content to find the machine entry. Consider title/link checks.
+        # Keep original line breaks to preserve formatting where possible.
+        entries = re.findall(r'(\{[\s\S]*?\})\s*,?', array_content)
+        new_entries = []
+        removed = False
+        machine_name_lower = machine_name.lower()
+        link_fragment = f"/writeups/{machine_name_lower}-walkthrough"
         
-        for line in lines:
-            line = line.strip()
-            
-            if not line:
+        for entry in entries:
+            entry_lower = entry.lower()
+            if (machine_name_lower in entry_lower) or (link_fragment in entry_lower):
+                # Skip this entry (remove it)
+                removed = True
                 continue
-            
-            # Check if this line starts a new object
-            if line.startswith('{'):
-                in_object = True
-                object_lines = [line]
-                skip_next = False
-            elif in_object:
-                object_lines.append(line)
-                
-                # Check if this object is for our machine
-                if any(machine_name.lower() in line.lower() for line in object_lines):
-                    skip_next = True
-                
-                # Check if object ends
-                if line.endswith('},') or line.endswith('}'):
-                    in_object = False
-                    if not skip_next:
-                        new_lines.extend(object_lines)
-                    object_lines = []
-            elif not in_object and not skip_next:
-                new_lines.append(line)
+            new_entries.append(entry)
         
-        # Reconstruct the array
-        if new_lines:
-            new_array_content = '\n    ' + '\n    '.join(new_lines)
-            # Clean up trailing commas
-            new_array_content = re.sub(r',\s*,', ',', new_array_content)
-            new_array_content = re.sub(r',\s*$', '', new_array_content)
+        if not removed:
+            print(f"Info: No entries found for '{machine_name}' in {file_path.name}")
+            return True
+        
+        # Reconstruct inner content with consistent indentation
+        if new_entries:
+            inner = '\n    ' + ',\n    '.join([e.strip() for e in new_entries]) + '\n  '
         else:
-            new_array_content = ''
+            inner = '\n  '
         
-        # Replace the array content
-        new_content = re.sub(pattern, f'const {array_name} = [{new_array_content}];', content, flags=re.DOTALL)
+        if match_plain:
+            new_content = re.sub(pattern_plain, f'const {array_name} = [{inner}];', content, flags=re.DOTALL)
+        else:
+            new_content = re.sub(pattern_memo, f'const {array_name} = useMemo(() => [{inner}], []);', content, flags=re.DOTALL)
         
         with open(file_path, 'w') as f:
             f.write(new_content)

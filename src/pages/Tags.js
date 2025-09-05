@@ -10,6 +10,12 @@ const Tags = () => {
   // All available posts data for counting
   const allPosts = [
     {
+    id: 7,
+    title: 'Wcorp Walkthrough',
+    category: 'writeup',
+    tags: ['hc', 'smb', 'ad', 'windows', 'asreproast', 'dcsync', 'kerberoasting', 'password-cracking']
+    },
+    {
     id: 1,
     title: 'DC02 Walkthrough',
     category: 'writeup',
@@ -54,8 +60,7 @@ const Tags = () => {
     image: '/images/projects/zshconf.png',
     link: 'https://github.com/EndlssNightmare/zsh-configs',
     category: 'project'
-    }
-  ];
+    }];
 
   // Calculate actual tag counts
   const calculateTagCount = (tagName) => {
@@ -128,7 +133,11 @@ const Tags = () => {
           <motion.div
             key={tag.name}
             variants={itemVariants}
-
+            whileHover={{ 
+              scale: 1.05,
+              transition: { duration: 0.2 }
+            }}
+            whileTap={{ scale: 0.95 }}
           >
             <Link to={`/tags/${tag.name}`} className="tag-card">
               <div 

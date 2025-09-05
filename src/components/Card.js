@@ -43,7 +43,18 @@ const Card = ({ title, excerpt, date, tags, image, link, category, os, github })
     >
       <div className="card-content">
         <div className="card-image-container">
-          <img src={image} alt={title} className="card-image" />
+          <img 
+            src={image} 
+            alt={title} 
+            className="card-image" 
+            onError={(e) => {
+              console.error(`Failed to load image: ${image}`);
+              e.target.style.display = 'none';
+            }}
+            onLoad={() => {
+              console.log(`Successfully loaded image: ${image}`);
+            }}
+          />
           <motion.div 
             className="card-overlay"
             initial={{ opacity: 0 }}

@@ -12,12 +12,24 @@ const Writeups = () => {
   // Writeups data
   const writeups = useMemo(() => [
     {
+    id: 7,
+    title: 'Wcorp Walkthrough',
+    excerpt: 'A challenging Windows Active Directory environment featuring SMB enumeration, AS-REP roasting, Kerberoasting, and DCSync techniques. This writeup covers advanced lateral movement and privilege escalation methods.',
+    date: 'Aug 15, 2025',
+    tags: ['hc', 'smb', 'ad', 'windows', 'asreproast', 'dcsync', 'kerberoasting', 'password-cracking'],
+    image: '/images/writeups/wcorp/machine.png',
+    link: '/writeups/wcorp-walkthrough',
+    difficulty: 'Hard',
+    category: 'writeup',
+    os: 'Windows'
+    },
+    {
     id: 1,
     title: 'DC02 Walkthrough',
     excerpt: 'This Windows Domain Controller (DC01) in the SOUPEDECODE.LOCAL domain was discovered via internal network scanning. Enumeration revealed multiple Active Directory services and valid SMB credentials (charlie:charlie). AS-REP roasting against zximena448 yielded the password internet, granting Backup Operators group privileges.',
     date: 'Aug 12, 2025',
     tags: ["hmv", "windows", "ad", "asreproast", "dcsync", "backup-operators", "password-cracking", "smb", "ldap"],
-    image: '/images/writeups/dc02-machine.png',
+    image: '/images/writeups/dc02/machine.png',
     link: '/writeups/dc02-walkthrough',
     difficulty: 'Medium',
     category: 'writeup',

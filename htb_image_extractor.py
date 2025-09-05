@@ -22,7 +22,8 @@ class HTBImageExtractor:
         """
         self.htb_token = htb_token or os.getenv('HTB_TOKEN')
         if not self.htb_token:
-            raise ValueError("HTB_TOKEN not provided and not found in environment variables")
+            # Token is optional for local-only operations like card removal
+            print("Warning: HTB_TOKEN not set. Network operations may fail; local operations are available.")
         
         self.base_url = "https://labs.hackthebox.com/api/v4"
         self.storage_base_url = "https://htb-mp-prod-public-storage.s3.eu-central-1.amazonaws.com"
@@ -41,6 +42,11 @@ class HTBImageExtractor:
         Returns:
             dict: Machine information or None if not found
         """
+        # Sanitize machine_name to avoid path manipulation/SSRF
+        import re as _re
+        if not _re.fullmatch(r"[A-Za-z0-9_-]+", machine_name or ""):
+            print("Invalid machine name format")
+            return None
         url = f"{self.base_url}/machine/profile/{machine_name}"
         headers = {"Authorization": f"Bearer {self.htb_token}"}
         
@@ -60,53 +66,19 @@ class HTBImageExtractor:
 
     def get_machine_avatar_path(self, machine_name: str) -> Optional[str]:
         """
-        Get the avatar path for a machine using curl and jq.
-        
-        Args:
-            machine_name (str): Name of the HTB machine
-            
-        Returns:
-            str: Avatar path or None if not found
+        Get the avatar path for a machine using the HTB API (no shell calls).
         """
         try:
-            # Use curl and jq to extract the avatar path
-            cmd = [
-                'curl', '-sH', f'Authorization: Bearer {self.htb_token}',
-                f'{self.base_url}/machine/profile/{machine_name}',
-                '|', 'jq', '-r', '.info.avatar'
-            ]
-            
-            # Join the command properly for subprocess
-            if '|' in cmd:
-                # Handle pipe in command
-                curl_cmd = cmd[:cmd.index('|')]
-                jq_cmd = cmd[cmd.index('|')+1:]
-                
-                curl_process = subprocess.Popen(curl_cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-                jq_process = subprocess.Popen(jq_cmd, stdin=curl_process.stdout, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-                
-                curl_process.stdout.close()
-                output, error = jq_process.communicate()
-                
-                if jq_process.returncode != 0:
-                    print(f"Error executing jq: {error.decode()}")
-                    return None
-                
-                avatar_path = output.decode().strip()
-                return avatar_path if avatar_path != 'null' else None
-                
-            else:
-                # No pipe, direct execution
-                result = subprocess.run(cmd, capture_output=True, text=True)
-                if result.returncode != 0:
-                    print(f"Error executing curl: {result.stderr}")
-                    return None
-                
-                avatar_path = result.stdout.strip()
-                return avatar_path if avatar_path != 'null' else None
-                
-        except subprocess.SubprocessError as e:
-            print(f"Error executing command for '{machine_name}': {e}")
+            info = self.get_machine_info(machine_name)
+            if not info:
+                return None
+            avatar_path = info.get('avatar')
+            # Basic sanitization to avoid SSRF-style surprises
+            if isinstance(avatar_path, str) and avatar_path.startswith('/'):
+                # allow only safe chars
+                import re
+                if re.fullmatch(r"/[a-zA-Z0-9/_\-.]+", avatar_path):
+                    return avatar_path
             return None
         except Exception as e:
             print(f"Unexpected error for '{machine_name}': {e}")
@@ -148,12 +120,25 @@ class HTBImageExtractor:
                 else:
                     new_filename += '.png'  # Default to PNG
             
+            # Ensure destination stays within the public directory
+            dest_path = Path(new_filename)
+            public_root = self.public_dir.resolve()
+            try:
+                dest_resolved = dest_path.resolve()
+                # Ensure parent directories exist
+                dest_path.parent.mkdir(parents=True, exist_ok=True)
+                # Check traversal
+                _ = dest_resolved.relative_to(public_root)
+            except Exception:
+                print("Refusing to write outside the public directory")
+                return False
+
             # Check if the file already exists to avoid overwriting
-            if os.path.exists(new_filename):
+            if dest_path.exists():
                 print(f"File '{new_filename}' already exists. Skipping download.")
                 return True
             
-            with open(new_filename, 'wb') as file:
+            with open(dest_path, 'wb') as file:
                 for chunk in response.iter_content(chunk_size=8192):
                     file.write(chunk)
             
@@ -189,14 +174,14 @@ class HTBImageExtractor:
         
         print(f"Found avatar path: {avatar_path}")
         
-        # Generate output filename if not provided
-        if not output_filename:
-            output_filename = f"{machine_name}-machine.png"
+        # Always normalize to lowercase folder and filename used by the site
+        output_filename = "machine.png"
+        folder_name = machine_name.lower()
         
         # Determine save location
         if use_writeup_images_dir:
-            # Save in writeup-images directory
-            writeup_images_dir = Path("public/writeup-images")
+            # Save in new per-writeup directory under public/images/writeups/<machine_name>/
+            writeup_images_dir = Path("public/images/writeups") / folder_name
             writeup_images_dir.mkdir(parents=True, exist_ok=True)
             output_filename = str(writeup_images_dir / output_filename)
         else:
@@ -206,9 +191,88 @@ class HTBImageExtractor:
         
         # Download the image
         if self.download_and_rename_image(avatar_path, output_filename):
-            return output_filename
+            # Return web-relative path for use in the React app
+            try:
+                file_name = Path(output_filename).name
+            except Exception:
+                file_name = "machine.png"
+            web_path = f"/images/writeups/{folder_name}/{file_name}"
+            return web_path
         else:
             return None
+
+    # ------------------- Removal helpers for React cards -------------------
+    def _remove_entry_from_js_array(self, file_path: Path, array_name: str, machine_name: str) -> bool:
+        """
+        Remove a writeup card from a JS file supporting both plain and useMemo arrays.
+        Returns True if the file was updated or entry did not exist; False on hard failure.
+        """
+        try:
+            if not file_path.exists():
+                print(f"Warning: {file_path} not found")
+                return False
+            content = file_path.read_text()
+        except Exception as e:
+            print(f"Error reading {file_path}: {e}")
+            return False
+
+        import re
+        pattern_plain = rf"const\\s+{array_name}\\s*=\\s*\\[(.*?)\\];"
+        pattern_memo = rf"const\\s+{array_name}\\s*=\\s*useMemo\\(\\(\\)\\s*=>\\s*\\[(.*?)\\]\\s*,\\s*\\[\\s*\\]\\s*\\);"
+        match_plain = re.search(pattern_plain, content, re.DOTALL)
+        match_memo = re.search(pattern_memo, content, re.DOTALL)
+        match = match_plain or match_memo
+        if not match:
+            print(f"Info: Could not find {array_name} array in {file_path.name}")
+            return True
+
+        inner = match.group(1)
+        entries = re.findall(r"(\{[\s\S]*?\})\s*,?", inner)
+        if not entries:
+            return True
+
+        machine_lower = machine_name.lower()
+        link_fragment = f"/writeups/{machine_lower}-walkthrough"
+        kept = []
+        removed_any = False
+        for e in entries:
+            el = e.lower()
+            if machine_lower in el or link_fragment in el:
+                removed_any = True
+                continue
+            kept.append(e.strip())
+
+        if not removed_any:
+            return True
+
+        if kept:
+            new_inner = "\n    " + ",\n    ".join(kept) + "\n  "
+        else:
+            new_inner = "\n  "
+
+        if match_plain:
+            new_content = re.sub(pattern_plain, f"const {array_name} = [{new_inner}];", content, flags=re.DOTALL)
+        else:
+            new_content = re.sub(pattern_memo, f"const {array_name} = useMemo(() => [{new_inner}], []);", content, flags=re.DOTALL)
+
+        try:
+            file_path.write_text(new_content)
+            print(f"✓ Removed card from {file_path.name}")
+            return True
+        except Exception as e:
+            print(f"Error writing {file_path}: {e}")
+            return False
+
+    def remove_writeup_cards(self, machine_name: str) -> None:
+        """
+        Remove the writeup cards for a machine from Home.js and Writeups.js.
+        """
+        src_dir = Path("src/pages")
+        home_js = src_dir / "Home.js"
+        writeups_js = src_dir / "Writeups.js"
+        # Home uses array name recentPosts; Writeups uses writeups
+        self._remove_entry_from_js_array(home_js, "recentPosts", machine_name)
+        self._remove_entry_from_js_array(writeups_js, "writeups", machine_name)
 
     def get_machine_details(self, machine_name: str) -> Optional[Dict[str, Any]]:
         """
@@ -238,20 +302,36 @@ def main():
     if len(sys.argv) < 2 or sys.argv[1] in ['-h', '--help', 'help']:
         print("HTB Image Extractor")
         print("==================")
-        print("Extracts machine images from HackTheBox API")
+        print("Extracts machine images from HackTheBox API and can remove React cards.")
         print()
-        print("Usage: python htb_image_extractor.py <machine_name> [output_filename]")
-        print("Example: python htb_image_extractor.py example-machine")
-        print("Example: python htb_image_extractor.py example-machine my-machine.png")
+        print("Usage:")
+        print("  python htb_image_extractor.py <machine_name> [output_filename]")
+        print("  python htb_image_extractor.py remove-cards <machine_name>")
         print()
-        print("Requirements:")
+        print("Examples:")
+        print("  python htb_image_extractor.py example-machine")
+        print("  python htb_image_extractor.py remove-cards example-machine")
+        print()
+        print("Requirements for download:")
         print("- HTB_TOKEN environment variable must be set")
-        print("- curl and jq must be installed")
-        print()
-        print("Setup:")
-        print("export HTB_TOKEN='your_htb_token_here'")
         sys.exit(0)
     
+    # Subcommand to remove cards
+    if sys.argv[1] == 'remove-cards':
+        if len(sys.argv) < 3:
+            print("Please provide the machine name to remove cards for.")
+            sys.exit(1)
+        machine_name = sys.argv[2]
+        try:
+            extractor = HTBImageExtractor(htb_token=None)
+            extractor.remove_writeup_cards(machine_name)
+            print("✅ Cards removal completed")
+            sys.exit(0)
+        except Exception as e:
+            print(f"❌ Unexpected error: {e}")
+            sys.exit(1)
+    
+    # Default: extract image
     machine_name = sys.argv[1]
     output_filename = sys.argv[2] if len(sys.argv) > 2 else None
     
@@ -265,11 +345,6 @@ def main():
             print(f"❌ Failed to extract image for machine: {machine_name}")
             sys.exit(1)
             
-    except ValueError as e:
-        print(f"❌ Configuration error: {e}")
-        print("Please set the HTB_TOKEN environment variable:")
-        print("export HTB_TOKEN='your_htb_token_here'")
-        sys.exit(1)
     except Exception as e:
         print(f"❌ Unexpected error: {e}")
         sys.exit(1)

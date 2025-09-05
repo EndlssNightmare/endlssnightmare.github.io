@@ -6,18 +6,21 @@ import { FaArrowLeft } from 'react-icons/fa';
 import './WriteupDetail.css';
 
 // Import specific writeup components
+import WcorpWalkthrough from './writeups/Wcorp/WcorpWalkthrough';
 import DC02Walkthrough from './writeups/dc02/DC02Walkthrough';
 
 const WriteupDetail = () => {
   const { id } = useParams();
+  const normalizedId = (id || '').toLowerCase();
 
   // Map of available writeups
   const writeupComponents = {
-    'dc02-walkthrough': DC02Walkthrough
-  };
+    'dc02-walkthrough': DC02Walkthrough,
+    'wcorp-walkthrough': WcorpWalkthrough,
+};
 
   // Get the component for this writeup
-  const WriteupComponent = writeupComponents[id];
+  const WriteupComponent = writeupComponents[normalizedId];
 
   // If writeup not found, show error
   if (!WriteupComponent) {
