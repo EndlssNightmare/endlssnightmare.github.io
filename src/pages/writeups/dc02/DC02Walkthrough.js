@@ -10,7 +10,7 @@ const DC02Walkthrough = () => {
   const writeup = {
     id: 'dc02-walkthrough',
     title: 'DC02 Walkthrough',
-    date: 'Aug 12, 2025',
+    date: 'Aug 20, 2025',
     tags: ['hmv', 'windows', 'ad', 'asreproast', 'dcsync', 'backup-operators', 'password-cracking', 'smb', 'ldap'],
     difficulty: 'Medium',
     os: 'Windows',

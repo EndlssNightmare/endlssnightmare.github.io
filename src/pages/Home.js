@@ -15,7 +15,7 @@ const Home = () => {
     id: 7,
     title: 'Wcorp Walkthrough',
     excerpt: 'A challenging Windows Active Directory environment featuring SMB enumeration, AS-REP roasting, Kerberoasting, and DCSync techniques. This writeup covers advanced lateral movement and privilege escalation methods.',
-    date: 'Aug 15, 2025',
+    date: 'Sep 05, 2025',
     category: 'writeup',
     tags: ['hc', 'smb', 'ad', 'windows', 'asreproast', 'dcsync', 'kerberoasting', 'password-cracking'],
     image: '/images/writeups/wcorp/machine.png',
@@ -26,7 +26,7 @@ const Home = () => {
     id: 2,
     title: 'DC02 Walkthrough',
     excerpt: 'This Windows Domain Controller (DC01) in the SOUPEDECODE.LOCAL domain was discovered via internal network scanning. Enumeration revealed multiple Active Directory services and valid SMB credentials (charlie:charlie). AS-REP roasting against zximena448 yielded the password internet, granting Backup Operators group privileges.',
-    date: 'Aug 12, 2025',
+    date: 'Aug 20, 2025',
     category: 'writeup',
     tags: ["hmv", "windows", "ad", "asreproast", "dcsync", "backup-operators", "password-cracking", "smb", "ldap"],
     image: '/images/writeups/dc02/machine.png',
@@ -34,21 +34,32 @@ const Home = () => {
     os: 'Windows'
     },
     {
-    id: 1,
-    title: 'Knock-Tool',
-    excerpt: 'A network reconnaissance tool designed for port knocking techniques and stealthy network enumeration. Features advanced scanning capabilities with customizable timing and protocol support.',
-    date: 'Aug 10, 2025',
-    category: 'project',
-    tags: ['python', 'network', 'security'],
-    image: '/images/projects/Knock-Tool.png',
-    link: 'https://github.com/EndlssNightmare/Knock-Tool',
-    github: 'https://github.com/EndlssNightmare/Knock-Tool'
+      id: 6,
+      title: 'zsh-configs',
+      excerpt: 'Custom zsh configuration files and aliases optimized for penetration testing workflows. Includes specialized functions for common security tools and enhanced terminal productivity features.',
+      date: 'Jul 28, 2025',
+      category: 'project',
+      tags: ['zsh', 'shell', 'pentesting'],
+      image: '/images/projects/zshconf.png',
+      link: 'https://github.com/EndlssNightmare/zsh-configs',
+      github: 'https://github.com/EndlssNightmare/zsh-configs'
+    },
+    {
+      id: 5,
+      title: 'MullvScript',
+      excerpt: 'Automated VPN configuration and management script for Mullvad VPN. Streamlines the setup process and provides enhanced privacy features for secure network connections.',
+      date: 'Feb 27, 2025',
+      category: 'project',
+      tags: ['bash', 'vpn'],
+      image: '/images/projects/MullvScript.png',
+      link: 'https://github.com/EndlssNightmare/MullvScript',
+      github: 'https://github.com/EndlssNightmare/MullvScript'
     },
     {
     id: 4,
     title: 'Digispark Scripts',
     excerpt: 'Collection of Arduino Digispark payloads and scripts for penetration testing and security research. Includes various USB attack vectors and automation scripts for ethical hacking assessments.',
-    date: 'Aug 5, 2025',
+    date: 'Feb 03, 2025',
     category: 'project',
     tags: ['arduino', 'usb', 'pentesting'],
     image: '/images/projects/digispark_scripts.png',
@@ -56,27 +67,16 @@ const Home = () => {
     github: 'https://github.com/EndlssNightmare/Digispark-scripts'
     },
     {
-    id: 5,
-    title: 'MullvScript',
-    excerpt: 'Automated VPN configuration and management script for Mullvad VPN. Streamlines the setup process and provides enhanced privacy features for secure network connections.',
-    date: 'Aug 1, 2025',
-    category: 'project',
-    tags: ['bash', 'vpn'],
-    image: '/images/projects/MullvScript.png',
-    link: 'https://github.com/EndlssNightmare/MullvScript',
-    github: 'https://github.com/EndlssNightmare/MullvScript'
-    },
-    {
-    id: 6,
-    title: 'zsh-configs',
-    excerpt: 'Custom zsh configuration files and aliases optimized for penetration testing workflows. Includes specialized functions for common security tools and enhanced terminal productivity features.',
-    date: 'Jul 28, 2025',
-    category: 'project',
-    tags: ['zsh', 'shell', 'pentesting'],
-    image: '/images/projects/zshconf.png',
-    link: 'https://github.com/EndlssNightmare/zsh-configs',
-    github: 'https://github.com/EndlssNightmare/zsh-configs'
-    }], []);
+      id: 1,
+      title: 'Knock-Tool',
+      excerpt: 'A network reconnaissance tool designed for port knocking techniques and stealthy network enumeration. Features advanced scanning capabilities with customizable timing and protocol support.',
+      date: 'May 05, 2024',
+      category: 'project',
+      tags: ['python', 'network', 'security'],
+      image: '/images/projects/Knock-Tool.png',
+      link: 'https://github.com/EndlssNightmare/Knock-Tool',
+      github: 'https://github.com/EndlssNightmare/Knock-Tool'
+      }], []);
 
   useEffect(() => {
     const filtered = recentPosts.filter(post => {
