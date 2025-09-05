@@ -142,7 +142,7 @@ nxc smb 172.16.13.103 -u 'guest' -p '' --rid-brute
 
 Save the result into a file, filter out and save only the usernames.
 \`\`\`bash
-cat a | grep "SidTypeUser" | awk -F " " '{print $6}' | cut -d '\' -f 2 > users.txt
+cat a | grep "SidTypeUser" | awk -F " " '{print $6}' | cut -d '\\' -f 2 > users.txt
 
 Administrator
 Guest
