@@ -61,8 +61,10 @@ const Card = ({ title, excerpt, date, tags, image, link, category, os, github })
             whileHover={{ opacity: 1 }}
             transition={{ duration: 0.3 }}
           >
-            <div className="overlay-content">
-              <span className="category-badge">{category}</span>
+            <div className="glitch-effect">
+              <div className="scan-lines"></div>
+              <div className="glitch-text" data-text={category.toUpperCase()}>{category.toUpperCase()}</div>
+              <div className="digital-noise"></div>
             </div>
           </motion.div>
         </div>
