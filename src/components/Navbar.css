@@ -96,19 +96,223 @@
 }
 
 .theme-toggle {
-  background: none;
   border: none;
-  color: var(--text-primary);
+  color: white;
   font-size: 1.2rem;
   padding: 0.75rem;
   border-radius: 50%;
   cursor: pointer;
-  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  transform-style: preserve-3d;
+  perspective: 1000px;
+}
+
+.theme-toggle::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+  transform: translateX(-100%);
+  transition: transform 0.6s ease;
+}
+
+.theme-toggle:hover::before {
+  transform: translateX(100%);
 }
 
 .theme-toggle:hover {
-  background-color: rgba(255, 0, 0, 0.1);
-  color: var(--primary-color);
+  animation: pulse 2s infinite;
+}
+
+.theme-icon-container {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform-style: preserve-3d;
+}
+
+.theme-particles {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+}
+
+.particle {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 6px;
+  height: 6px;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.9), transparent);
+  border-radius: 50%;
+  opacity: 0;
+  transform: translate(-50%, -50%);
+}
+
+.theme-toggle:active .particle-1 {
+  animation: explode-1 0.8s ease-out forwards;
+}
+
+.theme-toggle:active .particle-2 {
+  animation: explode-2 0.8s ease-out forwards;
+}
+
+.theme-toggle:active .particle-3 {
+  animation: explode-3 0.8s ease-out forwards;
+}
+
+.theme-toggle:active .particle-4 {
+  animation: explode-4 0.8s ease-out forwards;
+}
+
+.theme-toggle:active .particle-5 {
+  animation: explode-5 0.8s ease-out forwards;
+}
+
+.theme-toggle:active .particle-6 {
+  animation: explode-6 0.8s ease-out forwards;
+}
+
+.theme-ripple {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.3), transparent);
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.theme-toggle:active .theme-ripple {
+  animation: ripple 0.8s ease-out forwards;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    box-shadow: none;
+  }
+  50% {
+    box-shadow: none;
+  }
+}
+
+@keyframes explode-1 {
+  0% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(0) translateX(0) translateY(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(1) translateX(30px) translateY(-20px);
+  }
+}
+
+@keyframes explode-2 {
+  0% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(0) translateX(0) translateY(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(1) translateX(-25px) translateY(-30px);
+  }
+}
+
+@keyframes explode-3 {
+  0% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(0) translateX(0) translateY(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(1) translateX(35px) translateY(15px);
+  }
+}
+
+@keyframes explode-4 {
+  0% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(0) translateX(0) translateY(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(1) translateX(-30px) translateY(25px);
+  }
+}
+
+@keyframes explode-5 {
+  0% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(0) translateX(0) translateY(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(1) translateX(20px) translateY(35px);
+  }
+}
+
+@keyframes explode-6 {
+  0% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(0) translateX(0) translateY(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(1) translateX(-35px) translateY(-15px);
+  }
+}
+
+@keyframes ripple {
+  0% {
+    width: 0;
+    height: 0;
+    opacity: 1;
+  }
+  100% {
+    width: 100px;
+    height: 100px;
+    opacity: 0;
+  }
+}
+
+/* Theme-specific colors */
+/* Light theme - Moon visible, use gray color */
+[data-theme="light"] .theme-toggle {
+  background: #6B7280;
+  box-shadow: none;
+  --toggle-shadow-color: rgba(107, 114, 128, 0.5);
+}
+
+[data-theme="light"] .theme-toggle:hover {
+  background: #6B7280;
+  box-shadow: none;
+  --toggle-shadow-color: rgba(107, 114, 128, 0.7);
+}
+
+/* Dark theme - Sun visible, use dark red */
+[data-theme="dark"] .theme-toggle {
+  background: #8B0000;
+  box-shadow: none;
+  --toggle-shadow-color: rgba(139, 0, 0, 0.5);
+}
+
+[data-theme="dark"] .theme-toggle:hover {
+  background: #8B0000;
+  box-shadow: none;
+  --toggle-shadow-color: rgba(139, 0, 0, 0.7);
 }
 
 /* Responsive design */

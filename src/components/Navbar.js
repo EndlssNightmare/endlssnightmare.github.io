@@ -103,10 +103,45 @@ const Navbar = () => {
           <motion.button
             className="theme-toggle"
             onClick={toggleTheme}
-            whileHover={{ rotate: 180 }}
-            transition={{ duration: 0.2 }}
+            whileHover={{ 
+              scale: 1.1,
+              rotateY: 180
+            }}
+            whileTap={{ 
+              scale: 0.95,
+              rotateZ: 360
+            }}
+            transition={{ 
+              type: "spring",
+              stiffness: 300,
+              damping: 20
+            }}
+            animate={{
+              rotateZ: theme === 'dark' ? 0 : 180
+            }}
           >
-            {theme === 'dark' ? <FaSun /> : <FaMoon />}
+            <motion.div
+              className="theme-icon-container"
+              animate={{
+                rotateX: theme === 'dark' ? 0 : 180,
+                scale: [1, 1.2, 1]
+              }}
+              transition={{
+                duration: 0.6,
+                ease: "easeInOut"
+              }}
+            >
+              {theme === 'dark' ? <FaSun /> : <FaMoon />}
+            </motion.div>
+            <div className="theme-particles">
+              <div className="particle particle-1"></div>
+              <div className="particle particle-2"></div>
+              <div className="particle particle-3"></div>
+              <div className="particle particle-4"></div>
+              <div className="particle particle-5"></div>
+              <div className="particle particle-6"></div>
+            </div>
+            <div className="theme-ripple"></div>
           </motion.button>
         </div>
       </div>
