@@ -98,222 +98,106 @@
 .theme-toggle {
   border: none;
   color: white;
-  font-size: 1.2rem;
-  padding: 0.75rem;
+  font-size: 1.1rem;
+  width: 50px;
+  height: 50px;
   border-radius: 50%;
   cursor: pointer;
   position: relative;
   overflow: hidden;
-  transform-style: preserve-3d;
-  perspective: 1000px;
-}
-
-.theme-toggle::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
-  transform: translateX(-100%);
-  transition: transform 0.6s ease;
-}
-
-.theme-toggle:hover::before {
-  transform: translateX(100%);
-}
-
-.theme-toggle:hover {
-  animation: pulse 2s infinite;
-}
-
-.theme-icon-container {
-  position: relative;
-  z-index: 2;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   display: flex;
   align-items: center;
   justify-content: center;
-  transform-style: preserve-3d;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  /* Default background to prevent flash */
+  background: linear-gradient(135deg, #7F1D1D, #991B1B);
 }
 
-.theme-particles {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  transform: translate(-50%, -50%);
+.theme-toggle.theme-transitioning {
+  background-size: 200% 200%;
+  animation: gradientShift 0.6s ease-in-out;
 }
 
-.particle {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 6px;
-  height: 6px;
-  background: radial-gradient(circle, rgba(255, 255, 255, 0.9), transparent);
-  border-radius: 50%;
-  opacity: 0;
-  transform: translate(-50%, -50%);
-}
-
-.theme-toggle:active .particle-1 {
-  animation: explode-1 0.8s ease-out forwards;
-}
-
-.theme-toggle:active .particle-2 {
-  animation: explode-2 0.8s ease-out forwards;
-}
-
-.theme-toggle:active .particle-3 {
-  animation: explode-3 0.8s ease-out forwards;
-}
-
-.theme-toggle:active .particle-4 {
-  animation: explode-4 0.8s ease-out forwards;
-}
-
-.theme-toggle:active .particle-5 {
-  animation: explode-5 0.8s ease-out forwards;
-}
-
-.theme-toggle:active .particle-6 {
-  animation: explode-6 0.8s ease-out forwards;
-}
-
-.theme-ripple {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 0;
-  height: 0;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(255, 255, 255, 0.3), transparent);
-  transform: translate(-50%, -50%);
-  opacity: 0;
-  pointer-events: none;
-}
-
-.theme-toggle:active .theme-ripple {
-  animation: ripple 0.8s ease-out forwards;
-}
-
-@keyframes pulse {
-  0%, 100% {
-    box-shadow: none;
+@keyframes gradientShift {
+  0% {
+    background-position: 0% 50%;
   }
   50% {
-    box-shadow: none;
-  }
-}
-
-@keyframes explode-1 {
-  0% {
-    opacity: 1;
-    transform: translate(-50%, -50%) scale(0) translateX(0) translateY(0);
+    background-position: 100% 50%;
   }
   100% {
-    opacity: 0;
-    transform: translate(-50%, -50%) scale(1) translateX(30px) translateY(-20px);
+    background-position: 0% 50%;
   }
 }
 
-@keyframes explode-2 {
-  0% {
-    opacity: 1;
-    transform: translate(-50%, -50%) scale(0) translateX(0) translateY(0);
-  }
-  100% {
-    opacity: 0;
-    transform: translate(-50%, -50%) scale(1) translateX(-25px) translateY(-30px);
-  }
+
+.theme-toggle:hover {
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
 }
 
-@keyframes explode-3 {
-  0% {
-    opacity: 1;
-    transform: translate(-50%, -50%) scale(0) translateX(0) translateY(0);
-  }
-  100% {
-    opacity: 0;
-    transform: translate(-50%, -50%) scale(1) translateX(35px) translateY(15px);
-  }
+.theme-icon-wrapper {
+  position: relative;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
 }
 
-@keyframes explode-4 {
-  0% {
-    opacity: 1;
-    transform: translate(-50%, -50%) scale(0) translateX(0) translateY(0);
-  }
-  100% {
-    opacity: 0;
-    transform: translate(-50%, -50%) scale(1) translateX(-30px) translateY(25px);
-  }
+.theme-icon {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
 }
 
-@keyframes explode-5 {
-  0% {
-    opacity: 1;
-    transform: translate(-50%, -50%) scale(0) translateX(0) translateY(0);
-  }
-  100% {
-    opacity: 0;
-    transform: translate(-50%, -50%) scale(1) translateX(20px) translateY(35px);
-  }
+.theme-glow {
+  position: absolute;
+  top: -5px;
+  left: -5px;
+  right: -5px;
+  bottom: -5px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.3), transparent);
+  pointer-events: none;
+  z-index: 1;
 }
 
-@keyframes explode-6 {
-  0% {
-    opacity: 1;
-    transform: translate(-50%, -50%) scale(0) translateX(0) translateY(0);
-  }
-  100% {
-    opacity: 0;
-    transform: translate(-50%, -50%) scale(1) translateX(-35px) translateY(-15px);
-  }
-}
 
-@keyframes ripple {
-  0% {
-    width: 0;
-    height: 0;
-    opacity: 1;
-  }
-  100% {
-    width: 100px;
-    height: 100px;
-    opacity: 0;
-  }
-}
 
-/* Theme-specific colors */
+
+/* Theme-specific colors with smooth transitions */
 /* Light theme - Moon visible, use gray color */
 [data-theme="light"] .theme-toggle {
-  background: #6B7280;
-  box-shadow: none;
-  --toggle-shadow-color: rgba(107, 114, 128, 0.5);
+  background: linear-gradient(135deg, #4B5563, #6B7280);
+  color: white;
+  animation: themeTransition 0.6s ease-in-out;
 }
 
 [data-theme="light"] .theme-toggle:hover {
-  background: #6B7280;
-  box-shadow: none;
-  --toggle-shadow-color: rgba(107, 114, 128, 0.7);
+  background: linear-gradient(135deg, #374151, #4B5563);
+  box-shadow: 0 4px 12px rgba(75, 85, 99, 0.3);
+  transform: scale(1.05);
 }
 
-/* Dark theme - Sun visible, use dark red */
+/* Dark theme - Sun visible, use dark red gradient */
 [data-theme="dark"] .theme-toggle {
-  background: #8B0000;
-  box-shadow: none;
-  --toggle-shadow-color: rgba(139, 0, 0, 0.5);
+  background: linear-gradient(135deg, #7F1D1D, #991B1B);
+  color: white;
+  animation: themeTransition 0.6s ease-in-out;
 }
 
 [data-theme="dark"] .theme-toggle:hover {
-  background: #8B0000;
-  box-shadow: none;
-  --toggle-shadow-color: rgba(139, 0, 0, 0.7);
+  background: linear-gradient(135deg, #5F1A1A, #7F1D1D);
+  box-shadow: 0 4px 12px rgba(127, 29, 29, 0.3);
+  transform: scale(1.05);
 }
+
 
 /* Responsive design */
 @media (max-width: 768px) {

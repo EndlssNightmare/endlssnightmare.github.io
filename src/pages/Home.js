@@ -2,6 +2,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { FaClock, FaSearch, FaFilter } from 'react-icons/fa';
 import Card from '../components/Card';
+import SEO from '../components/SEO';
 import './Home.css';
 
 const Home = () => {
@@ -116,12 +117,18 @@ const Home = () => {
   };
 
   return (
-    <motion.div 
-      className="home-page"
-      initial="hidden"
-      animate="visible"
-      variants={containerVariants}
-    >
+    <>
+      <SEO 
+        title="V01 - Cybersecurity Portfolio"
+        description="V01's Cybersecurity Portfolio - Pentester, CTF player, ACCH Team. Explore my latest writeups, projects, and cybersecurity content."
+        url="https://endlssightmare.com/"
+      />
+      <motion.div 
+        className="home-page"
+        initial="hidden"
+        animate="visible"
+        variants={containerVariants}
+      >
       <motion.div className="page-header" variants={itemVariants}>
         <div className="header-content">
           <FaClock className="header-icon" />
@@ -205,7 +212,8 @@ const Home = () => {
       </motion.div>
 
 
-    </motion.div>
+      </motion.div>
+    </>
   );
 };
 

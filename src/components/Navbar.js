@@ -6,7 +6,7 @@ import { useTheme } from '../contexts/ThemeContext';
 import './Navbar.css';
 
 const Navbar = () => {
-  const { theme, toggleTheme } = useTheme();
+  const { theme, toggleTheme, isTransitioning } = useTheme();
   const location = useLocation();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
@@ -101,47 +101,71 @@ const Navbar = () => {
           })}
           
           <motion.button
-            className="theme-toggle"
+            className={`theme-toggle ${isTransitioning ? 'theme-transitioning' : ''}`}
             onClick={toggleTheme}
             whileHover={{ 
-              scale: 1.1,
-              rotateY: 180
+              scale: 1.05,
+              y: -2
             }}
             whileTap={{ 
-              scale: 0.95,
-              rotateZ: 360
+              scale: 0.95
             }}
             transition={{ 
               type: "spring",
-              stiffness: 300,
-              damping: 20
-            }}
-            animate={{
-              rotateZ: theme === 'dark' ? 0 : 180
+              stiffness: 400,
+              damping: 25
             }}
           >
             <motion.div
-              className="theme-icon-container"
+              className="theme-icon-wrapper"
               animate={{
-                rotateX: theme === 'dark' ? 0 : 180,
-                scale: [1, 1.2, 1]
+                rotate: isTransitioning ? 360 : 0,
+                scale: isTransitioning ? 1.2 : 1
               }}
               transition={{
                 duration: 0.6,
                 ease: "easeInOut"
               }}
             >
-              {theme === 'dark' ? <FaSun /> : <FaMoon />}
+              <motion.div
+                className="theme-icon"
+                animate={{
+                  opacity: theme === 'dark' ? [0, 1] : [1, 0],
+                  y: theme === 'dark' ? [10, 0] : [0, -10]
+                }}
+                transition={{
+                  duration: 0.3,
+                  ease: "easeInOut"
+                }}
+              >
+                <FaSun />
+              </motion.div>
+              <motion.div
+                className="theme-icon"
+                animate={{
+                  opacity: theme === 'light' ? [0, 1] : [1, 0],
+                  y: theme === 'light' ? [10, 0] : [0, -10]
+                }}
+                transition={{
+                  duration: 0.3,
+                  ease: "easeInOut"
+                }}
+              >
+                <FaMoon />
+              </motion.div>
             </motion.div>
-            <div className="theme-particles">
-              <div className="particle particle-1"></div>
-              <div className="particle particle-2"></div>
-              <div className="particle particle-3"></div>
-              <div className="particle particle-4"></div>
-              <div className="particle particle-5"></div>
-              <div className="particle particle-6"></div>
-            </div>
-            <div className="theme-ripple"></div>
+            
+            <motion.div
+              className="theme-glow"
+              animate={{
+                opacity: isTransitioning ? 1 : 0,
+                scale: isTransitioning ? [0.8, 1.2, 0.8] : 0
+              }}
+              transition={{
+                duration: 0.6,
+                ease: "easeInOut"
+              }}
+            />
           </motion.button>
         </div>
       </div>

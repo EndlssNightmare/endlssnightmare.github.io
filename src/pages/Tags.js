@@ -140,10 +140,6 @@ const Tags = () => {
             whileTap={{ scale: 0.95 }}
           >
             <Link to={`/tags/${tag.name}`} className="tag-card">
-              <div 
-                className="tag-color-indicator"
-                style={{ backgroundColor: tag.color }}
-              />
               <div className="tag-content">
                 <h3 className="tag-name">{tag.name}</h3>
                 <span className="tag-count">{tag.count} posts</span>

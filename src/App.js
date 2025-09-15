@@ -1,5 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { HelmetProvider } from 'react-helmet-async';
 import { ThemeProvider } from './contexts/ThemeContext';
 import Navbar from './components/Navbar';
 import Sidebar from './components/Sidebar';
@@ -14,27 +15,29 @@ import './App.css';
 
 function App() {
   return (
-    <ThemeProvider>
-      <Router>
-        <div className="App">
-          <Navbar />
-          <div className="main-container">
-            <Sidebar />
-            <main className="content">
-              <Routes>
-                <Route path="/" element={<Home />} />
-                <Route path="/writeups" element={<Writeups />} />
-                <Route path="/projects" element={<Projects />} />
-                <Route path="/tags" element={<Tags />} />
-                <Route path="/writeups/:id" element={<WriteupDetail />} />
-                <Route path="/tags/:tag" element={<TagDetail />} />
-              </Routes>
-            </main>
+    <HelmetProvider>
+      <ThemeProvider>
+        <Router>
+          <div className="App">
+            <Navbar />
+            <div className="main-container">
+              <Sidebar />
+              <main className="content">
+                <Routes>
+                  <Route path="/" element={<Home />} />
+                  <Route path="/writeups" element={<Writeups />} />
+                  <Route path="/projects" element={<Projects />} />
+                  <Route path="/tags" element={<Tags />} />
+                  <Route path="/writeups/:id" element={<WriteupDetail />} />
+                  <Route path="/tags/:tag" element={<TagDetail />} />
+                </Routes>
+              </main>
+            </div>
+            <Footer />
           </div>
-          <Footer />
-        </div>
-      </Router>
-    </ThemeProvider>
+        </Router>
+      </ThemeProvider>
+    </HelmetProvider>
   );
 }
 

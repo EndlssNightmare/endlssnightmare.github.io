@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { FaCalendar, FaTag } from 'react-icons/fa';
@@ -6,6 +6,9 @@ import './Card.css';
 
 const Card = ({ title, excerpt, date, tags, image, link, category, os, github }) => {
   const navigate = useNavigate();
+  const [imageLoading, setImageLoading] = useState(true);
+  const [imageError, setImageError] = useState(false);
+  const [ripples, setRipples] = useState([]);
 
   const handleCardClick = (e) => {
     // Don't navigate if clicking on a tag or any link
@@ -13,6 +16,26 @@ const Card = ({ title, excerpt, date, tags, image, link, category, os, github })
       e.stopPropagation();
       return;
     }
+    
+    // Criar efeito ripple
+    const rect = e.currentTarget.getBoundingClientRect();
+    const size = Math.max(rect.width, rect.height);
+    const x = e.clientX - rect.left - size / 2;
+    const y = e.clientY - rect.top - size / 2;
+    
+    const newRipple = {
+      x,
+      y,
+      size,
+      id: Date.now()
+    };
+    
+    setRipples(prev => [...prev, newRipple]);
+    
+    // Remover ripple após animação
+    setTimeout(() => {
+      setRipples(prev => prev.filter(ripple => ripple.id !== newRipple.id));
+    }, 600);
     
     if (category === 'project') {
       window.open(link, '_blank', 'noopener,noreferrer');
@@ -43,16 +66,21 @@ const Card = ({ title, excerpt, date, tags, image, link, category, os, github })
     >
       <div className="card-content">
         <div className="card-image-container">
+          {imageLoading && !imageError && (
+            <div className="card-image card-image-loading" />
+          )}
           <img 
             src={image} 
             alt={title} 
-            className="card-image" 
+            className={`card-image ${imageLoading ? 'hidden' : ''}`}
             onError={(e) => {
               console.error(`Failed to load image: ${image}`);
-              e.target.style.display = 'none';
+              setImageError(true);
+              setImageLoading(false);
             }}
             onLoad={() => {
               console.log(`Successfully loaded image: ${image}`);
+              setImageLoading(false);
             }}
           />
           <motion.div 
@@ -144,6 +172,23 @@ const Card = ({ title, excerpt, date, tags, image, link, category, os, github })
           whileHover={{ opacity: 1 }}
           transition={{ duration: 0.3 }}
         />
+        
+        {/* Efeitos ripple */}
+        {ripples.map(ripple => (
+          <motion.div
+            key={ripple.id}
+            className="ripple-effect"
+            initial={{ scale: 0, opacity: 0.6 }}
+            animate={{ scale: 1, opacity: 0 }}
+            transition={{ duration: 0.6, ease: "easeOut" }}
+            style={{
+              left: ripple.x,
+              top: ripple.y,
+              width: ripple.size,
+              height: ripple.size,
+            }}
+          />
+        ))}
       </div>
     </motion.div>
   );

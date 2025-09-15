@@ -1,9 +1,13 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { FaGithub, FaKey, FaBox, FaServer, FaUsers } from 'react-icons/fa';
 import './Sidebar.css';
 
 const Sidebar = () => {
+  const [displayedText, setDisplayedText] = useState('');
+  
+  const targetName = 'V01';
+  const hashChars = 'abcdef0123456789';
   const socialLinks = [
     { icon: FaGithub, url: 'https://github.com/EndlssNightmare', label: 'GitHub' },
     { icon: FaKey, url: 'https://keybase.io/endlssnightmare', label: 'Keybase' },
@@ -12,6 +16,57 @@ const Sidebar = () => {
     { icon: FaUsers, url: 'https://app.hackingclub.com/profile/user/20057', label: 'HackingClub' }
   ];
 
+  // Hash to name transformation effect
+  useEffect(() => {
+    // Start with random hash
+    let currentHash = generateRandomHash(targetName.length);
+    setDisplayedText(currentHash);
+    
+    let crackProgress = 0;
+    
+    // Fast randomization timer
+    const randomizeTimer = setInterval(() => {
+      // Generate new random hash for unrevealed characters
+      let newText = '';
+      for (let i = 0; i < targetName.length; i++) {
+        const charactersToReveal = Math.floor((crackProgress / 100) * targetName.length);
+        if (i < charactersToReveal) {
+          newText += targetName[i]; // Show target character
+        } else {
+          newText += generateRandomHash(1); // Show random hash character
+        }
+      }
+      setDisplayedText(newText);
+    }, 50); // Fast randomization every 50ms
+    
+    // Slow cracking timer
+    const crackTimer = setInterval(() => {
+      crackProgress += Math.random() * 3 + 1; // Very slow progress between 1-4%
+      
+      if (crackProgress >= 100) {
+        // Complete transformation
+        setDisplayedText(targetName);
+        clearInterval(randomizeTimer);
+        clearInterval(crackTimer);
+      }
+    }, 300); // Slow cracking every 300ms
+
+    return () => {
+      clearInterval(randomizeTimer);
+      clearInterval(crackTimer);
+    };
+  }, []);
+
+  // Generate random hash characters for display
+  const generateRandomHash = (length) => {
+    let hash = '';
+    for (let i = 0; i < length; i++) {
+      hash += hashChars[Math.floor(Math.random() * hashChars.length)];
+    }
+    return hash;
+  };
+
+
   return (
     <motion.aside 
       className="sidebar"
@@ -19,6 +74,7 @@ const Sidebar = () => {
       animate={{ x: 0, opacity: 1 }}
       transition={{ duration: 0.6, ease: "easeOut" }}
     >
+
       <div className="sidebar-content">
         <motion.div 
           className="profile-section"
@@ -28,24 +84,14 @@ const Sidebar = () => {
         >
           <motion.div 
             className="profile-avatar-container"
-    
+            whileHover={{ scale: 1.05 }}
             transition={{ type: "spring", stiffness: 300 }}
           >
+            
             <img 
               src="/images/profile/profile.jpg" 
               alt="V01" 
               className="profile-avatar"
-            />
-            <motion.div 
-              className="avatar-glow"
-              animate={{ 
-                boxShadow: [
-                  "0 0 20px rgba(255, 0, 0, 0.3)",
-                  "0 0 40px rgba(255, 0, 0, 0.5)",
-                  "0 0 20px rgba(255, 0, 0, 0.3)"
-                ]
-              }}
-              transition={{ duration: 2, repeat: Infinity }}
             />
           </motion.div>
           
@@ -55,7 +101,11 @@ const Sidebar = () => {
             animate={{ y: 0, opacity: 1 }}
             transition={{ delay: 0.3, duration: 0.6 }}
           >
-            V01
+            <div className="hash-crack-container">
+              <span className="hash-crack-text">
+                {displayedText}
+              </span>
+            </div>
           </motion.h2>
           
           <motion.p 
@@ -103,10 +153,18 @@ const Sidebar = () => {
                 }}
                 whileHover={{ 
                   color: 'var(--primary-color)',
-                  y: -3,
+                  y: -5,
+                  scale: 1.05,
+                  rotateX: 5,
                   transition: {
-                    duration: 0.15  // Zoom rápido ao entrar (0.15s)
+                    duration: 0.2,
+                    type: "spring",
+                    stiffness: 400
                   }
+                }}
+                whileTap={{ 
+                  scale: 0.95,
+                  rotateX: -5
                 }}
               >
                 <Icon />
