@@ -1,57 +1,71 @@
-# Workflow para fazer deploy de conteúdo estático para o GitHub Pages
-name: Deploy static content to Pages
+name: Deploy to GitHub Pages
 
 on:
-  # Roda quando um push é feito para o branch principal
   push:
-    branches: ['main'] # Mude para 'master' se for o seu branch principal
-
-  # Permite que você rode este workflow manualmente pela aba Actions
+    branches: [ main ]
   workflow_dispatch:
 
-# Define as permissões do GITHUB_TOKEN para permitir o deploy no GitHub Pages
 permissions:
   contents: read
   pages: write
   id-token: write
 
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
 jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          
+      - name: Install dependencies
+        run: npm ci
+        
+      - name: Build
+        run: npm run build
+        
+      - name: Create static files for SPA routes
+        run: |
+          # Create directories and copy index.html for each route
+          mkdir -p build/writeups
+          mkdir -p build/projects
+          mkdir -p build/tags
+          
+          # Copy index.html to each route directory
+          cp build/index.html build/writeups/index.html
+          cp build/index.html build/projects/index.html
+          cp build/index.html build/tags/index.html
+          
+          # Create specific writeup pages
+          mkdir -p build/writeups/wcorp-walkthrough
+          mkdir -p build/writeups/dc02-walkthrough
+          cp build/index.html build/writeups/wcorp-walkthrough/index.html
+          cp build/index.html build/writeups/dc02-walkthrough/index.html
+          
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
+        
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: './build'
+
   deploy:
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
+    needs: build
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20 # Use uma versão mais recente do Node
-      - name: Configure npm
-        run: |
-          npm config set legacy-peer-deps true
-          npm config set strict-ssl false
-      - name: Install dependencies
-        run: |
-          npm cache clean --force
-          rm -rf node_modules package-lock.json
-          npm install
-      - name: Build
-        run: npm run build
-      - name: Copy to docs
-        run: |
-          rm -rf docs
-          cp -r build docs
-          echo "# Redirecting..." > docs/404.html
-          echo "<script>window.location.href = '/';</script>" >> docs/404.html
-      - name: Setup Pages
-        uses: actions/configure-pages@v5
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          # Faz o upload da pasta 'docs'
-          path: './docs'
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
