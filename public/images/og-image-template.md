@@ -47,3 +47,4 @@
 ## Exemplo de Implementação
 Depois de criar a imagem, salve como `/public/images/og-image.png` e atualize o componente SEO para usar esta imagem específica.
 
+

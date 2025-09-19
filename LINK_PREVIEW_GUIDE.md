@@ -213,3 +213,4 @@ npm start
 
 **Nota**: Este guia cobre as principais personalizações. Para mudanças mais específicas, edite diretamente os componentes `SEO.js` e `DynamicSEO.js`.
 
+

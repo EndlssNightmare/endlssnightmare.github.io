@@ -49,3 +49,4 @@ const DynamicSEO = ({ type, data }) => {
 
 export default DynamicSEO;
 
+
