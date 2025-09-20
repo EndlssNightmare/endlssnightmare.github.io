@@ -28,20 +28,29 @@ export const ThemeProvider = ({ children }) => {
   const toggleTheme = () => {
     const newTheme = theme === 'dark' ? 'light' : 'dark';
     
-    // Add transition class
+    // Add transition class and enhanced animation state
     setIsTransitioning(true);
     document.body.classList.add('theme-transitioning');
+    
+    // Add special class for enhanced button animations
+    const themeButton = document.querySelector('.theme-toggle');
+    if (themeButton) {
+      themeButton.classList.add('theme-morphing');
+    }
     
     // Update theme
     setTheme(newTheme);
     document.documentElement.setAttribute('data-theme', newTheme);
     localStorage.setItem('theme', newTheme);
     
-    // Remove transition class after animation
+    // Remove transition classes after extended animation duration
     setTimeout(() => {
       setIsTransitioning(false);
       document.body.classList.remove('theme-transitioning');
-    }, 300);
+      if (themeButton) {
+        themeButton.classList.remove('theme-morphing');
+      }
+    }, 800); // Extended duration to match new animations
   };
 
   const value = {

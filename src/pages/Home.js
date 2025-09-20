@@ -119,8 +119,8 @@ const Home = () => {
   return (
     <>
       <SEO 
-        title="V01 - Cybersecurity Portfolio"
-        description="V01's Cybersecurity Portfolio - Pentester, CTF player, ACCH Team. Explore my latest writeups, projects, and cybersecurity content."
+        title="V01 - Cybersecurity Notes"
+        description="V01's Cybersecurity Notes - Pentester, CTF player, ACCH Team. Explore my latest writeups, projects, and cybersecurity content."
         url="https://endlssightmare.com/"
       />
       <motion.div 

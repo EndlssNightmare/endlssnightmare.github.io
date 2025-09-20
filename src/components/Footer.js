@@ -24,7 +24,7 @@ const Footer = () => {
               © {currentYear} V01
             </p>
             <p className="footer-note">
-              This portfolio showcases ethical hacking and security research.
+              This site showcases ethical hacking and security research.
             </p>
           </div>
         </motion.div>

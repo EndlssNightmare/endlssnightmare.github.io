@@ -25,19 +25,19 @@ const DynamicSEO = ({ type, data }) => {
       case 'tag':
         return {
           title: `${data.tag} - V01 Cybersecurity Content`,
-          description: `Explore all ${data.tag} related content on V01's cybersecurity portfolio`,
+          description: `Explore all ${data.tag} related content on V01's cybersecurity notes`,
           image: 'https://endlssightmare.com/images/profile/profile.jpg',
           url: `https://endlssightmare.com/tags/${data.tag}`,
-          keywords: `${data.tag}, cybersecurity, content, portfolio`
+          keywords: `${data.tag}, cybersecurity, content, notes`
         };
       
       default:
         return {
-          title: "V01 - Cybersecurity Portfolio",
-          description: "V01's Cybersecurity Portfolio - Pentester, CTF player, ACCH Team",
+          title: "V01 - Cybersecurity Notes",
+          description: "V01's Cybersecurity Notes - Pentester, CTF player, ACCH Team",
           image: "https://endlssightmare.com/images/profile/profile.jpg",
           url: "https://endlssightmare.com/",
-          keywords: "cybersecurity, pentesting, CTF, hacking, security, portfolio, V01, ACCH"
+          keywords: "cybersecurity, pentesting, CTF, hacking, security, notes, V01, ACCH"
         };
     }
   };

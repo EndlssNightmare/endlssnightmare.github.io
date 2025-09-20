@@ -67,7 +67,11 @@ const Navbar = () => {
           className="navbar-brand"
         >
           <Link to="/" className="brand-link">
-            V01
+            <img 
+              src="/images/V01Logo2.png" 
+              alt="V01 Logo" 
+              className="brand-logo"
+            />
           </Link>
         </motion.div>
 
@@ -105,37 +109,49 @@ const Navbar = () => {
             onClick={toggleTheme}
             whileHover={{ 
               scale: 1.05,
-              y: -2
+              y: -3,
+              rotateY: 5,
+              rotateX: 5
             }}
             whileTap={{ 
-              scale: 0.95
+              scale: 0.95,
+              rotateY: -5,
+              rotateX: -5
             }}
             transition={{ 
               type: "spring",
-              stiffness: 400,
-              damping: 25
+              stiffness: 300,
+              damping: 20,
+              mass: 0.8
+            }}
+            style={{
+              transformStyle: "preserve-3d"
             }}
           >
             <motion.div
               className="theme-icon-wrapper"
               animate={{
                 rotate: isTransitioning ? 360 : 0,
-                scale: isTransitioning ? 1.2 : 1
+                scale: isTransitioning ? 1.1 : 1
               }}
               transition={{
                 duration: 0.6,
-                ease: "easeInOut"
+                ease: [0.23, 1, 0.32, 1]
               }}
             >
               <motion.div
                 className="theme-icon"
                 animate={{
-                  opacity: theme === 'dark' ? [0, 1] : [1, 0],
-                  y: theme === 'dark' ? [10, 0] : [0, -10]
+                  opacity: theme === 'dark' ? 1 : 0,
+                  scale: theme === 'dark' ? 1 : 0.8,
+                  rotateY: theme === 'dark' ? 0 : 90
                 }}
                 transition={{
-                  duration: 0.3,
-                  ease: "easeInOut"
+                  duration: 0.4,
+                  ease: [0.23, 1, 0.32, 1]
+                }}
+                style={{
+                  transformStyle: "preserve-3d"
                 }}
               >
                 <FaSun />
@@ -143,29 +159,60 @@ const Navbar = () => {
               <motion.div
                 className="theme-icon"
                 animate={{
-                  opacity: theme === 'light' ? [0, 1] : [1, 0],
-                  y: theme === 'light' ? [10, 0] : [0, -10]
+                  opacity: theme === 'light' ? 1 : 0,
+                  scale: theme === 'light' ? 1 : 0.8,
+                  rotateY: theme === 'light' ? 0 : 90
                 }}
                 transition={{
-                  duration: 0.3,
-                  ease: "easeInOut"
+                  duration: 0.4,
+                  ease: [0.23, 1, 0.32, 1]
+                }}
+                style={{
+                  transformStyle: "preserve-3d"
                 }}
               >
                 <FaMoon />
               </motion.div>
             </motion.div>
             
-            <motion.div
-              className="theme-glow"
-              animate={{
-                opacity: isTransitioning ? 1 : 0,
-                scale: isTransitioning ? [0.8, 1.2, 0.8] : 0
-              }}
-              transition={{
-                duration: 0.6,
-                ease: "easeInOut"
-              }}
-            />
+            
+            {/* Particle effects */}
+            {isTransitioning && (
+              <>
+                {[...Array(6)].map((_, i) => (
+                  <motion.div
+                    key={i}
+                    className="theme-particle"
+                    initial={{
+                      opacity: 0,
+                      scale: 0,
+                      x: 0,
+                      y: 0
+                    }}
+                    animate={{
+                      opacity: [0, 1, 0],
+                      scale: [0, 1, 0],
+                      x: Math.cos(i * 60 * Math.PI / 180) * 40,
+                      y: Math.sin(i * 60 * Math.PI / 180) * 40
+                    }}
+                    transition={{
+                      duration: 0.8,
+                      delay: i * 0.1,
+                      ease: "easeOut"
+                    }}
+                    style={{
+                      position: 'absolute',
+                      width: '4px',
+                      height: '4px',
+                      background: 'rgba(255, 255, 255, 0.8)',
+                      borderRadius: '50%',
+                      pointerEvents: 'none',
+                      zIndex: 3
+                    }}
+                  />
+                ))}
+              </>
+            )}
           </motion.button>
         </div>
       </div>

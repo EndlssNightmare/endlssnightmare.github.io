@@ -2,12 +2,12 @@ import React from 'react';
 import { Helmet } from 'react-helmet-async';
 
 const SEO = ({ 
-  title = "V01 - Cybersecurity Portfolio", 
-  description = "V01's Cybersecurity Portfolio - Pentester, CTF player, ACCH Team",
+  title = "V01 - Cybersecurity Notes", 
+  description = "V01's Cybersecurity Notes - Pentester, CTF player, ACCH Team",
   image = "https://endlssightmare.com/images/profile/profile.jpg",
   url = "https://endlssightmare.com/",
   type = "website",
-  keywords = "cybersecurity, pentesting, CTF, hacking, security, portfolio, V01, ACCH"
+  keywords = "cybersecurity, pentesting, CTF, hacking, security, notes, V01, ACCH"
 }) => {
   return (
     <Helmet>
@@ -25,7 +25,7 @@ const SEO = ({
       <meta property="og:image" content={image} />
       <meta property="og:image:width" content="1200" />
       <meta property="og:image:height" content="630" />
-      <meta property="og:site_name" content="V01 Portfolio" />
+      <meta property="og:site_name" content="V01 Notes" />
       
       {/* Twitter */}
       <meta property="twitter:card" content="summary_large_image" />
