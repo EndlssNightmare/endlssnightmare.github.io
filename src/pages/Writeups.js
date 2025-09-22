@@ -12,6 +12,18 @@ const Writeups = () => {
   // Writeups data
   const writeups = useMemo(() => [
     {
+      id: 8,
+      title: 'Fluffy Walkthrough',
+      excerpt: 'Fluffy Walkthrough - This writeup documents the discovery and analysis of vulnerabilities, exploitation techniques, and privilege escalation methods.',
+      date: 'Sep 20, 2025',
+      tags: ['Htb', 'Ad', 'Smb', 'Ldap', 'Windows', 'Password-Cracking', 'Kerberoasting'],
+      image: '/images/writeups/fluffy/machine.png',
+      link: '/writeups/fluffy-walkthrough',
+      difficulty: 'Easy',
+      category: 'writeup',
+      os: 'Windows'
+    },
+    {
     id: 7,
     title: 'Wcorp Walkthrough',
     excerpt: 'A challenging Windows Active Directory environment featuring SMB enumeration, AS-REP roasting, Kerberoasting, and DCSync techniques. This writeup covers advanced lateral movement and privilege escalation methods.',

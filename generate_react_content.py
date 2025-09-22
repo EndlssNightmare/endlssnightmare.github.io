@@ -33,6 +33,10 @@ class WriteupGenerator:
                 image_url = self.copy_image(data['image_path'], data['machine_name'])
                 data['image_url'] = image_url
             
+            # Ensure image_url always has a valid path
+            if not data.get('image_url'):
+                data['image_url'] = f"/images/writeups/{data['machine_name'].lower()}/machine.png"
+            
             # Generate writeup HTML template (commented out - not used by React)
             # template = self.generate_writeup_template(data)
             # writeup_file = self.writeups_dir / f"{data['machine_name']}-walkthrough.html"
@@ -118,6 +122,8 @@ class WriteupGenerator:
         
         # Image handling
         print(f"\nImage file path (will be copied to {self.images_dir}):")
+        print("Tip: You can use the HTB image extractor script to download machine images:")
+        print("   python3 htb_image_extractor.py <machine_name>")
         image_path = input("Image path (or press Enter to skip): ").strip()
         
         return {
@@ -366,7 +372,7 @@ class WriteupGenerator:
       date: '{datetime.now().strftime('%b %d, %Y')}',
       category: 'writeup',
       tags: {str([tag.lower() for tag in data['tags']])},
-      image: '{data.get('image_url', '/images/writeups/default/machine.png')}',
+      image: '{data['image_url']}',
       link: '/writeups/{data['machine_name']}-walkthrough',
       os: '{data['os_type']}'
     }}"""
@@ -419,7 +425,7 @@ class WriteupGenerator:
       excerpt: '{data['excerpt']}',
       date: '{datetime.now().strftime('%b %d, %Y')}',
       tags: {str(data['tags'])},
-      image: '{data.get('image_url', '/images/writeups/default/machine.png')}',
+      image: '{data['image_url']}',
       link: '/writeups/{data['machine_name']}-walkthrough',
       difficulty: '{data['difficulty']}',
       category: 'writeup',
@@ -613,7 +619,7 @@ class WriteupGenerator:
       excerpt: '{data['excerpt']}',
       date: '{datetime.now().strftime('%b %d, %Y')}',
       tags: {str([tag.lower() for tag in data['tags']])},
-      image: '{data.get('image_url', f"/images/writeups/{data['machine_name'].lower()}/machine.png")}',
+      image: '{data['image_url']}',
       link: '/writeups/{data['machine_name']}-walkthrough',
       category: 'writeup'
     }}"""
@@ -755,7 +761,7 @@ This machine demonstrated various {data['os_type']} exploitation techniques and 
                 transition={{{{ delay: 0.3 + index * 0.1, duration: 0.3 }}}}
                 whileHover={{{{ scale: 1.1 }}}}
                 style={{{{ cursor: 'pointer' }}}}
-                onClick={{() => navigate(`/tags/${{{{String(tag).toLowerCase()}}}}`)}}
+                onClick={{() => navigate(`/tags/${{String(tag).toLowerCase()}}`)}}
               >
                 {{tag}}
               </motion.span>
@@ -788,7 +794,7 @@ This machine demonstrated various {data['os_type']} exploitation techniques and 
                 </div>
               </div>
               <div className="machine-info-right">
-                <img src="{data.get('image_url', f'/images/writeups/{data['machine_name']}/machine.png')}" alt="{data['title']}" className="machine-image" />
+                <img src="{data['image_url']}" alt="{data['title']}" className="machine-image" />
               </div>
             </div>
           </div>
@@ -1309,19 +1315,29 @@ export default {data['machine_name'].replace('-', '').title()}Walkthrough;
         
         # Find the writeupComponents object and add the new entry
         if mapping_entry not in content:
-            # Add to the writeupComponents object
-            # Insert before the closing brace without creating stray commas
-            content = re.sub(
-                r"(writeupComponents\s*=\s*\{)([^}]*)\}",
-                lambda m: f"{m.group(1)}{m.group(2).rstrip()}\n  ,{mapping_entry}\n}}",
-                content,
-                flags=re.DOTALL
-            )
+            # Find the writeupComponents object
+            writeup_components_pattern = r'const writeupComponents = \{(.*?)\};'
+            match = re.search(writeup_components_pattern, content, re.DOTALL)
             
-            # If the regex didn't work, try a simpler approach
-            if mapping_entry not in content:
-                # Find the closing brace of writeupComponents and add before it
-                content = content.replace("};", f"\n  ,{mapping_entry}\n}};")
+            if match:
+                components_content = match.group(1).strip()
+                
+                # Add the new entry with proper comma
+                if components_content:
+                    new_components_content = f"{components_content.rstrip()},\n  {mapping_entry}"
+                else:
+                    new_components_content = mapping_entry
+                
+                # Replace the content
+                content = re.sub(
+                    writeup_components_pattern,
+                    f'const writeupComponents = {{\n  {new_components_content}\n}};',
+                    content,
+                    flags=re.DOTALL
+                )
+            else:
+                # Fallback: simple replacement
+                content = content.replace("};", f",\n  {mapping_entry}\n}};")
         
         with open(writeup_detail_js, 'w') as f:
             f.write(content)

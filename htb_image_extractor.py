@@ -48,7 +48,15 @@ class HTBImageExtractor:
             print("Invalid machine name format")
             return None
         url = f"{self.base_url}/machine/profile/{machine_name}"
-        headers = {"Authorization": f"Bearer {self.htb_token}"}
+        headers = {
+            "Authorization": f"Bearer {self.htb_token}",
+            "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36",
+            "Accept": "application/json, text/plain, */*",
+            "Accept-Language": "en-US,en;q=0.9",
+            "Accept-Encoding": "gzip, deflate, br",
+            "Connection": "keep-alive",
+            "Referer": "https://app.hackthebox.com/"
+        }
         
         try:
             response = requests.get(url, headers=headers)

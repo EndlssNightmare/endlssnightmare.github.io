@@ -13,6 +13,17 @@ const Home = () => {
   // Recent posts data
   const recentPosts = useMemo(() => [
     {
+      id: 8,
+      title: 'Fluffy Walkthrough',
+      excerpt: 'Fluffy Walkthrough - This writeup documents the discovery and analysis of vulnerabilities, exploitation techniques, and privilege escalation methods.',
+      date: 'Sep 20, 2025',
+      category: 'writeup',
+      tags: ['htb', 'ad', 'smb', 'ldap', 'windows', 'password-cracking', 'kerberoasting'],
+      image: '/images/writeups/fluffy/machine.png',
+      link: '/writeups/fluffy-walkthrough',
+      os: 'Windows'
+    },
+    {
     id: 7,
     title: 'Wcorp Walkthrough',
     excerpt: 'A challenging Windows Active Directory environment featuring SMB enumeration, AS-REP roasting, Kerberoasting, and DCSync techniques. This writeup covers advanced lateral movement and privilege escalation methods.',

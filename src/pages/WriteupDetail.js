@@ -6,6 +6,7 @@ import { FaArrowLeft } from 'react-icons/fa';
 import './WriteupDetail.css';
 
 // Import specific writeup components
+import FluffyWalkthrough from './writeups/fluffy/FluffyWalkthrough';
 import WcorpWalkthrough from './writeups/Wcorp/WcorpWalkthrough';
 import DC02Walkthrough from './writeups/dc02/DC02Walkthrough';
 
@@ -17,6 +18,7 @@ const WriteupDetail = () => {
   const writeupComponents = {
     'dc02-walkthrough': DC02Walkthrough,
     'wcorp-walkthrough': WcorpWalkthrough,
+    'fluffy-walkthrough': FluffyWalkthrough
 };
 
   // Get the component for this writeup
