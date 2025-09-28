@@ -43,16 +43,6 @@
         to { transform: rotate(360deg); }
       }
     </style>
-    <script type="text/javascript">
-      // Enhanced SPA redirect for GitHub Pages
-      (function() {
-        var redirect = sessionStorage.redirect;
-        delete sessionStorage.redirect;
-        if (redirect && redirect != location.href) {
-          history.replaceState(null, null, redirect);
-        }
-      })();
-    </script>
   </head>
   <body>
     <div class="container">
@@ -61,9 +51,16 @@
       <p>Redirecting to the correct page...</p>
     </div>
     <script>
-      // Store the attempted URL and redirect to home
-      sessionStorage.redirect = location.href;
-      location.replace('/');
+      // SPA redirect for GitHub Pages - redirect to index.html with the path
+      var pathSegmentsToKeep = 0;
+      var l = window.location;
+      l.replace(
+        l.protocol + '//' + l.hostname + (l.port ? ':' + l.port : '') +
+        l.pathname.split('/').slice(0, 1 + pathSegmentsToKeep).join('/') + '/?/' +
+        l.pathname.slice(1).split('/').slice(pathSegmentsToKeep).join('/').replace(/&/g, '~and~') +
+        (l.search ? '&' + l.search.slice(1).replace(/&/g, '~and~') : '') +
+        l.hash
+      );
     </script>
   </body>
 </html>
