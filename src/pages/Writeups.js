@@ -14,7 +14,7 @@ const Writeups = () => {
     {
       id: 9,
       title: 'Puppy Walkthrough',
-      excerpt: 'Puppy Walkthrough - This writeup documents the discovery and analysis of vulnerabilities, exploitation techniques, and privilege escalation methods.',
+      excerpt: 'Puppy is an medium-difficulty Windows Active Directory machine built around an assumed-breach scenario where credentials for a low-privileged user are provided (levi.james / KingofAkron2025!). Initial SMB/BloodHound enumeration reveals GenericWrite on the Developers group, allowing the attacker to add the user and access the DEV share. A KeePass file harvested from DEV is cracked to recover additional credentials. A password-spraying and further enumeration lead to steph.cooper and extraction of DPAPI-protected secrets. Using steph.cooper_adm recovered credentials the box allows DCSync to dump the Administrator hash, enabling remote authentication and full domain compromise.',
       date: 'Sep 27, 2025',
       tags: ['Htb', 'Ad', 'DPAPI', 'Password-Cracking', 'Kerberos', 'Smb', 'Ldap', 'Windows', 'Dcsync'],
       image: '/images/writeups/puppy/machine.png',
