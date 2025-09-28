@@ -1,4 +1,4 @@
-/* Fluffy Walkthrough Writeup Styles */
+/* Puppy Walkthrough Writeup Styles */
 
 .writeup-detail-page {
   max-width: none;
@@ -278,6 +278,118 @@
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
+/* Code block styles */
+.code-block {
+  background-color: var(--bg-primary);
+  border: 0.5px solid var(--border-color);
+  border-radius: 8px;
+  padding: 1rem;
+  margin: 0.5rem 0;
+  overflow-x: auto;
+  font-family: 'Courier New', 'Monaco', 'Consolas', monospace;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  opacity: 0.8;
+}
+
+/* Image styles */
+.image-container {
+  margin: 0.5rem 0;
+  text-align: left;
+}
+
+.content-image {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  border: 1px solid var(--border-color);
+}
+
+/* Inline code styling */
+.inline-code {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  padding: 0.2rem 0.4rem;
+  border-radius: 4px;
+  font-family: 'Courier New', 'Monaco', 'Consolas', monospace;
+  font-size: 0.9em;
+  border: 1px solid var(--border-color);
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .writeup-layout {
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .writeup-title-section h1 {
+    font-size: 2rem;
+  }
+  
+  .writeup-meta {
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .machine-info-content {
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .machine-info-right {
+    order: -1;
+  }
+  
+  .machine-image {
+    max-width: 250px;
+  }
+  
+  .writeup-content {
+    padding: 1.5rem;
+  }
+  
+  .markdown-content h1 {
+    font-size: 1.75rem;
+  }
+  
+  .markdown-content h2 {
+    font-size: 1.25rem;
+  }
+  
+  .markdown-content h3 {
+    font-size: 1.1rem;
+  }
+  
+  .content-image {
+    border-radius: 6px;
+  }
+}
+
+@media (max-width: 480px) {
+  .writeup-detail-page {
+    padding: 0 0.5rem;
+  }
+  
+  .writeup-content {
+    padding: 1rem;
+  }
+  
+  .writeup-title-section h1 {
+    font-size: 1.75rem;
+  }
+  
+  .writeup-tags {
+    gap: 0.5rem;
+  }
+  
+  .tag-badge {
+    font-size: 0.7rem;
+    padding: 0.4rem 0.8rem;
+  }
+}
+
 /* Terminal-style Code Block Styles */
 .code-block-container {
   position: relative;
@@ -438,11 +550,11 @@
 }
 
 .code-block-container pre::-webkit-scrollbar-track {
-  background: #3d2020; /* Darker red scrollbar track */
+  background: #3d2020;
 }
 
 .code-block-container pre::-webkit-scrollbar-thumb {
-  background: #ff6666; /* Red scrollbar thumb */
+  background: #ff6666;
   border-radius: 4px;
 }
 
@@ -481,116 +593,4 @@
 .code-block-container *:focus {
   outline: none !important;
   box-shadow: none !important;
-}
-
-/* Code block styles (fallback) */
-.code-block {
-  background-color: var(--bg-primary);
-  border: 0.5px solid var(--border-color);
-  border-radius: 8px;
-  padding: 1rem;
-  margin: 0.5rem 0;
-  overflow-x: auto;
-  font-family: 'Courier New', 'Monaco', 'Consolas', monospace;
-  font-size: 0.9rem;
-  line-height: 1.5;
-  opacity: 0.8;
-}
-
-/* Image styles */
-.image-container {
-  margin: 0.5rem 0;
-  text-align: left;
-}
-
-.content-image {
-  max-width: 100%;
-  height: auto;
-  border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  border: 1px solid var(--border-color);
-}
-
-/* Inline code styling */
-.inline-code {
-  background-color: var(--bg-primary);
-  color: var(--text-primary);
-  padding: 0.2rem 0.4rem;
-  border-radius: 4px;
-  font-family: 'Courier New', 'Monaco', 'Consolas', monospace;
-  font-size: 0.9em;
-  border: 1px solid var(--border-color);
-}
-
-/* Responsive design */
-@media (max-width: 768px) {
-  .writeup-layout {
-    flex-direction: column;
-    gap: 1rem;
-  }
-  
-  .writeup-title-section h1 {
-    font-size: 2rem;
-  }
-  
-  .writeup-meta {
-    flex-direction: column;
-    gap: 1rem;
-  }
-  
-  .machine-info-content {
-    flex-direction: column;
-    gap: 1rem;
-  }
-  
-  .machine-info-right {
-    order: -1;
-  }
-  
-  .machine-image {
-    max-width: 250px;
-  }
-  
-  .writeup-content {
-    padding: 1.5rem;
-  }
-  
-  .markdown-content h1 {
-    font-size: 1.75rem;
-  }
-  
-  .markdown-content h2 {
-    font-size: 1.25rem;
-  }
-  
-  .markdown-content h3 {
-    font-size: 1.1rem;
-  }
-  
-  .content-image {
-    border-radius: 6px;
-  }
-}
-
-@media (max-width: 480px) {
-  .writeup-detail-page {
-    padding: 0 0.5rem;
-  }
-  
-  .writeup-content {
-    padding: 1rem;
-  }
-  
-  .writeup-title-section h1 {
-    font-size: 1.75rem;
-  }
-  
-  .writeup-tags {
-    gap: 0.5rem;
-  }
-  
-  .tag-badge {
-    font-size: 0.7rem;
-    padding: 0.4rem 0.8rem;
-  }
 }

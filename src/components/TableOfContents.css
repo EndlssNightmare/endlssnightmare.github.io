@@ -5,8 +5,8 @@
   background: var(--sidebar-bg);
   border-left: 1px solid var(--border-color);
   padding: 2rem 1.5rem;
-  max-height: calc(100vh - 100px);
-  overflow-y: auto;
+  max-height: none;
+  overflow-y: visible;
   flex-shrink: 0;
   transition: background-color var(--theme-transition), border-color var(--theme-transition);
 }

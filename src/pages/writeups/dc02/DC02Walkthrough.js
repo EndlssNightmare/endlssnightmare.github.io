@@ -1,11 +1,52 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { FaArrowLeft, FaCalendar, FaServer, FaStar, FaDesktop, FaNetworkWired } from 'react-icons/fa';
+import { FaArrowLeft, FaCalendar, FaServer, FaStar, FaDesktop, FaNetworkWired, FaCopy, FaCheck } from 'react-icons/fa';
 import TableOfContents from '../../../components/TableOfContents';
 import './DC02Walkthrough.css';
 
 const DC02Walkthrough = () => {
+  const navigate = useNavigate();
+
+  // CodeBlock component for terminal-like code blocks
+  const CodeBlock = ({ language, children }) => {
+    const [copied, setCopied] = useState(false);
+    
+    const handleCopy = async () => {
+      try {
+        await navigator.clipboard.writeText(children);
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2000);
+      } catch (err) {
+        console.error('Failed to copy text: ', err);
+      }
+    };
+
+    const displayLanguage = language === 'bash' ? 'Shell' : language;
+    const showPrompt = language === 'bash' || language === 'shell';
+
+    return (
+      <div className="code-block-container">
+        <div className="code-block-header">
+          <span className="code-block-language">{displayLanguage || 'Terminal'}</span>
+          <button 
+            className={`copy-button ${copied ? 'copied' : ''}`}
+            onClick={handleCopy}
+            title={copied ? 'Copied!' : 'Copy to clipboard'}
+          >
+            {copied ? <FaCheck /> : <FaCopy />}
+          </button>
+        </div>
+        <pre>
+          <code className={`terminal-code ${language ? `language-${language}` : ''}`}>
+            {showPrompt && <span className="terminal-prompt">$ </span>}
+            {children}
+          </code>
+        </pre>
+      </div>
+    );
+  };
+
   // DC02 Writeup data
   const writeup = {
     id: 'dc02-walkthrough',
@@ -77,6 +118,17 @@ Host script results:
 |_    Message signing enabled and required
 |_clock-skew: 3h59m56s
 \`\`\`
+
+We can see some important open ports:
+• **Port 53**: DNS service running Simple DNS Plus
+• **Port 88**: Kerberos service running Microsoft Windows Kerberos
+• **Port 135**: Microsoft Windows RPC service
+• **Port 139**: NetBIOS service running Microsoft Windows netbios-ssn
+• **Port 389**: LDAP service running Microsoft Windows Active Directory LDAP (Domain: DC02.LOCAL.)
+• **Port 445**: Microsoft-DS service
+• **Port 464**: Kerberos password service
+• **Port 593**: Microsoft Windows RPC over HTTP 1.0
+• **Port 636**: LDAP over SSL service
 
 ### Service Enumeration
 Adding the domains into \`hosts\` file.
@@ -189,8 +241,35 @@ Authenticating as Administrator and retrieving the root flag.
 evil-winrm -i 192.168.0.18 -u Administrator -H 8982<REDACTED>
 \`\`\`
 ![Root Flag Retrieval](/images/writeups/dc02/17.png)
+
+# Conclusion
+
+This machine demonstrated various Windows Active Directory exploitation techniques including:
+• SMB enumeration and share access exploitation
+• Active Directory user enumeration and password attacks
+• Kerberoasting attacks to extract service account credentials
+• Pass-the-hash attacks for lateral movement
+• Domain administrator privilege escalation through credential theft
+
+# Tools Used
+• Nmap - Port scanning and service enumeration
+• NetExec (nxc) - SMB enumeration and authentication testing
+• BloodHound - Active Directory enumeration and attack path analysis
+• John the Ripper - Password cracking for Kerberoasting hashes
+• Evil-WinRM - Remote management and shell access
+• Impacket - Kerberoasting and pass-the-hash attacks
+• Rpcclient - LDAP enumeration and user information extraction
+
+# References
+• HackTheBox DC02 machine
+• Active Directory enumeration techniques
+• Kerberoasting attack methods
+• Pass-the-hash attack vectors
+• SMB share exploitation techniques
+• Service account privilege escalation methods
     `
   };
+
 
   return (
     <motion.div 
@@ -235,6 +314,7 @@ evil-winrm -i 192.168.0.18 -u Administrator -H 8982<REDACTED>
               </Link>
             ))}
           </div>
+
 
           <div className="machine-info">
             <div className="machine-info-content">
@@ -292,7 +372,7 @@ evil-winrm -i 192.168.0.18 -u Administrator -H 8982<REDACTED>
                 } else if (line.startsWith('### ')) {
                   elements.push(<h3 key={i}>{line.substring(4)}</h3>);
                 } else if (line.startsWith('```')) {
-                  // Handle code blocks
+                  // Handle code blocks with CodeBlock component
                   const language = line.substring(3).trim();
                   const codeLines = [];
                   i++;
@@ -303,23 +383,22 @@ evil-winrm -i 192.168.0.18 -u Administrator -H 8982<REDACTED>
                   }
                   
                   elements.push(
-                    <pre key={i} className="code-block">
-                      <code className={`language-${language}`}>
-                        {codeLines.join('\n')}
-                      </code>
-                    </pre>
+                    <CodeBlock key={i} language={language}>
+                      {codeLines.join('\n')}
+                    </CodeBlock>
                   );
-                } else if (line.startsWith('![') && line.includes('](') && line.endsWith(')')) {
-                  const altText = line.match(/\[(.*?)\]/)[1];
-                  const imageSrc = line.match(/\((.*?)\)/)[1];
-                  elements.push(
-                    <div key={i} className="image-container">
-                      <img src={imageSrc} alt={altText} className="content-image" />
-                    </div>
-                  );
-                } else if (line.trim() === '') {
-                  elements.push(<br key={i} />);
-                } else {
+                } else if (line.startsWith('![')) {
+                  // Handle images
+                  const match = line.match(/!\[(.*?)\]\((.*?)\)/);
+                  if (match) {
+                    const [, alt, src] = match;
+                    elements.push(
+                      <div key={i} className="image-container">
+                        <img src={src} alt={alt} className="content-image" />
+                      </div>
+                    );
+                  }
+                } else if (line.trim()) {
                   // Process inline markdown
                   const processedLine = line
                     .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') // Bold
@@ -329,6 +408,8 @@ evil-winrm -i 192.168.0.18 -u Administrator -H 8982<REDACTED>
                   elements.push(
                     <p key={i} dangerouslySetInnerHTML={{ __html: processedLine }} />
                   );
+                } else {
+                  elements.push(<br key={i} />);
                 }
                 
                 i++;

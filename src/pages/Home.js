@@ -13,9 +13,20 @@ const Home = () => {
   // Recent posts data
   const recentPosts = useMemo(() => [
     {
+      id: 9,
+      title: 'Puppy Walkthrough',
+      excerpt: 'Puppy Walkthrough - This writeup documents the discovery and analysis of vulnerabilities, exploitation techniques, and privilege escalation methods.',
+      date: 'Sep 27, 2025',
+      category: 'writeup',
+      tags: ['htb', 'ad', 'dpapi', 'password-cracking', 'kerberos', 'smb', 'ldap', 'windows', 'dcsync'],
+      image: '/images/writeups/puppy/machine.png',
+      link: '/writeups/puppy-walkthrough',
+      os: 'Windows'
+    },
+    {
       id: 8,
       title: 'Fluffy Walkthrough',
-      excerpt: 'Fluffy Walkthrough - This writeup documents the discovery and analysis of vulnerabilities, exploitation techniques, and privilege escalation methods.',
+      excerpt: 'Fluffy is an easy-difficulty Windows machine designed around an assumed breach scenario, where credentials for a low-privileged user are provided. By exploiting CVE-2025-24071, the credentials of another low-privileged user can be obtained. Further enumeration reveals the existence of ACLs over the winrm_svc and ca_svc accounts. WinRM can then be used to log in to the target using the winrc_svc account. Exploitation of an Active Directory Certificate service (ESC16) using the ca_svc account is required to obtain access to the Administrator account.',
       date: 'Sep 20, 2025',
       category: 'writeup',
       tags: ['htb', 'ad', 'smb', 'ldap', 'windows', 'password-cracking', 'kerberoasting'],

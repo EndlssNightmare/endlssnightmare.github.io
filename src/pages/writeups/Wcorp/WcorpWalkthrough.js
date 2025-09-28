@@ -1,12 +1,52 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { FaArrowLeft, FaCalendar, FaServer, FaStar, FaDesktop, FaNetworkWired } from 'react-icons/fa';
+import { FaArrowLeft, FaCalendar, FaServer, FaStar, FaDesktop, FaNetworkWired, FaCopy, FaCheck } from 'react-icons/fa';
 import TableOfContents from '../../../components/TableOfContents';
 import './WcorpWalkthrough.css';
 
 const WcorpWalkthrough = () => {
   const navigate = useNavigate();
+
+  // CodeBlock component for terminal-like code blocks
+  const CodeBlock = ({ language, children }) => {
+    const [copied, setCopied] = useState(false);
+    
+    const handleCopy = async () => {
+      try {
+        await navigator.clipboard.writeText(children);
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2000);
+      } catch (err) {
+        console.error('Failed to copy text: ', err);
+      }
+    };
+
+    const displayLanguage = language === 'bash' ? 'Shell' : language;
+    const showPrompt = language === 'bash' || language === 'shell';
+
+    return (
+      <div className="code-block-container">
+        <div className="code-block-header">
+          <span className="code-block-language">{displayLanguage || 'Terminal'}</span>
+          <button 
+            className={`copy-button ${copied ? 'copied' : ''}`}
+            onClick={handleCopy}
+            title={copied ? 'Copied!' : 'Copy to clipboard'}
+          >
+            {copied ? <FaCheck /> : <FaCopy />}
+          </button>
+        </div>
+        <pre>
+          <code className={`terminal-code ${language ? `language-${language}` : ''}`}>
+            {showPrompt && <span className="terminal-prompt">$ </span>}
+            {children}
+          </code>
+        </pre>
+      </div>
+    );
+  };
+
   // Wcorp Walkthrough data
   const writeup = {
     id: 'wcorp-walkthrough',
@@ -121,6 +161,13 @@ Host script results:
 |_clock-skew: 0s
 |_smb2-time: Protocol negotiation failed (SMB2)
 \`\`\`
+
+We can see some important open ports:
+• **Port 53**: DNS service
+• **Port 135**: Microsoft Windows RPC service
+• **Port 139**: NetBIOS service running Microsoft Windows netbios-ssn
+• **Port 445**: Microsoft-DS service
+• **Port 636**: LDAP over SSL service
 
 ## Service Enumeration
 Adding the domains into \`hosts\` file.
@@ -237,7 +284,7 @@ rpcclient -U 'john.doe%a59c<REDACTED>' --pw-nt-hash 172.16.13.103
 \`\`\`
 ![Kerbrute User Enumeration](/images/writeups/wcorp/16.png)
 
-### Privilege Escalation - DCSync
+## Privilege Escalation
 User \`john.doe\` have some outbounds permissions on Active Directory, we can make a GenericAll into the DC-01 computer and we also have \`ForceChangePassword\` permission into the \`diana.ops\`. The \`diana.ops\` account have some permissions into the Domain object that allows the DCSync attack.
 ![Kerbrute User Enumeration](/images/writeups/wcorp/17.png)
 ![Kerbrute User Enumeration](/images/writeups/wcorp/18.png)
@@ -266,7 +313,33 @@ Authenticting as \`Administrator\` and retrieving the root flag.
 evil-winrm -i wcorp.hc -u 'Administrator' -H 'bca9<REDACTED>'
 \`\`\`
 ![Kerbrute User Enumeration](/images/writeups/wcorp/22.png)
-`
+
+# Conclusion
+This machine demonstrated various Windows Active Directory exploitation techniques including:
+• AS-REP Roasting attacks to obtain user credentials
+• Kerberoasting to extract service account hashes
+• Certificate theft and abuse for lateral movement
+• Shadow credentials and certificate-based attacks
+• DCSync privilege escalation to gain domain administrator access
+
+# Tools Used
+• Nmap - Port scanning and service enumeration
+• NetExec (nxc) - SMB enumeration and authentication testing
+• BloodHound - Active Directory enumeration and attack path analysis
+• John the Ripper - Password cracking for AS-REP and Kerberoasting hashes
+• Evil-WinRM - Remote management and shell access
+• Impacket - Certificate theft and shadow credential attacks
+• Certipy - Certificate-based attacks and shadow credentials
+• Rpcclient - LDAP enumeration and user information extraction
+
+# References
+• HackTheBox Wcorp machine
+• Active Directory Certificate Services exploitation
+• AS-REP Roasting attack techniques
+• Kerberoasting attack methods
+• Shadow credentials and certificate theft
+• DCSync attack vectors
+• Certificate-based lateral movement techniques`
   };
 
   return (
@@ -370,7 +443,7 @@ evil-winrm -i wcorp.hc -u 'Administrator' -H 'bca9<REDACTED>'
                 } else if (line.startsWith('### ')) {
                   elements.push(<h3 key={i}>{line.substring(4)}</h3>);
                 } else if (line.startsWith('```')) {
-                  // Handle code blocks
+                  // Handle code blocks with CodeBlock component
                   const language = line.substring(3).trim();
                   const codeLines = [];
                   i++;
@@ -381,11 +454,9 @@ evil-winrm -i wcorp.hc -u 'Administrator' -H 'bca9<REDACTED>'
                   }
                   
                   elements.push(
-                    <pre key={i}>
-                      <code className={language ? `language-${language}` : ''}>
-                        {codeLines.join('\n')}
-                      </code>
-                    </pre>
+                    <CodeBlock key={i} language={language}>
+                      {codeLines.join('\n')}
+                    </CodeBlock>
                   );
                 } else if (line.startsWith('![')) {
                   // Handle images

@@ -12,6 +12,16 @@ const TagDetail = () => {
   // All available posts data
   const allPosts = [
     {
+      id: 9,
+      title: 'Puppy Walkthrough',
+      excerpt: 'Puppy Walkthrough - This writeup documents the discovery and analysis of vulnerabilities, exploitation techniques, and privilege escalation methods.',
+      date: 'Sep 27, 2025',
+      tags: ['htb', 'ad', 'dpapi', 'password-cracking', 'kerberos', 'smb', 'ldap', 'windows', 'dcsync'],
+      image: '/images/writeups/puppy/machine.png',
+      link: '/writeups/puppy-walkthrough',
+      category: 'writeup'
+    },
+    {
       id: 8,
       title: 'Fluffy Walkthrough',
       excerpt: 'Fluffy Walkthrough - This writeup documents the discovery and analysis of vulnerabilities, exploitation techniques, and privilege escalation methods.',

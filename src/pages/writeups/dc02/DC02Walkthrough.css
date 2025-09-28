@@ -276,7 +276,212 @@
   height: auto;
 }
 
-/* Code block styles */
+/* Terminal-style Code Block Styles */
+.code-block-container {
+  position: relative;
+  margin: 0;
+  border: none !important;
+  border-radius: 8px;
+  background: #2d1818;
+  box-shadow: 0 4px 12px rgba(139, 0, 0, 0.3);
+  overflow: hidden;
+}
+
+/* ===== CODE BLOCK HEADER (BARRA HORIZONTAL) ===== */
+.code-block-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  background: #3d2020;
+  border-bottom: none; /* Remove qualquer linha abaixo do header */
+  font-size: 0.8rem;
+  color: #ffcccc;
+  position: relative; /* Para posicionamento absoluto dos elementos */
+}
+
+/* Window controls (● ● ●) - posicionados à esquerda */
+.code-block-header::before {
+  content: '● ● ●';
+  color: #ff6666;
+  font-size: 0.7rem;
+  letter-spacing: 0.3rem;
+  position: absolute;
+  left: 1rem;
+}
+
+/* Centraliza a palavra SHELL */
+.code-block-language {
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #ffcccc;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  margin: 0; /* Remove margin-left que estava empurrando para a direita */
+}
+
+/* ===== BOTÃO DE COPIAR COM EFEITOS ===== */
+.copy-button {
+  position: absolute;
+  right: 1rem; /* Posiciona à direita */
+  z-index: 10;
+  background: transparent;
+  border: 1px solid #ff6666;
+  color: #ffcccc;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.75rem;
+  transition: all 0.3s ease;
+  overflow: hidden;
+}
+
+/* Efeito hover - brilho suave */
+.copy-button:hover {
+  background: rgba(255, 102, 102, 0.1);
+  border-color: #ff8888;
+  color: #ffdddd;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(255, 102, 102, 0.3);
+}
+
+/* Efeito de clique - ripple effect */
+.copy-button:active {
+  transform: translateY(0);
+  box-shadow: 0 1px 4px rgba(255, 102, 102, 0.2);
+  background: rgba(255, 102, 102, 0.2);
+}
+
+/* Estado copiado - animação de sucesso */
+.copy-button.copied {
+  background: #28a745;
+  color: white;
+  border-color: #28a745;
+  transform: scale(1.05);
+  box-shadow: 0 2px 12px rgba(40, 167, 69, 0.4);
+}
+
+/* Animação de pulse quando copiado */
+.copy-button.copied::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  animation: pulse 0.6s ease-out;
+}
+
+@keyframes pulse {
+  0% {
+    width: 0;
+    height: 0;
+    opacity: 1;
+  }
+  100% {
+    width: 100px;
+    height: 100px;
+    opacity: 0;
+  }
+}
+
+/* ===== CONTROLE DO GAP ABAIXO DA BARRA HORIZONTAL ===== */
+.code-block-container pre {
+  margin: 0; /* Remove margens que podem criar gap */
+  border: none !important;
+  background: #2d1818;
+  padding: 0; /* Remove padding que pode criar gap */
+  overflow-x: auto;
+  color: #ffcccc;
+  font-family: 'Courier New', 'Monaco', 'Consolas', monospace;
+  line-height: 1.4;
+}
+
+/* ===== CONTROLE DO GAP NO ELEMENTO CODE ===== */
+.code-block-container code {
+  background: transparent !important;
+  border: none !important;
+  padding: 0.5rem 1rem !important; /* Padding apenas horizontal e vertical mínimo */
+  color: #ffcccc;
+  display: block;
+  margin: 0; /* Remove margens que podem criar gap */
+}
+
+/* Terminal prompt styling */
+.terminal-prompt {
+  color: #ff6666;
+  font-weight: bold;
+  user-select: none;
+}
+
+.code-block-container pre code {
+  color: #ffcccc;
+}
+
+.terminal-code {
+  color: #ffcccc;
+}
+
+/* Terminal scrollbar */
+.code-block-container pre::-webkit-scrollbar {
+  height: 8px;
+}
+
+.code-block-container pre::-webkit-scrollbar-track {
+  background: #3d2020; /* Darker red scrollbar track */
+}
+
+.code-block-container pre::-webkit-scrollbar-thumb {
+  background: #ff6666; /* Red scrollbar thumb */
+  border-radius: 4px;
+}
+
+.code-block-container pre::-webkit-scrollbar-thumb:hover {
+  background: #ff8888;
+}
+
+/* ===== GARANTIA DE ZERO GAPS - REMOVE TODOS OS ESPAÇAMENTOS ===== */
+/* Ensure no black colors appear in terminal and remove all borders */
+.code-block-container,
+.code-block-container * {
+  background-color: #2d1818 !important;
+  border: none !important;
+  margin: 0 !important; /* Remove todas as margens */
+  gap: 0 !important; /* Remove gaps do flexbox */
+}
+
+.code-block-header,
+.code-block-header * {
+  background-color: #3d2020 !important;
+  border: none !important;
+  margin: 0 !important; /* Remove todas as margens */
+  gap: 0 !important; /* Remove gaps do flexbox */
+}
+
+.code-block-container pre,
+.code-block-container pre * {
+  background-color: #2d1818 !important;
+  border: none !important;
+  margin: 0 !important; /* Remove todas as margens */
+  gap: 0 !important; /* Remove gaps do flexbox */
+}
+
+/* Remove any outline or box-shadow borders */
+.code-block-container:focus,
+.code-block-container *:focus {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+/* Code block styles (fallback) */
 .code-block {
   background-color: var(--bg-primary);
   border: 0.5px solid var(--border-color);
@@ -313,6 +518,61 @@
   font-family: 'Courier New', 'Monaco', 'Consolas', monospace;
   font-size: 0.9em;
   border: 1px solid var(--border-color);
+}
+
+/* Copy All Button Styles */
+.copy-all-container {
+  margin: 1.5rem 0;
+  display: flex;
+  justify-content: center;
+}
+
+.copy-all-button {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+  color: white;
+  border: none;
+  padding: 0.8rem 1.5rem;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.copy-all-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+}
+
+.copy-all-button.copied {
+  background: linear-gradient(135deg, #22c55e, #16a34a);
+  animation: copySuccess 0.5s ease-in-out;
+}
+
+.copy-all-button svg {
+  font-size: 0.8rem;
+}
+
+.copy-all-button span {
+  font-size: 0.8rem;
+}
+
+@keyframes copySuccess {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+  }
 }
 
 /* Responsive design */

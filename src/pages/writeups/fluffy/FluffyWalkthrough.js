@@ -1,13 +1,52 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { FaArrowLeft, FaCalendar, FaServer, FaStar, FaDesktop, FaNetworkWired } from 'react-icons/fa';
+import { FaArrowLeft, FaCalendar, FaServer, FaStar, FaDesktop, FaNetworkWired, FaCopy, FaCheck } from 'react-icons/fa';
 import TableOfContents from '../../../components/TableOfContents';
 import InfoStatus from '../../../components/InfoStatus';
 import './FluffyWalkthrough.css';
 
 const FluffyWalkthrough = () => {
   const navigate = useNavigate();
+
+  // CodeBlock component for terminal-like code blocks
+  const CodeBlock = ({ language, children }) => {
+    const [copied, setCopied] = useState(false);
+    
+    const handleCopy = async () => {
+      try {
+        await navigator.clipboard.writeText(children);
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2000);
+      } catch (err) {
+        console.error('Failed to copy text: ', err);
+      }
+    };
+
+    const displayLanguage = language === 'bash' ? 'Shell' : language;
+    const showPrompt = language === 'bash' || language === 'shell';
+
+    return (
+      <div className="code-block-container">
+        <div className="code-block-header">
+          <span className="code-block-language">{displayLanguage || 'Terminal'}</span>
+          <button 
+            className={`copy-button ${copied ? 'copied' : ''}`}
+            onClick={handleCopy}
+            title={copied ? 'Copied!' : 'Copy to clipboard'}
+          >
+            {copied ? <FaCheck /> : <FaCopy />}
+          </button>
+        </div>
+        <pre>
+          <code className={`terminal-code ${language ? `language-${language}` : ''}`}>
+            {showPrompt && <span className="terminal-prompt">$ </span>}
+            {children}
+          </code>
+        </pre>
+      </div>
+    );
+  };
   // Fluffy Walkthrough data
   const writeup = {
     id: 'fluffy-walkthrough',
@@ -255,6 +294,15 @@ Host script results:
 |_clock-skew: mean: 7h00m03s, deviation: 0s, median: 7h00m02s
 \`\`\`
 
+We can see some important open ports:
+• **Port 53**: DNS service running Simple DNS Plus
+• **Port 88**: Kerberos service running Microsoft Windows Kerberos
+• **Port 135**: Microsoft Windows RPC service
+• **Port 139**: NetBIOS service running Microsoft Windows netbios-ssn
+• **Port 389**: LDAP service running Microsoft Windows Active Directory LDAP (Domain: FLUFFY.HTB.)
+• **Port 445**: Microsoft-DS service
+• **Port 636**: LDAP over SSL service
+
 ### Service Enumeration
 Executing the \`netexec\` tool and enumerating the shared smb folders. This will help us identify accessible shares and understand the file system structure available to our low-privileged user account.
 \`\`\`bash
@@ -432,7 +480,36 @@ Authenticating as Administrator and retrieving the root flag. With the extracted
 evil-winrm -i 10.129.71.158 -u Administrator -H '8da8<REDACTED>'
 \`\`\`
 ![Kerbrute User Enumeration](/images/writeups/fluffy/27.png)
-`
+
+# Conclusion
+
+This machine demonstrated various Windows Active Directory exploitation techniques including:
+• CVE-2025-24071 Windows File Explorer Spoofing vulnerability exploitation
+• NTLM hash capture and cracking techniques
+• Active Directory group membership manipulation
+• Service account credential extraction using shadow credentials
+• Certificate-based attacks and ESC16 exploitation
+• Domain administrator privilege escalation through certificate theft
+
+# Tools Used
+• Nmap - Port scanning and service enumeration
+• NetExec (nxc) - SMB enumeration and authentication testing
+• BloodHound - Active Directory enumeration and attack path analysis
+• John the Ripper - Password cracking for captured NTLM hashes
+• Evil-WinRM - Remote management and shell access
+• Impacket - NTLM hash capture and authentication
+• Certipy - Certificate-based attacks and shadow credentials
+• Responder - NTLM hash capture and relay attacks
+• Hashcat - Advanced password cracking techniques
+
+# References
+• HackTheBox Fluffy machine
+• CVE-2025-24071 Windows File Explorer Spoofing vulnerability
+• Active Directory Certificate Services exploitation (ESC16)
+• Shadow credentials and certificate theft techniques
+• NTLM hash capture and cracking methods
+• Service account privilege escalation techniques
+• Certificate-based lateral movement attacks`
   };
 
   return (
@@ -536,7 +613,7 @@ evil-winrm -i 10.129.71.158 -u Administrator -H '8da8<REDACTED>'
                 } else if (line.startsWith('### ')) {
                   elements.push(<h3 key={i}>{line.substring(4)}</h3>);
                 } else if (line.startsWith('```')) {
-                  // Handle code blocks
+                  // Handle code blocks with CodeBlock component
                   const language = line.substring(3).trim();
                   const codeLines = [];
                   i++;
@@ -547,11 +624,9 @@ evil-winrm -i 10.129.71.158 -u Administrator -H '8da8<REDACTED>'
                   }
                   
                   elements.push(
-                    <pre key={i}>
-                      <code className={language ? `language-${language}` : ''}>
-                        {codeLines.join('\n')}
-                      </code>
-                    </pre>
+                    <CodeBlock key={i} language={language}>
+                      {codeLines.join('\n')}
+                    </CodeBlock>
                   );
                 } else if (line.startsWith('![')) {
                   // Handle images
