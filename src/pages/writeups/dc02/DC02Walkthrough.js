@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { FaArrowLeft, FaCalendar, FaServer, FaStar, FaDesktop, FaNetworkWired, FaCopy, FaCheck } from 'react-icons/fa';
 import TableOfContents from '../../../components/TableOfContents';
 import './DC02Walkthrough.css';
 
 const DC02Walkthrough = () => {
-  const navigate = useNavigate();
 
   // CodeBlock component for terminal-like code blocks
   const CodeBlock = ({ language, children }) => {
@@ -126,8 +125,6 @@ We can see some important open ports:
 • **Port 139**: NetBIOS service running Microsoft Windows netbios-ssn
 • **Port 389**: LDAP service running Microsoft Windows Active Directory LDAP (Domain: DC02.LOCAL.)
 • **Port 445**: Microsoft-DS service
-• **Port 464**: Kerberos password service
-• **Port 593**: Microsoft Windows RPC over HTTP 1.0
 • **Port 636**: LDAP over SSL service
 
 ### Service Enumeration
