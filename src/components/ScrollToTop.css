@@ -1,0 +1,82 @@
+.scroll-to-top {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  width: 50px;
+  height: 50px;
+  border: none;
+  border-radius: 50%;
+  background: var(--primary-color);
+  color: white;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+  z-index: 1000;
+  transition: all 0.3s ease;
+  opacity: 0;
+  transform: translateY(20px) scale(0.8);
+  pointer-events: none;
+}
+
+.scroll-to-top.visible {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  pointer-events: auto;
+}
+
+.scroll-to-top.hidden {
+  opacity: 0;
+  transform: translateY(20px) scale(0.8);
+  pointer-events: none;
+}
+
+.scroll-to-top.visible:hover {
+  background: var(--secondary-color);
+  transform: translateY(-2px) scale(1);
+}
+
+.scroll-to-top:active {
+  transform: translateY(0);
+}
+
+.scroll-icon {
+  font-size: 18px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .scroll-to-top {
+    bottom: 20px;
+    right: 20px;
+    width: 45px;
+    height: 45px;
+  }
+  
+  .scroll-icon {
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .scroll-to-top {
+    bottom: 15px;
+    right: 15px;
+    width: 40px;
+    height: 40px;
+  }
+  
+  .scroll-icon {
+    font-size: 14px;
+  }
+}
+
+/* Light theme specific colors */
+[data-theme="light"] .scroll-to-top {
+  background: #6b7280; /* Gray-500 */
+}
+
+[data-theme="light"] .scroll-to-top.visible:hover {
+  background: #4b5563; /* Gray-600 */
+}

@@ -665,6 +665,7 @@ import {{ Link, useNavigate }} from 'react-router-dom';
 import {{ motion }} from 'framer-motion';
 import {{ FaArrowLeft, FaCalendar, FaServer, FaStar, FaDesktop, FaNetworkWired, FaCopy, FaCheck }} from 'react-icons/fa';
 import TableOfContents from '../../../components/TableOfContents';
+import ScrollToTop from '../../../components/ScrollToTop';
 import './{data['machine_name'].replace('-', '').title()}Walkthrough.css';
 
 const {data['machine_name'].replace('-', '').title()}Walkthrough = () => {{
@@ -692,7 +693,7 @@ const {data['machine_name'].replace('-', '').title()}Walkthrough = () => {{
         <div className="code-block-header">
           <span className="code-block-language">{{displayLanguage || 'Terminal'}}</span>
           <button 
-            className={`${{'copy-button'}} ${{copied ? 'copied' : ''}}`}
+            className={{'copy-button ' + (copied ? 'copied' : '')}}
             onClick={{handleCopy}}
             title={{copied ? 'Copied!' : 'Copy to clipboard'}}
           >
@@ -700,7 +701,7 @@ const {data['machine_name'].replace('-', '').title()}Walkthrough = () => {{
           </button>
         </div>
         <pre>
-          <code className={`terminal-code ${{language ? `language-${{language}}` : ''}}`}>
+          <code className={{'terminal-code ' + (language ? 'language-' + language : '')}}>
             {{showPrompt && <span className="terminal-prompt">$ </span>}}
             {{children}}
           </code>
@@ -905,6 +906,8 @@ This machine demonstrated various {data['os_type']} exploitation techniques and 
         </motion.div>
         <TableOfContents content={{writeup.content}} />
       </div>
+      
+      <ScrollToTop />
     </motion.div>
   );
 }};
