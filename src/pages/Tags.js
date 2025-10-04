@@ -10,6 +10,12 @@ const Tags = () => {
   // All available posts data for counting
   const allPosts = [
     {
+      id: 10,
+      title: 'Aria Walkthrough',
+      category: 'writeup',
+      tags: ['linux', 'hmv', 'steg', 'aria2c', 'json-rpc']
+    },
+    {
       id: 9,
       title: 'Puppy Walkthrough',
       category: 'writeup',

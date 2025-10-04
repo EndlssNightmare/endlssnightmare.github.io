@@ -12,6 +12,16 @@ const TagDetail = () => {
   // All available posts data
   const allPosts = [
     {
+      id: 10,
+      title: 'Aria Walkthrough',
+      excerpt: 'Aria Walkthrough - This writeup documents the discovery and analysis of vulnerabilities, exploitation techniques, and privilege escalation methods.',
+      date: 'Oct 04, 2025',
+      tags: ['linux', 'hmv', 'steg', 'aria2c', 'json-rpc'],
+      image: '/images/writeups/aria/machine.png',
+      link: '/writeups/aria-walkthrough',
+      category: 'writeup'
+    },
+    {
       id: 9,
       title: 'Puppy Walkthrough',
       excerpt: 'Puppy is an medium-difficulty Windows Active Directory machine built around an assumed-breach scenario where credentials for a low-privileged user are provided (levi.james / KingofAkron2025!). Initial SMB/BloodHound enumeration reveals GenericWrite on the Developers group, allowing the attacker to add the user and access the DEV share. A KeePass file harvested from DEV is cracked to recover additional credentials. A password-spraying and further enumeration lead to steph.cooper and extraction of DPAPI-protected secrets. Using steph.cooper_adm recovered credentials the box allows DCSync to dump the Administrator hash, enabling remote authentication and full domain compromise.',
