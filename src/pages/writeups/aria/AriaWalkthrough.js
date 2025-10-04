@@ -127,6 +127,7 @@ PORT     STATE SERVICE REASON         VERSION
 |     Command not found: 
 |_    random1random2random3random4
 \`\`\`
+
 We can see some important open ports:
 • **Port 22**: SSH service running OpenSSH
 • **Port 80**: HTTP service running Apache
@@ -248,7 +249,7 @@ ps aux | grep aria2c
 \`\`\`
 ![Service Enumeration](/images/writeups/aria/11.png)
 
-We will find the port 6800 open locally on system.
+We will find that the port 6800 is open locally on system.
 \`\`\`bash
 ss -lntp
 \`\`\`
