@@ -522,6 +522,21 @@
   border: 1px solid var(--border-color);
 }
 
+/* Content links styling */
+.content-link {
+  color: var(--primary-color);
+  text-decoration: none;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  border-bottom: 1px solid transparent;
+}
+
+.content-link:hover {
+  color: var(--secondary-color);
+  text-decoration: underline;
+  border-bottom-color: var(--secondary-color);
+}
+
 /* Responsive design */
 @media (max-width: 768px) {
   .writeup-layout {

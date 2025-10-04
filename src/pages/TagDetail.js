@@ -14,7 +14,7 @@ const TagDetail = () => {
     {
       id: 10,
       title: 'Aria Walkthrough',
-      excerpt: 'Aria Walkthrough - This writeup documents the discovery and analysis of vulnerabilities, exploitation techniques, and privilege escalation methods.',
+      excerpt: 'Aria is a Linux machine that demonstrates file upload bypass techniques, zero-width steganography, and JSON-RPC exploitation through aria2c. The machine showcases how improper input validation and services running with elevated privileges can lead to complete system compromise.',
       date: 'Oct 04, 2025',
       tags: ['linux', 'hmv', 'steg', 'aria2c', 'json-rpc'],
       image: '/images/writeups/aria/machine.png',

@@ -53,7 +53,7 @@ const AriaWalkthrough = () => {
   const writeup = {
     id: 'aria-walkthrough',
     title: 'Aria Walkthrough',
-    excerpt: 'Aria Walkthrough - This writeup documents the discovery and analysis of vulnerabilities, exploitation techniques, and privilege escalation methods.',
+    excerpt: 'Aria is a Linux machine that demonstrates file upload bypass techniques, zero-width steganography, and JSON-RPC exploitation through aria2c. The machine showcases how improper input validation and services running with elevated privileges can lead to complete system compromise.',
     date: 'Oct 04, 2025',
     tags: ['Linux', 'Hmv', 'Steg', 'Aria2c', 'Json-rpc'],
     difficulty: 'Easy',
@@ -62,7 +62,7 @@ const AriaWalkthrough = () => {
     content: `# Aria Walkthrough
 
 ## Overview
-This writeup documents the discovery and analysis of vulnerabilities, exploitation techniques, and privilege escalation methods for the Aria Walkthrough machine.
+Aria is a Linux machine that demonstrates file upload bypass techniques, zero-width steganography, and JSON-RPC exploitation through aria2c. The machine showcases how improper input validation and services running with elevated privileges can lead to complete system compromise.
 
 ## Enumeration
 ### Port Scanning
@@ -375,6 +375,32 @@ ssh root@192.168.0.11 -i id_rsa
 \`\`\`
 ![Service Enumeration](/images/writeups/aria/19.png)
 
+# Conclusion
+This machine demonstrated various Linux exploitation techniques and privilege escalation methods:
+
+• **File Upload Bypass**: Exploited file upload restrictions by manipulating magic bytes and Content-Type headers to upload PHP shells
+• **Steganography**: Used zero-width steganography to extract hidden authentication tokens from text files
+• **JSON-RPC Exploitation**: Leveraged aria2c's JSON-RPC interface running as root to download and overwrite system files
+• **SSH Key Injection**: Created SSH key pairs and used aria2c to download authorized_keys to gain root access
+
+The machine highlighted the importance of proper input validation, secure file handling, and the risks of running services with elevated privileges.
+
+# Tools Used
+• **Nmap** - Port scanning and service enumeration
+• **Burp Suite** - Intercepting and modifying HTTP requests
+• **Python** - Custom scripts for MD5 hash generation and steganography extraction
+• **ffuf** - Directory and file brute forcing
+• **chisel** - Port forwarding and tunneling
+• **curl** - Interacting with JSON-RPC API
+• **SSH** - Remote access and key management
+
+# References
+• [aria2c Documentation](https://aria2.github.io/manual/en/html/)
+• [JSON-RPC Specification](https://www.jsonrpc.org/specification)
+• [Zero-Width Steganography](https://en.wikipedia.org/wiki/Zero-width_joiner)
+• [File Upload Security Best Practices](https://owasp.org/www-community/vulnerabilities/Unrestricted_File_Upload)
+• [SSH Key Management](https://www.ssh.com/academy/ssh/key)
+
 `
   };
 
@@ -577,7 +603,7 @@ ssh root@192.168.0.11 -i id_rsa
                       parts.push(text.substring(lastIndex));
                     }
                     
-                    // Then process inline code within the remaining parts
+                    // Then process inline code and links within the remaining parts
                     const finalParts = [];
                     parts.forEach((part, partIndex) => {
                       if (typeof part === 'string') {
@@ -605,7 +631,45 @@ ssh root@192.168.0.11 -i id_rsa
                           codeParts.push(part.substring(codeLastIndex));
                         }
                         
-                        finalParts.push(...codeParts);
+                        // Process links in each part
+                        const linkParts = [];
+                        codeParts.forEach((codePart, codePartIndex) => {
+                          if (typeof codePart === 'string') {
+                            const linkRegex = /\[([^\]]+)\]\(([^)]+)\)/g;
+                            let linkMatch;
+                            let linkLastIndex = 0;
+                            let linkProcessedParts = [];
+                            
+                            while ((linkMatch = linkRegex.exec(codePart)) !== null) {
+                              // Add text before the link
+                              if (linkMatch.index > linkLastIndex) {
+                                linkProcessedParts.push(codePart.substring(linkLastIndex, linkMatch.index));
+                              }
+                              // Add the link
+                              linkProcessedParts.push(
+                                <a key={`${partIndex}-${codePartIndex}-${linkMatch.index}`} 
+                                   href={linkMatch[2]} 
+                                   target="_blank" 
+                                   rel="noopener noreferrer"
+                                   className="content-link">
+                                  {linkMatch[1]}
+                                </a>
+                              );
+                              linkLastIndex = linkMatch.index + linkMatch[0].length;
+                            }
+                            
+                            // Add remaining text
+                            if (linkLastIndex < codePart.length) {
+                              linkProcessedParts.push(codePart.substring(linkLastIndex));
+                            }
+                            
+                            linkParts.push(...linkProcessedParts);
+                          } else {
+                            linkParts.push(codePart);
+                          }
+                        });
+                        
+                        finalParts.push(...linkParts);
                       } else {
                         finalParts.push(part);
                       }
