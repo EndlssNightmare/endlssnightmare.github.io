@@ -49,6 +49,11 @@ const DynamicSEO = ({ type, data }) => {
 
   const seoData = getSEOData();
 
+  // Debug: Log SEO data in development
+  if (process.env.NODE_ENV === 'development') {
+    console.log('DynamicSEO Data:', seoData);
+  }
+
   return <SEO {...seoData} />;
 };
 

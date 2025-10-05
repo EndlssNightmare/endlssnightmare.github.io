@@ -45,6 +45,10 @@ const SEO = ({
       <meta property="og:locale" content="en_US" />
       <meta property="og:updated_time" content={new Date().toISOString()} />
       
+      {/* Cache busting for link previews */}
+      <meta property="og:image:secure_url" content={image} />
+      <meta name="twitter:image:alt" content={title} />
+      
       {/* Additional Twitter tags */}
       <meta name="twitter:site" content="@v01_cyber" />
       <meta name="twitter:domain" content="endlssightmare.com" />
