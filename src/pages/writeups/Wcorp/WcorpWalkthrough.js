@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { FaArrowLeft, FaCalendar, FaServer, FaStar, FaDesktop, FaNetworkWired, FaCopy, FaCheck } from 'react-icons/fa';
 import TableOfContents from '../../../components/TableOfContents';
 import ScrollToTop from '../../../components/ScrollToTop';
+import DynamicSEO from '../../../components/DynamicSEO';
 import './WcorpWalkthrough.css';
 
 const WcorpWalkthrough = () => {

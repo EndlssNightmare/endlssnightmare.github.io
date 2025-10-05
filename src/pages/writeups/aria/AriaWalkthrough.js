@@ -5,6 +5,7 @@ import { FaArrowLeft, FaCalendar, FaServer, FaStar, FaDesktop, FaNetworkWired, F
 import TableOfContents from '../../../components/TableOfContents';
 import ScrollToTop from '../../../components/ScrollToTop';
 import InfoStatus from '../../../components/InfoStatus';
+import DynamicSEO from '../../../components/DynamicSEO';
 import './AriaWalkthrough.css';
 
 const AriaWalkthrough = () => {
@@ -398,7 +399,7 @@ The machine highlighted the importance of proper input validation, secure file h
 # References
 • [aria2c Documentation](https://aria2.github.io/manual/en/html/)
 • [JSON-RPC Specification](https://www.jsonrpc.org/specification)
-• [Zero-Width Steganography](https://en.wikipedia.org/wiki/Zero-width_joiner)
+• [Zero-Width Steganography](https://null-byte.wonderhowto.com/how-to/use-zero-width-characters-hide-secret-messages-text-even-reveal-leaks-0198692/)
 • [File Upload Security Best Practices](https://owasp.org/www-community/vulnerabilities/Unrestricted_File_Upload)
 • [SSH Key Management](https://www.ssh.com/academy/ssh/key)
 
@@ -406,12 +407,25 @@ The machine highlighted the importance of proper input validation, secure file h
   };
 
   return (
-    <motion.div 
-      className="writeup-detail-page"
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.6 }}
-    >
+    <>
+      <DynamicSEO 
+        type="writeup" 
+        data={{
+          title: writeup.title,
+          excerpt: writeup.excerpt,
+          id: writeup.id,
+          image_url: `/images/writeups/aria/machine.png`,
+          os_type: writeup.os,
+          difficulty: writeup.difficulty,
+          tags: writeup.tags
+        }} 
+      />
+      <motion.div 
+        className="writeup-detail-page"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
+      >
       <div className="writeup-header">
         <Link to="/writeups" className="back-button">
           <FaArrowLeft />
@@ -700,6 +714,7 @@ The machine highlighted the importance of proper input validation, secure file h
       
       <ScrollToTop />
     </motion.div>
+    </>
   );
 };
 

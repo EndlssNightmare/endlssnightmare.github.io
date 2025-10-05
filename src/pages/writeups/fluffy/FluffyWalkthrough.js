@@ -5,6 +5,7 @@ import { FaArrowLeft, FaCalendar, FaServer, FaStar, FaDesktop, FaNetworkWired, F
 import TableOfContents from '../../../components/TableOfContents';
 import InfoStatus from '../../../components/InfoStatus';
 import ScrollToTop from '../../../components/ScrollToTop';
+import DynamicSEO from '../../../components/DynamicSEO';
 import './FluffyWalkthrough.css';
 
 const FluffyWalkthrough = () => {
@@ -514,12 +515,25 @@ This machine demonstrated various Windows Active Directory exploitation techniqu
   };
 
   return (
-    <motion.div 
-      className="writeup-detail-page"
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.6 }}
-    >
+    <>
+      <DynamicSEO 
+        type="writeup" 
+        data={{
+          title: writeup.title,
+          excerpt: writeup.excerpt,
+          id: writeup.id,
+          image_url: `/images/writeups/fluffy/machine.png`,
+          os_type: writeup.os,
+          difficulty: writeup.difficulty,
+          tags: writeup.tags
+        }} 
+      />
+      <motion.div 
+        className="writeup-detail-page"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
+      >
       <div className="writeup-header">
         <Link to="/writeups" className="back-button">
           <FaArrowLeft />
@@ -675,6 +689,7 @@ This machine demonstrated various Windows Active Directory exploitation techniqu
       
       <ScrollToTop />
     </motion.div>
+    </>
   );
 };
 
