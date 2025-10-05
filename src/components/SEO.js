@@ -25,19 +25,29 @@ const SEO = ({
       <meta property="og:image" content={image} />
       <meta property="og:image:width" content="1200" />
       <meta property="og:image:height" content="630" />
+      <meta property="og:image:type" content="image/png" />
+      <meta property="og:image:alt" content={title} />
       <meta property="og:site_name" content="V01 Notes" />
       
       {/* Twitter */}
-      <meta property="twitter:card" content="summary_large_image" />
-      <meta property="twitter:url" content={url} />
-      <meta property="twitter:title" content={title} />
-      <meta property="twitter:description" content={description} />
-      <meta property="twitter:image" content={image} />
-      <meta property="twitter:creator" content="@v01_cyber" />
+      <meta name="twitter:card" content="summary_large_image" />
+      <meta name="twitter:url" content={url} />
+      <meta name="twitter:title" content={title} />
+      <meta name="twitter:description" content={description} />
+      <meta name="twitter:image" content={image} />
+      <meta name="twitter:creator" content="@v01_cyber" />
       
       {/* Additional Meta Tags */}
       <meta name="robots" content="index, follow" />
       <link rel="canonical" href={url} />
+      
+      {/* Additional Open Graph tags for better compatibility */}
+      <meta property="og:locale" content="en_US" />
+      <meta property="og:updated_time" content={new Date().toISOString()} />
+      
+      {/* Additional Twitter tags */}
+      <meta name="twitter:site" content="@v01_cyber" />
+      <meta name="twitter:domain" content="endlssightmare.com" />
     </Helmet>
   );
 };
