@@ -37,16 +37,8 @@ class WriteupGenerator:
             if not data.get('image_url'):
                 data['image_url'] = f"/images/writeups/{data['machine_name'].lower()}/machine.png"
             
-            # Generate static HTML page for link previews
-            template = self.generate_static_html_for_previews(data)
-            public_writeups_dir = self.public_dir / "writeups"
-            public_writeups_dir.mkdir(exist_ok=True)
-            writeup_file = public_writeups_dir / f"{data['machine_name']}-walkthrough.html"
-            
-            with open(writeup_file, 'w') as f:
-                f.write(template)
-            
-            print(f"✓ Created static HTML for link previews: {writeup_file}")
+            # Note: Static HTML pages are not needed anymore since DynamicSEO 
+            # in React components provides the meta tags for link previews
             
             # Update React components
             self.update_home_js(data)
@@ -58,8 +50,7 @@ class WriteupGenerator:
             print("\n=== Generation Complete! ===")
             print(f"✓ React components updated")
             print(f"✓ Image copied (if provided)")
-            print(f"✓ Static HTML page created for link previews")
-            print(f"✓ DynamicSEO component added")
+            print(f"✓ DynamicSEO component added for link previews")
             print(f"\nNext steps:")
             print(f"1. Add your content to the React component: src/pages/writeups/{data['machine_name']}/{data['machine_name'].replace('-', '').title()}Walkthrough.js")
             print(f"2. Add routing in your App.js if needed")
@@ -74,8 +65,7 @@ class WriteupGenerator:
             print(f"   └── public/images/writeups/")
             print(f"       └── {data['machine_name']}/")
             print(f"           └── machine.{ext_display}")
-            print(f"   └── public/writeups/")
-            print(f"       └── {data['machine_name']}-walkthrough.html (for link previews)")
+            print(f"\n💡 Link previews work via DynamicSEO component in React!")
             
         except KeyboardInterrupt:
             print("\n\nGeneration cancelled by user.")
@@ -230,15 +220,12 @@ class WriteupGenerator:
     <meta name="twitter:domain" content="endlssightmare.com" />
     
     <link rel="canonical" href="https://endlssightmare.com/writeups/{data['machine_name']}-walkthrough" />
-    
-    <!-- Load React App -->
-    <script>
-        // Redirect to the correct React route
-        window.location.replace('/writeups/{data['machine_name']}-walkthrough');
-    </script>
 </head>
 <body>
-    <p>Loading {data['title']}...</p>
+    <noscript>
+        <p>Please enable JavaScript to view this content.</p>
+        <p><a href="/writeups/{data['machine_name']}-walkthrough">Click here to view {data['title']}</a></p>
+    </noscript>
 </body>
 </html>"""
         
