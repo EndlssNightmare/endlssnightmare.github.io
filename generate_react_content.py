@@ -37,14 +37,16 @@ class WriteupGenerator:
             if not data.get('image_url'):
                 data['image_url'] = f"/images/writeups/{data['machine_name'].lower()}/machine.png"
             
-            # Generate writeup HTML template (commented out - not used by React)
-            # template = self.generate_writeup_template(data)
-            # writeup_file = self.writeups_dir / f"{data['machine_name']}-walkthrough.html"
-            # 
-            # with open(writeup_file, 'w') as f:
-            #     f.write(template)
-            # 
-            # print(f"✓ Created writeup template: {writeup_file}")
+            # Generate static HTML page for link previews
+            template = self.generate_static_html_for_previews(data)
+            public_writeups_dir = self.public_dir / "writeups"
+            public_writeups_dir.mkdir(exist_ok=True)
+            writeup_file = public_writeups_dir / f"{data['machine_name']}-walkthrough.html"
+            
+            with open(writeup_file, 'w') as f:
+                f.write(template)
+            
+            print(f"✓ Created static HTML for link previews: {writeup_file}")
             
             # Update React components
             self.update_home_js(data)
@@ -56,13 +58,15 @@ class WriteupGenerator:
             print("\n=== Generation Complete! ===")
             print(f"✓ React components updated")
             print(f"✓ Image copied (if provided)")
+            print(f"✓ Static HTML page created for link previews")
+            print(f"✓ DynamicSEO component added")
             print(f"\nNext steps:")
             print(f"1. Add your content to the React component: src/pages/writeups/{data['machine_name']}/{data['machine_name'].replace('-', '').title()}Walkthrough.js")
             print(f"2. Add routing in your App.js if needed")
             print(f"3. Test your new writeup!")
             print(f"\n📁 New structure created:")
             print(f"   └── src/pages/writeups/{data['machine_name']}/")
-            print(f"       ├── {data['machine_name'].replace('-', '').title()}Walkthrough.js")
+            print(f"       ├── {data['machine_name'].replace('-', '').title()}Walkthrough.js (with DynamicSEO)")
             print(f"       ├── {data['machine_name'].replace('-', '').title()}Walkthrough.css")
             print(f"       └── images/")
             ext_display = Path(data.get('image_path', '')).suffix.lstrip('.') if data.get('image_path') else 'png'
@@ -70,6 +74,8 @@ class WriteupGenerator:
             print(f"   └── public/images/writeups/")
             print(f"       └── {data['machine_name']}/")
             print(f"           └── machine.{ext_display}")
+            print(f"   └── public/writeups/")
+            print(f"       └── {data['machine_name']}-walkthrough.html (for link previews)")
             
         except KeyboardInterrupt:
             print("\n\nGeneration cancelled by user.")
@@ -171,171 +177,68 @@ class WriteupGenerator:
             print(f"Error copying image: {e}")
             return None
     
-    def generate_writeup_template(self, data):
-        """Generate the writeup HTML template"""
+    def generate_static_html_for_previews(self, data):
+        """Generate static HTML page with meta tags for link previews"""
+        # Convert relative image URLs to absolute URLs
+        image_url = data.get('image_url', f"/images/writeups/{data['machine_name'].lower()}/machine.png")
+        if image_url.startswith('/'):
+            image_url = f"https://endlssightmare.com{image_url}"
+        
+        # Format tags for keywords
+        tags_str = ', '.join(data['tags']) if data['tags'] else ''
+        keywords = f"{tags_str}, writeup, walkthrough, cybersecurity, {data['os_type'].lower()}, {data['difficulty'].lower()}"
+        
         template = f"""<!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{data['title']}</title>
-    <style>
-        body {{
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.6;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-            background-color: #1a1a1a;
-            color: #ffffff;
-        }}
-        .header {{
-            text-align: center;
-            margin-bottom: 40px;
-            padding: 20px;
-            background: linear-gradient(135deg, #3D0000, #800000);
-            border-radius: 10px;
-        }}
-        .machine-info {{
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin: 20px 0;
-            padding: 15px;
-            background: rgba(61, 0, 0, 0.3);
-            border-radius: 8px;
-        }}
-        .machine-image {{
-            max-width: 200px;
-            border-radius: 8px;
-        }}
-        .badge {{
-            display: inline-block;
-            padding: 5px 10px;
-            margin: 2px;
-            border-radius: 15px;
-            font-size: 0.9em;
-            font-weight: bold;
-        }}
-        .badge.difficulty {{
-            background-color: #ff6b6b;
-            color: white;
-        }}
-        .badge.os {{
-            background-color: #4ecdc4;
-            color: white;
-        }}
-        .badge.ip {{
-            background-color: #45b7d1;
-            color: white;
-        }}
-        h1, h2, h3 {{
-            color: #ff6b6b;
-            border-bottom: 2px solid #3D0000;
-            padding-bottom: 10px;
-        }}
-        pre {{
-            background-color: #2d2d2d;
-            padding: 15px;
-            border-radius: 8px;
-            overflow-x: auto;
-            border-left: 4px solid #ff6b6b;
-        }}
-        code {{
-            background-color: #2d2d2d;
-            padding: 2px 6px;
-            border-radius: 4px;
-            font-family: 'Courier New', monospace;
-        }}
-        .image-container {{
-            text-align: center;
-            margin: 20px 0;
-        }}
-        .content-image {{
-            max-width: 100%;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
-        }}
-        .tags {{
-            margin: 15px 0;
-        }}
-        .tag {{
-            display: inline-block;
-            background-color: #3D0000;
-            color: white;
-            padding: 5px 12px;
-            margin: 3px;
-            border-radius: 15px;
-            font-size: 0.9em;
-        }}
-    </style>
+    <meta charset="utf-8" />
+    <link rel="icon" href="/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#3D0000" />
+    
+    <!-- SEO Meta Tags -->
+    <title>{data['title']} - V01 Cybersecurity Writeup</title>
+    <meta name="description" content="{data['excerpt']}" />
+    <meta name="keywords" content="{keywords}" />
+    <meta name="author" content="V01" />
+    <meta name="robots" content="index, follow" />
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="article" />
+    <meta property="og:url" content="https://endlssightmare.com/writeups/{data['machine_name']}-walkthrough" />
+    <meta property="og:title" content="{data['title']} - V01 Cybersecurity Writeup" />
+    <meta property="og:description" content="{data['excerpt']}" />
+    <meta property="og:image" content="{image_url}" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:alt" content="{data['title']} - V01 Cybersecurity Writeup" />
+    <meta property="og:site_name" content="V01 Notes" />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:updated_time" content="2025-01-27T00:00:00Z" />
+    <meta property="og:image:secure_url" content="{image_url}" />
+    
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:url" content="https://endlssightmare.com/writeups/{data['machine_name']}-walkthrough" />
+    <meta name="twitter:title" content="{data['title']} - V01 Cybersecurity Writeup" />
+    <meta name="twitter:description" content="{data['excerpt']}" />
+    <meta name="twitter:image" content="{image_url}" />
+    <meta name="twitter:image:alt" content="{data['title']} - V01 Cybersecurity Writeup" />
+    <meta name="twitter:creator" content="@v01_cyber" />
+    <meta name="twitter:site" content="@v01_cyber" />
+    <meta name="twitter:domain" content="endlssightmare.com" />
+    
+    <link rel="canonical" href="https://endlssightmare.com/writeups/{data['machine_name']}-walkthrough" />
+    
+    <!-- Load React App -->
+    <script>
+        // Redirect to the correct React route
+        window.location.replace('/writeups/{data['machine_name']}-walkthrough');
+    </script>
 </head>
 <body>
-    <div class="header">
-        <h1>{data['title']}</h1>
-        <p>{data['excerpt']}</p>
-        
-        <div class="machine-info">
-            <div>
-                <h3>Machine Information</h3>
-                <span class="badge difficulty">Difficulty: {data['difficulty']}</span>
-                <span class="badge os">OS: {data['os_type']}</span>
-                <span class="badge ip">IP: {data['ip_address']}</span>
-                
-                <div class="tags">
-                    {''.join([f'<span class="tag">{tag}</span>' for tag in data['tags']])}
-                </div>
-            </div>
-            <div>
-                <img src="{data.get('image_url', '/images/writeups/default/machine.png')}" alt="{data['title']}" class="machine-image">
-            </div>
-        </div>
-    </div>
-
-    <h1>Overview</h1>
-    <p>Provide a brief overview of the machine, what you discovered, and the overall approach to solving it.</p>
-
-    <h2>Enumeration</h2>
-    <p>Document your initial reconnaissance and enumeration steps.</p>
-    
-    <h3>Port Scanning</h3>
-    <p>Start with your nmap scan results:</p>
-    <pre><code>nmap -sC -sV -p- [TARGET_IP]</code></pre>
-    
-    <h3>Service Enumeration</h3>
-    <p>Document any specific service enumeration you performed.</p>
-
-    <h2>Exploitation</h2>
-    <p>Document your exploitation steps and findings.</p>
-    
-    <h3>Initial Access</h3>
-    <p>How did you gain initial access to the machine?</p>
-    
-    <h3>User Flag</h3>
-    <p>How did you obtain the user flag?</p>
-
-    <h2>Post Exploitation</h2>
-    <p>Document privilege escalation and post-exploitation activities.</p>
-    
-    <h3>Privilege Escalation</h3>
-    <p>How did you escalate privileges?</p>
-    
-    <h3>Root Flag</h3>
-    <p>How did you obtain the root flag?</p>
-
-    <h2>Lessons Learned</h2>
-    <p>What did you learn from this machine? Any new techniques or tools discovered?</p>
-
-    <h2>Tools Used</h2>
-    <ul>
-        <li>Nmap - Port scanning and service enumeration</li>
-        <li>Add other tools you used...</li>
-    </ul>
-
-    <h2>References</h2>
-    <ul>
-        <li>Add any references, documentation, or resources you used...</li>
-    </ul>
+    <p>Loading {data['title']}...</p>
 </body>
 </html>"""
         
@@ -666,6 +569,7 @@ import {{ motion }} from 'framer-motion';
 import {{ FaArrowLeft, FaCalendar, FaServer, FaStar, FaDesktop, FaNetworkWired, FaCopy, FaCheck }} from 'react-icons/fa';
 import TableOfContents from '../../../components/TableOfContents';
 import ScrollToTop from '../../../components/ScrollToTop';
+import DynamicSEO from '../../../components/DynamicSEO';
 import './{data['machine_name'].replace('-', '').title()}Walkthrough.css';
 
 const {data['machine_name'].replace('-', '').title()}Walkthrough = () => {{
@@ -765,12 +669,25 @@ This machine demonstrated various {data['os_type']} exploitation techniques and 
   }};
 
   return (
-    <motion.div 
-      className="writeup-detail-page"
-      initial={{{{ opacity: 0, y: 20 }}}}
-      animate={{{{ opacity: 1, y: 0 }}}}
-      transition={{{{ duration: 0.6 }}}}
-    >
+    <>
+      <DynamicSEO 
+        type="writeup" 
+        data={{
+          title: writeup.title,
+          excerpt: writeup.excerpt,
+          id: writeup.id,
+          image_url: '{data['image_url']}',
+          os_type: writeup.os,
+          difficulty: writeup.difficulty,
+          tags: writeup.tags
+        }} 
+      />
+      <motion.div 
+        className="writeup-detail-page"
+        initial={{{{ opacity: 0, y: 20 }}}}
+        animate={{{{ opacity: 1, y: 0 }}}}
+        transition={{{{ duration: 0.6 }}}}
+      >
       <div className="writeup-header">
         <Link to="/writeups" className="back-button">
           <FaArrowLeft />
@@ -908,7 +825,8 @@ This machine demonstrated various {data['os_type']} exploitation techniques and 
       </div>
       
       <ScrollToTop />
-    </motion.div>
+      </motion.div>
+    </>
   );
 }};
 
