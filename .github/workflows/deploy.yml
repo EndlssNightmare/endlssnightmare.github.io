@@ -33,6 +33,10 @@ jobs:
       - name: Build
         run: npm run build
         
+      - name: Generate static SEO files for Discord previews
+        run: |
+          python3 generate_static_seo.py
+          
       - name: Create static files for SPA routes
         run: |
           # Create directories and copy index.html for each route
@@ -45,19 +49,21 @@ jobs:
           cp build/index.html build/projects/index.html
           cp build/index.html build/tags/index.html
           
-          # Create specific writeup pages
+          # Create specific writeup pages with SEO meta tags
           mkdir -p build/writeups/wcorp-walkthrough
           mkdir -p build/writeups/dc02-walkthrough
           mkdir -p build/writeups/tombwatcher-walkthrough
           mkdir -p build/writeups/aria-walkthrough
           mkdir -p build/writeups/puppy-walkthrough
           mkdir -p build/writeups/fluffy-walkthrough
-          cp build/index.html build/writeups/wcorp-walkthrough/index.html
-          cp build/index.html build/writeups/dc02-walkthrough/index.html
-          cp build/index.html build/writeups/tombwatcher-walkthrough/index.html
-          cp build/index.html build/writeups/aria-walkthrough/index.html
-          cp build/index.html build/writeups/puppy-walkthrough/index.html
-          cp build/index.html build/writeups/fluffy-walkthrough/index.html
+          
+          # Copy SEO-specific HTML files for Discord previews
+          cp public/wcorp-walkthrough.html build/writeups/wcorp-walkthrough/index.html
+          cp public/dc02-walkthrough.html build/writeups/dc02-walkthrough/index.html
+          cp public/tombwatcher-walkthrough.html build/writeups/tombwatcher-walkthrough/index.html
+          cp public/aria-walkthrough.html build/writeups/aria-walkthrough/index.html
+          cp public/puppy-walkthrough.html build/writeups/puppy-walkthrough/index.html
+          cp public/fluffy-walkthrough.html build/writeups/fluffy-walkthrough/index.html
           
       - name: Setup Pages
         uses: actions/configure-pages@v4
