@@ -48,12 +48,27 @@
     <meta property="og:image:secure_url" content="https://endlssightmare.com/images/writeups/dc02/machine.png" />
     <meta name="twitter:image:alt" content="DC02 Walkthrough" />
     
-    <!-- No redirect - let React Router handle navigation -->
+    <!-- Instant redirect for users, but crawlers see meta tags first -->
+    <script type="text/javascript">
+        // Redirect to React app immediately
+        window.location.replace('/writeups/dc02-walkthrough');
+    </script>
+    <noscript>
+        <meta http-equiv="refresh" content="0; url=/writeups/dc02-walkthrough" />
+    </noscript>
 </head>
 <body style="font-family: Arial, sans-serif; max-width: 800px; margin: 50px auto; padding: 20px; background-color: #0a0a0a; color: #e0e0e0; text-align: center;">
     <h1 style="color: #ff6b6b;">DC02 Walkthrough</h1>
     <p style="font-size: 16px; line-height: 1.6;">This Windows Domain Controller (DC01) in the SOUPEDECODE.LOCAL domain was discovered via internal network scanning. Enumeration revealed multiple Active Directory services and valid SMB credentials (charlie:charlie). AS-REP roasting against zximena448 yielded the password internet, granting Backup Operators group privileges.</p>
-    <p style="color: #666; font-size: 14px; margin-top: 20px;">Loading the full writeup...</p>
-    <p><a href="/writeups/dc02-walkthrough" style="color: #ff6b6b; text-decoration: none; font-weight: bold;">← View Full Writeup</a></p>
+    <div style="margin: 30px 0;">
+        <div style="display: inline-block; width: 40px; height: 40px; border: 4px solid #ff6b6b; border-radius: 50%; border-top-color: transparent; animation: spin 1s linear infinite;"></div>
+    </div>
+    <p style="color: #888; font-size: 14px;">Redirecting to full writeup...</p>
+    <p><a href="/writeups/dc02-walkthrough" style="color: #ff6b6b; text-decoration: none; font-weight: bold;">Click here if not redirected automatically</a></p>
+    <style>
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
 </body>
 </html>
