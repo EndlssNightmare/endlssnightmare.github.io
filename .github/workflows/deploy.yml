@@ -48,8 +48,16 @@ jobs:
           # Create specific writeup pages
           mkdir -p build/writeups/wcorp-walkthrough
           mkdir -p build/writeups/dc02-walkthrough
+          mkdir -p build/writeups/tombwatcher-walkthrough
+          mkdir -p build/writeups/aria-walkthrough
+          mkdir -p build/writeups/puppy-walkthrough
+          mkdir -p build/writeups/fluffy-walkthrough
           cp build/index.html build/writeups/wcorp-walkthrough/index.html
           cp build/index.html build/writeups/dc02-walkthrough/index.html
+          cp build/index.html build/writeups/tombwatcher-walkthrough/index.html
+          cp build/index.html build/writeups/aria-walkthrough/index.html
+          cp build/index.html build/writeups/puppy-walkthrough/index.html
+          cp build/index.html build/writeups/fluffy-walkthrough/index.html
           
       - name: Setup Pages
         uses: actions/configure-pages@v4
