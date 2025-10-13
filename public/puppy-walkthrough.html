@@ -48,20 +48,12 @@
     <meta property="og:image:secure_url" content="https://endlssightmare.com/images/writeups/puppy/machine.png" />
     <meta name="twitter:image:alt" content="Puppy Walkthrough" />
     
-    <!-- Redirect to main app after meta tags are read -->
-    <script>
-        // Redirect to the main React app
-        setTimeout(() => {
-            window.location.replace('https://endlssightmare.com/writeups/puppy-walkthrough');
-        }, 100);
-    </script>
+    <!-- No redirect - let React Router handle navigation -->
 </head>
 <body style="font-family: Arial, sans-serif; max-width: 800px; margin: 50px auto; padding: 20px; background-color: #0a0a0a; color: #e0e0e0; text-align: center;">
     <h1 style="color: #ff6b6b;">Puppy Walkthrough</h1>
     <p style="font-size: 16px; line-height: 1.6;">Puppy is an medium-difficulty Windows Active Directory machine built around an assumed-breach scenario where credentials for a low-privileged user are provided (levi.james / KingofAkron2025!). Initial SMB/BloodHound enumeration reveals GenericWrite on the Developers group, allowing the attacker to add the user and access the DEV share. A KeePass file harvested from DEV is cracked to recover additional credentials. A password-spraying and further enumeration lead to steph.cooper and extraction of DPAPI-protected secrets. Using steph.cooper_adm recovered credentials the box allows DCSync to dump the Administrator hash, enabling remote authentication and full domain compromise.</p>
-    <p style="color: #666; font-size: 14px; margin-top: 20px;">Redirecting to the full writeup...</p>
-    <noscript>
-        <p><a href="https://endlssightmare.com/writeups/puppy-walkthrough" style="color: #ff6b6b;">Click here to view the full writeup</a></p>
-    </noscript>
+    <p style="color: #666; font-size: 14px; margin-top: 20px;">Loading the full writeup...</p>
+    <p><a href="/writeups/puppy-walkthrough" style="color: #ff6b6b; text-decoration: none; font-weight: bold;">← View Full Writeup</a></p>
 </body>
 </html>

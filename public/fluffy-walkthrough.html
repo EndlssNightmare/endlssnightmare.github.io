@@ -48,20 +48,12 @@
     <meta property="og:image:secure_url" content="https://endlssightmare.com/images/writeups/fluffy/machine.png" />
     <meta name="twitter:image:alt" content="Fluffy Walkthrough" />
     
-    <!-- Redirect to main app after meta tags are read -->
-    <script>
-        // Redirect to the main React app
-        setTimeout(() => {
-            window.location.replace('https://endlssightmare.com/writeups/fluffy-walkthrough');
-        }, 100);
-    </script>
+    <!-- No redirect - let React Router handle navigation -->
 </head>
 <body style="font-family: Arial, sans-serif; max-width: 800px; margin: 50px auto; padding: 20px; background-color: #0a0a0a; color: #e0e0e0; text-align: center;">
     <h1 style="color: #ff6b6b;">Fluffy Walkthrough</h1>
     <p style="font-size: 16px; line-height: 1.6;">Fluffy is an easy-difficulty Windows machine designed around an assumed breach scenario, where credentials for a low-privileged user are provided. By exploiting CVE-2025-24071, the credentials of another low-privileged user can be obtained. Further enumeration reveals the existence of ACLs over the winrm_svc and ca_svc accounts. WinRM can then be used to log in to the target using the winrc_svc account. Exploitation of an Active Directory Certificate service (ESC15) using the ca_svc account is required to obtain access to the Administrator account.</p>
-    <p style="color: #666; font-size: 14px; margin-top: 20px;">Redirecting to the full writeup...</p>
-    <noscript>
-        <p><a href="https://endlssightmare.com/writeups/fluffy-walkthrough" style="color: #ff6b6b;">Click here to view the full writeup</a></p>
-    </noscript>
+    <p style="color: #666; font-size: 14px; margin-top: 20px;">Loading the full writeup...</p>
+    <p><a href="/writeups/fluffy-walkthrough" style="color: #ff6b6b; text-decoration: none; font-weight: bold;">← View Full Writeup</a></p>
 </body>
 </html>
