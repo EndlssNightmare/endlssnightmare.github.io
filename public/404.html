@@ -66,13 +66,13 @@
       // If it's a crawler, try to serve SEO content for writeups
       if (isCrawler) {
         const path = window.location.pathname;
-        const writeupMatch = path.match(/^\/([^\/]+)-walkthrough\/?$/);
+        const writeupMatch = path.match(/^\/writeups\/([^\/]+)\/?$/);
         
         if (writeupMatch) {
-          const writeupId = writeupMatch[1] + '-walkthrough';
+          const writeupId = writeupMatch[1];
           
           // Fetch the SEO content for this writeup
-          fetch(`/seo/${writeupId}.html`)
+          fetch(`/seo-${writeupId}.html`)
             .then(response => {
               if (response.ok) {
                 return response.text();
