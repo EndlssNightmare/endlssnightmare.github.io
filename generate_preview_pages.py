@@ -102,7 +102,7 @@ def generate_html_preview(writeup):
     <meta property="og:description" content="{writeup["excerpt"]}" />
     <meta property="og:image" content="https://endlssightmare.com{writeup["image"]}" />
     <meta property="og:image:width" content="1200" />
-    <meta property="og:image:height" content="630" />
+    <meta property="og:image:height" content="800" />
     <meta property="og:image:type" content="image/png" />
     <meta property="og:image:alt" content="{writeup["title"]}" />
     <meta property="og:site_name" content="V01 Notes" />

@@ -105,7 +105,7 @@ const TombwatcherWalkthrough = () => {
   const writeup = {
     id: 'tombwatcher-walkthrough',
     title: 'TombWatcher Walkthrough',
-    excerpt: 'TombWatcher - This writeup documents the discovery and analysis of vulnerabilities, exploitation techniques, and privilege escalation methods.',
+    excerpt: 'TombWatcher is a medium-difficulty Windows Active Directory machine that demonstrates advanced ADCS exploitation techniques. Starting with provided credentials (henry / H3nry_987TGV!), the machine showcases GMSA enumeration, Kerberoasting attacks, and ESC15 vulnerability exploitation through Certipy. The walkthrough covers tombstone object abuse, certificate template manipulation, and privilege escalation to Domain Administrator through ADCS certificate abuse.',
     date: 'Oct 11, 2025',
     tags: ['Htb', 'Ad', 'Adcs', 'Password-Cracking', 'Gmsa', 'Kerberoasting', 'Kerberos', 'Tombstone', 'Esc15'],
     difficulty: 'Medium',
@@ -114,7 +114,7 @@ const TombwatcherWalkthrough = () => {
     content: `# TombWatcher
 
 ## Overview
-This writeup documents the discovery and analysis of vulnerabilities, exploitation techniques, and privilege escalation methods for the TombWatcher machine.
+TombWatcher is a medium-difficulty Windows Active Directory machine that demonstrates advanced ADCS exploitation techniques. Starting with provided credentials (henry / H3nry_987TGV!), the machine showcases GMSA enumeration, Kerberoasting attacks, and ESC15 vulnerability exploitation through Certipy. The walkthrough covers tombstone object abuse, certificate template manipulation, and privilege escalation to Domain Administrator through ADCS certificate abuse.
 <InfoStatus title="Info Status:" message="As is common in real life Windows pentests, you will start the TombWatcher box with credentials for the following account: henry / H3nry_987TGV!" />
 
 ## Enumeration

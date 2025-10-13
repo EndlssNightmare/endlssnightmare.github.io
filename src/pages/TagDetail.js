@@ -14,7 +14,7 @@ const TagDetail = () => {
     {
       id: 11,
       title: 'TombWatcher Walkthrough',
-      excerpt: 'TombWatcher - This writeup documents the discovery and analysis of vulnerabilities, exploitation techniques, and privilege escalation methods.',
+      excerpt: 'TombWatcher is a medium-difficulty Windows Active Directory machine that demonstrates advanced ADCS exploitation techniques. Starting with provided credentials (henry / H3nry_987TGV!), the machine showcases GMSA enumeration, Kerberoasting attacks, and ESC15 vulnerability exploitation through Certipy. The walkthrough covers tombstone object abuse, certificate template manipulation, and privilege escalation to Domain Administrator through ADCS certificate abuse.',
       date: 'Oct 11, 2025',
       tags: ['htb', 'ad', 'adcs', 'password-cracking', 'gmsa', 'kerberoasting', 'kerberos', 'tombstone', 'esc15'],
       image: '/images/writeups/tombwatcher/machine.png',
