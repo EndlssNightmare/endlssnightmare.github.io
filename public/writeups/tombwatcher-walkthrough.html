@@ -7,7 +7,7 @@
     
     <!-- Basic Meta Tags -->
     <title>TombWatcher Walkthrough - V01 Cybersecurity Writeup</title>
-    <meta name="description" content="TombWatcher - This writeup documents the discovery and analysis of vulnerabilities, exploitation techniques, and privilege escalation methods." />
+    <meta name="description" content="TombWatcher is a medium-difficulty Windows Active Directory machine that demonstrates advanced ADCS exploitation techniques. Starting with provided credentials (henry / H3nry_987TGV!), the machine showcases GMSA enumeration, Kerberoasting attacks, and ESC15 vulnerability exploitation through Certipy. The walkthrough covers tombstone object abuse, certificate template manipulation, and privilege escalation to Domain Administrator through ADCS certificate abuse." />
     <meta name="keywords" content="htb, ad, adcs, password-cracking, gmsa, kerberoasting, kerberos, tombstone, esc15, writeup, walkthrough, cybersecurity, windows, medium" />
     <meta name="author" content="V01" />
     
@@ -15,10 +15,10 @@
     <meta property="og:type" content="article" />
     <meta property="og:url" content="https://endlssightmare.com/writeups/tombwatcher-walkthrough" />
     <meta property="og:title" content="TombWatcher Walkthrough - V01 Cybersecurity Writeup" />
-    <meta property="og:description" content="TombWatcher - This writeup documents the discovery and analysis of vulnerabilities, exploitation techniques, and privilege escalation methods." />
+    <meta property="og:description" content="TombWatcher is a medium-difficulty Windows Active Directory machine that demonstrates advanced ADCS exploitation techniques. Starting with provided credentials (henry / H3nry_987TGV!), the machine showcases GMSA enumeration, Kerberoasting attacks, and ESC15 vulnerability exploitation through Certipy. The walkthrough covers tombstone object abuse, certificate template manipulation, and privilege escalation to Domain Administrator through ADCS certificate abuse." />
     <meta property="og:image" content="https://endlssightmare.com/images/writeups/tombwatcher/machine.png" />
-    <meta property="og:image:width" content="1200" />
-    <meta property="og:image:height" content="800" />
+    <meta property="og:image:width" content="600" />
+    <meta property="og:image:height" content="600" />
     <meta property="og:image:type" content="image/png" />
     <meta property="og:image:alt" content="TombWatcher Walkthrough" />
     <meta property="og:site_name" content="V01 Notes" />
@@ -34,7 +34,7 @@
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:url" content="https://endlssightmare.com/writeups/tombwatcher-walkthrough" />
     <meta name="twitter:title" content="TombWatcher Walkthrough - V01 Cybersecurity Writeup" />
-    <meta name="twitter:description" content="TombWatcher - This writeup documents the discovery and analysis of vulnerabilities, exploitation techniques, and privilege escalation methods." />
+    <meta name="twitter:description" content="TombWatcher is a medium-difficulty Windows Active Directory machine that demonstrates advanced ADCS exploitation techniques. Starting with provided credentials (henry / H3nry_987TGV!), the machine showcases GMSA enumeration, Kerberoasting attacks, and ESC15 vulnerability exploitation through Certipy. The walkthrough covers tombstone object abuse, certificate template manipulation, and privilege escalation to Domain Administrator through ADCS certificate abuse." />
     <meta name="twitter:image" content="https://endlssightmare.com/images/writeups/tombwatcher/machine.png" />
     <meta name="twitter:creator" content="@v01_cyber" />
     <meta name="twitter:site" content="@v01_cyber" />
@@ -48,17 +48,15 @@
     <meta property="og:image:secure_url" content="https://endlssightmare.com/images/writeups/tombwatcher/machine.png" />
     <meta name="twitter:image:alt" content="TombWatcher Walkthrough" />
     
-    <!-- Redirect to main app -->
-    <script>
-        // Redirect to the main React app
-        window.location.replace('https://endlssightmare.com/writeups/tombwatcher-walkthrough');
-    </script>
+    <!-- Auto redirect after preview is scraped (3 seconds delay) -->
+    <meta http-equiv="refresh" content="3;url=https://endlssightmare.com/" />
 </head>
-<body>
-    <noscript>
-        <h1>TombWatcher Walkthrough</h1>
-        <p>TombWatcher - This writeup documents the discovery and analysis of vulnerabilities, exploitation techniques, and privilege escalation methods.</p>
-        <p><a href="https://endlssightmare.com/writeups/tombwatcher-walkthrough">View the full writeup</a></p>
-    </noscript>
+<body style="font-family: Arial, sans-serif; max-width: 800px; margin: 50px auto; padding: 20px; background-color: #0a0a0a; color: #e0e0e0;">
+    <h1 style="color: #ff6b6b;">TombWatcher Walkthrough</h1>
+    <p style="font-size: 16px; line-height: 1.6;">TombWatcher is a medium-difficulty Windows Active Directory machine that demonstrates advanced ADCS exploitation techniques. Starting with provided credentials (henry / H3nry_987TGV!), the machine showcases GMSA enumeration, Kerberoasting attacks, and ESC15 vulnerability exploitation through Certipy. The walkthrough covers tombstone object abuse, certificate template manipulation, and privilege escalation to Domain Administrator through ADCS certificate abuse.</p>
+    <p style="margin-top: 30px;">
+        <a href="https://endlssightmare.com/" style="color: #ff6b6b; text-decoration: none; font-weight: bold;">← Back to V01 Notes</a>
+    </p>
+    <p style="color: #666; font-size: 14px; margin-top: 20px;">You will be redirected to the homepage in a few seconds...</p>
 </body>
 </html>

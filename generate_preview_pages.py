@@ -13,7 +13,7 @@ writeups = [
     {
         "id": "tombwatcher-walkthrough",
         "title": "TombWatcher Walkthrough",
-        "excerpt": "TombWatcher - This writeup documents the discovery and analysis of vulnerabilities, exploitation techniques, and privilege escalation methods.",
+        "excerpt": "TombWatcher is a medium-difficulty Windows Active Directory machine that demonstrates advanced ADCS exploitation techniques. Starting with provided credentials (henry / H3nry_987TGV!), the machine showcases GMSA enumeration, Kerberoasting attacks, and ESC15 vulnerability exploitation through Certipy. The walkthrough covers tombstone object abuse, certificate template manipulation, and privilege escalation to Domain Administrator through ADCS certificate abuse.",
         "date": "2025-10-11",
         "tags": ["Htb", "Ad", "Adcs", "Password-Cracking", "Gmsa", "Kerberoasting", "Kerberos", "Tombstone", "Esc15"],
         "image": "/images/writeups/tombwatcher/machine.png",
@@ -101,8 +101,8 @@ def generate_html_preview(writeup):
     <meta property="og:title" content="{writeup["title"]} - V01 Cybersecurity Writeup" />
     <meta property="og:description" content="{writeup["excerpt"]}" />
     <meta property="og:image" content="https://endlssightmare.com{writeup["image"]}" />
-    <meta property="og:image:width" content="1200" />
-    <meta property="og:image:height" content="800" />
+    <meta property="og:image:width" content="600" />
+    <meta property="og:image:height" content="600" />
     <meta property="og:image:type" content="image/png" />
     <meta property="og:image:alt" content="{writeup["title"]}" />
     <meta property="og:site_name" content="V01 Notes" />
@@ -132,18 +132,16 @@ def generate_html_preview(writeup):
     <meta property="og:image:secure_url" content="https://endlssightmare.com{writeup["image"]}" />
     <meta name="twitter:image:alt" content="{writeup["title"]}" />
     
-    <!-- Redirect to main app -->
-    <script>
-        // Redirect to the main React app
-        window.location.replace('https://endlssightmare.com/writeups/{writeup["id"]}');
-    </script>
+    <!-- Auto redirect after preview is scraped (3 seconds delay) -->
+    <meta http-equiv="refresh" content="3;url=https://endlssightmare.com/" />
 </head>
-<body>
-    <noscript>
-        <h1>{writeup["title"]}</h1>
-        <p>{writeup["excerpt"]}</p>
-        <p><a href="https://endlssightmare.com/writeups/{writeup["id"]}">View the full writeup</a></p>
-    </noscript>
+<body style="font-family: Arial, sans-serif; max-width: 800px; margin: 50px auto; padding: 20px; background-color: #0a0a0a; color: #e0e0e0;">
+    <h1 style="color: #ff6b6b;">{writeup["title"]}</h1>
+    <p style="font-size: 16px; line-height: 1.6;">{writeup["excerpt"]}</p>
+    <p style="margin-top: 30px;">
+        <a href="https://endlssightmare.com/" style="color: #ff6b6b; text-decoration: none; font-weight: bold;">← Back to V01 Notes</a>
+    </p>
+    <p style="color: #666; font-size: 14px; margin-top: 20px;">You will be redirected to the homepage in a few seconds...</p>
 </body>
 </html>'''
     
