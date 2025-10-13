@@ -6,6 +6,7 @@ import { FaArrowLeft } from 'react-icons/fa';
 import './WriteupDetail.css';
 
 // Import specific writeup components
+import TombwatcherWalkthrough from './writeups/tombwatcher/TombwatcherWalkthrough';
 import AriaWalkthrough from './writeups/aria/AriaWalkthrough';
 import PuppyWalkthrough from './writeups/puppy/PuppyWalkthrough';
 import FluffyWalkthrough from './writeups/fluffy/FluffyWalkthrough';
@@ -22,7 +23,8 @@ const WriteupDetail = () => {
     'wcorp-walkthrough': WcorpWalkthrough,
     'fluffy-walkthrough': FluffyWalkthrough,
       'puppy-walkthrough': PuppyWalkthrough,
-      'aria-walkthrough': AriaWalkthrough
+      'aria-walkthrough': AriaWalkthrough,
+      'tombwatcher-walkthrough': TombwatcherWalkthrough
 };
 
   // Get the component for this writeup

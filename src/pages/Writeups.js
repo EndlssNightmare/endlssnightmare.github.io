@@ -12,6 +12,18 @@ const Writeups = () => {
   // Writeups data
   const writeups = useMemo(() => [
     {
+      id: 11,
+      title: 'TombWatcher Walkthrough',
+      excerpt: 'TombWatcher - This writeup documents the discovery and analysis of vulnerabilities, exploitation techniques, and privilege escalation methods.',
+      date: 'Oct 11, 2025',
+      tags: ['Htb', 'Ad', 'Adcs', 'Password-Cracking', 'Gmsa', 'Kerberoasting', 'Kerberos', 'Tombstone', 'Esc15'],
+      image: '/images/writeups/tombwatcher/machine.png',
+      link: '/writeups/tombwatcher-walkthrough',
+      difficulty: 'Medium',
+      category: 'writeup',
+      os: 'Windows'
+    },
+    {
       id: 10,
       title: 'Aria Walkthrough',
       excerpt: 'Aria is a Linux machine that demonstrates file upload bypass techniques, zero-width steganography, and JSON-RPC exploitation through aria2c. The machine showcases how improper input validation and services running with elevated privileges can lead to complete system compromise.',
@@ -38,7 +50,7 @@ const Writeups = () => {
     {
       id: 8,
       title: 'Fluffy Walkthrough',
-      excerpt: 'Fluffy is an easy-difficulty Windows machine designed around an assumed breach scenario, where credentials for a low-privileged user are provided. By exploiting CVE-2025-24071, the credentials of another low-privileged user can be obtained. Further enumeration reveals the existence of ACLs over the winrm_svc and ca_svc accounts. WinRM can then be used to log in to the target using the winrc_svc account. Exploitation of an Active Directory Certificate service (ESC16) using the ca_svc account is required to obtain access to the Administrator account.',
+      excerpt: 'Fluffy is an easy-difficulty Windows machine designed around an assumed breach scenario, where credentials for a low-privileged user are provided. By exploiting CVE-2025-24071, the credentials of another low-privileged user can be obtained. Further enumeration reveals the existence of ACLs over the winrm_svc and ca_svc accounts. WinRM can then be used to log in to the target using the winrc_svc account. Exploitation of an Active Directory Certificate service (ESC15) using the ca_svc account is required to obtain access to the Administrator account.',
       date: 'Sep 20, 2025',
       tags: ['Htb', 'Ad', 'Smb', 'Ldap', 'Windows', 'Password-Cracking', 'Kerberoasting'],
       image: '/images/writeups/fluffy/machine.png',

@@ -555,6 +555,7 @@ import {{ Link, useNavigate }} from 'react-router-dom';
 import {{ motion }} from 'framer-motion';
 import {{ FaArrowLeft, FaCalendar, FaServer, FaStar, FaDesktop, FaNetworkWired, FaCopy, FaCheck }} from 'react-icons/fa';
 import TableOfContents from '../../../components/TableOfContents';
+import InfoStatus from '../../../components/InfoStatus';
 import ScrollToTop from '../../../components/ScrollToTop';
 import DynamicSEO from '../../../components/DynamicSEO';
 import './{data['machine_name'].replace('-', '').title()}Walkthrough.css';
@@ -601,6 +602,57 @@ const {data['machine_name'].replace('-', '').title()}Walkthrough = () => {{
     );
   }};
 
+  // Function to parse inline markdown (bold, italic, inline code, links)
+  const parseInlineMarkdown = (text) => {{
+    const parts = [];
+    let lastIndex = 0;
+    let key = 0;
+    
+    // Regex to match [text](url), **bold**, *italic*, and `code`
+    const regex = /(\\[.*?\\]\\(.*?\\)|\\*\\*.*?\\*\\*|\\*.*?\\*|`.*?`)/g;
+    let match;
+    
+    while ((match = regex.exec(text)) !== null) {{
+      // Add text before the match
+      if (match.index > lastIndex) {{
+        parts.push(text.substring(lastIndex, match.index));
+      }}
+      
+      const matched = match[0];
+      
+      if (matched.startsWith('[') && matched.includes('](')) {{
+        // Link [text](url)
+        const linkMatch = matched.match(/\\[(.*?)\\]\\((.*?)\\)/);
+        if (linkMatch) {{
+          const [, linkText, linkUrl] = linkMatch;
+          parts.push(
+            <a key={{key++}} href={{linkUrl}} target="_blank" rel="noopener noreferrer" className="content-link">
+              {{linkText}}
+            </a>
+          );
+        }}
+      }} else if (matched.startsWith('**') && matched.endsWith('**')) {{
+        // Bold text
+        parts.push(<strong key={{key++}}>{{matched.slice(2, -2)}}</strong>);
+      }} else if (matched.startsWith('*') && matched.endsWith('*')) {{
+        // Italic text
+        parts.push(<em key={{key++}}>{{matched.slice(1, -1)}}</em>);
+      }} else if (matched.startsWith('`') && matched.endsWith('`')) {{
+        // Inline code
+        parts.push(<code key={{key++}} className="inline-code">{{matched.slice(1, -1)}}</code>);
+      }}
+      
+      lastIndex = regex.lastIndex;
+    }}
+    
+    // Add remaining text
+    if (lastIndex < text.length) {{
+      parts.push(text.substring(lastIndex));
+    }}
+    
+    return parts.length > 0 ? parts : text;
+  }};
+
   // {data['title']} data
   const writeup = {{
     id: '{data['machine_name']}-walkthrough',
@@ -616,17 +668,36 @@ const {data['machine_name'].replace('-', '').title()}Walkthrough = () => {{
 ## Overview
 This writeup documents the discovery and analysis of vulnerabilities, exploitation techniques, and privilege escalation methods for the {data['title']} machine.
 
+<InfoStatus 
+  title="Initial Access Credentials:" 
+  message="As is common in real life {data['os_type']} pentests, you will start the {data['machine_name'].title()} box with credentials for the following account: username / password" 
+/>
+
 ## Initial Reconnaissance
 
 ### Port Scanning
-Start with your nmap scan results:
+Running Nmap port scanner to enumerate the services running on the target machine. From the nmap scan we have an indication that the target is running a {data['os_type']} machine with typical services.
+
+We can see some important open ports:
+• **Port 22**: SSH service
+• **Port 80**: HTTP service  
+• **Port 443**: HTTPS service
+• **Port 135**: RPC service
+• **Port 139**: NetBIOS service
+• **Port 445**: SMB service
 
 \`\`\`bash
-nmap -sC -sV -p- [TARGET_IP]
+nmap -sC -sV -p- {data['ip_address']}
 \`\`\`
 
 ### Service Enumeration
 Document any specific service enumeration you performed.
+
+<InfoStatus 
+  title="Important Note:" 
+  message="This is an example of an informational block that can be used to highlight important details, tips, or explanations throughout the writeup. It supports **bold text** and line breaks for better formatting." 
+  type="info"
+/>
 
 ## Initial Access
 
@@ -641,18 +712,29 @@ How did you obtain the user flag?
 ### Escalation Method
 How did you escalate privileges?
 
+<InfoStatus 
+  title="Warning:" 
+  message="This is an example of a warning block that can be used to highlight potential issues, dangerous commands, or important security considerations. Use sparingly for maximum impact." 
+  type="warning"
+/>
+
 ### Root Flag
 How did you obtain the root flag?
 
 ## Conclusion
-This machine demonstrated various {data['os_type']} exploitation techniques and privilege escalation methods.
 
-## Tools Used
-- Nmap - Port scanning and service enumeration
-- Add other tools you used...
+{data['machine_name'].title()} is a {data['difficulty'].lower()}-difficulty {data['os_type']} machine that demonstrates various exploitation techniques and privilege escalation methods. The machine provides excellent practice for understanding how multiple vulnerabilities can be chained together for system compromise.
 
-## References
-- Add any references, documentation, or resources you used...`
+The attack path involved:
+
+• **Initial Reconnaissance**: Port scanning and service enumeration
+• **Service Exploitation**: Identifying and exploiting vulnerable services
+• **Privilege Escalation**: Escalating privileges to gain administrative access
+• **Post-Exploitation**: Maintaining access and extracting sensitive data
+
+**Tools Used**: Nmap, NetExec (nxc), BloodHound, John the Ripper, Evil-WinRM, Impacket, [Additional Tools]
+
+The machine emphasizes the importance of proper service configuration, secure authentication mechanisms, and defense against common exploitation techniques. It demonstrates how seemingly minor misconfigurations can lead to complete system compromise.`
   }};
 
   return (
@@ -763,11 +845,11 @@ This machine demonstrated various {data['os_type']} exploitation techniques and 
                 const line = lines[i];
                 
                 if (line.startsWith('# ')) {{
-                  elements.push(<h1 key={{i}}>{{line.substring(2)}}</h1>);
+                  elements.push(<h1 key={{i}}>{{parseInlineMarkdown(line.substring(2))}}</h1>);
                 }} else if (line.startsWith('## ')) {{
-                  elements.push(<h2 key={{i}}>{{line.substring(3)}}</h2>);
+                  elements.push(<h2 key={{i}}>{{parseInlineMarkdown(line.substring(3))}}</h2>);
                 }} else if (line.startsWith('### ')) {{
-                  elements.push(<h3 key={{i}}>{{line.substring(4)}}</h3>);
+                  elements.push(<h3 key={{i}}>{{parseInlineMarkdown(line.substring(4))}}</h3>);
                 }} else if (line.startsWith('```')) {{
                   // Handle code blocks with CodeBlock component
                   const language = line.substring(3).trim();
@@ -795,8 +877,43 @@ This machine demonstrated various {data['os_type']} exploitation techniques and 
                       </div>
                     );
                   }}
+                }} else if (line.startsWith('<InfoStatus')) {{
+                  // Handle InfoStatus components (single line or multi-line)
+                  const infoStatusLines = [];
+                  let currentLine = i;
+                  
+                  // Collect all lines for this InfoStatus component
+                  while (currentLine < lines.length && !lines[currentLine].trim().endsWith('/>')) {{
+                    infoStatusLines.push(lines[currentLine]);
+                    currentLine++;
+                  }}
+                  if (currentLine < lines.length) {{
+                    infoStatusLines.push(lines[currentLine]); // Add the closing line
+                  }}
+                  
+                  const fullInfoStatus = infoStatusLines.join(' ');
+                  
+                  // Extract attributes
+                  const titleMatch = fullInfoStatus.match(/title="([^"]*)"/);
+                  const messageMatch = fullInfoStatus.match(/message="([^"]*)"/);
+                  const typeMatch = fullInfoStatus.match(/type="([^"]*)"/);
+                  
+                  if (titleMatch && messageMatch) {{
+                    const type = typeMatch ? typeMatch[1] : 'info';
+                    elements.push(
+                      <InfoStatus 
+                        key={{i}} 
+                        title={{titleMatch[1]}} 
+                        message={{messageMatch[1]}}
+                        type={{type}}
+                      />
+                    );
+                  }}
+                  
+                  // Skip the lines we've already processed
+                  i = currentLine;
                 }} else if (line.trim()) {{
-                  elements.push(<p key={{i}}>{{line}}</p>);
+                  elements.push(<p key={{i}}>{{parseInlineMarkdown(line)}}</p>);
                 }} else {{
                   elements.push(<br key={{i}} />);
                 }}

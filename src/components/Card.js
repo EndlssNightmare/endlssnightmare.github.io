@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { FaCalendar, FaTag } from 'react-icons/fa';
+import CrackingTitle from './CrackingTitle';
 import './Card.css';
 
 const Card = ({ title, excerpt, date, tags, image, link, category, os, github }) => {
@@ -98,7 +99,9 @@ const Card = ({ title, excerpt, date, tags, image, link, category, os, github })
         </div>
         
         <div className="card-body">
-          <h3 className="card-title">{title}</h3>
+          <h3 className="card-title">
+            <CrackingTitle>{title}</CrackingTitle>
+          </h3>
           
           <p className="card-excerpt">{excerpt}</p>
           

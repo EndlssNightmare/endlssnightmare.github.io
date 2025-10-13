@@ -378,32 +378,20 @@ ssh root@192.168.0.11 -i id_rsa
 ![Service Enumeration](/images/writeups/aria/19.png)
 
 # Conclusion
-This machine demonstrated various Linux exploitation techniques and privilege escalation methods:
 
-• **File Upload Bypass**: Exploited file upload restrictions by manipulating magic bytes and Content-Type headers to upload PHP shells
-• **Steganography**: Used zero-width steganography to extract hidden authentication tokens from text files
-• **JSON-RPC Exploitation**: Leveraged aria2c's JSON-RPC interface running as root to download and overwrite system files
-• **SSH Key Injection**: Created SSH key pairs and used aria2c to download authorized_keys to gain root access
+Aria is an easy-difficulty Linux machine that demonstrates creative exploitation techniques including file upload bypass, zero-width steganography, and JSON-RPC abuse. The machine provides excellent practice for understanding how seemingly secure services can be exploited when running with elevated privileges.
 
-The machine highlighted the importance of proper input validation, secure file handling, and the risks of running services with elevated privileges.
+The initial access was achieved through file upload bypass and steganography. The attack path involved:
 
-# Tools Used
-• **Nmap** - Port scanning and service enumeration
-• **Burp Suite** - Intercepting and modifying HTTP requests
-• **Python** - Custom scripts for MD5 hash generation and steganography extraction
-• **ffuf** - Directory and file brute forcing
-• **chisel** - Port forwarding and tunneling
-• **curl** - Interacting with JSON-RPC API
-• **SSH** - Remote access and key management
+• **File Upload Bypass**: Exploiting [file upload restrictions](https://owasp.org/www-community/vulnerabilities/Unrestricted_File_Upload) by manipulating magic bytes and Content-Type headers to upload PHP shells
+• **Zero-Width Steganography**: Using [zero-width characters](https://null-byte.wonderhowto.com/how-to/use-zero-width-characters-hide-secret-messages-text-even-reveal-leaks-0198692/) to extract hidden authentication tokens from text files
+• **Port Forwarding**: Tunneling internal services using chisel for access to restricted JSON-RPC interface
+• **JSON-RPC Exploitation**: Leveraging [aria2c's JSON-RPC interface](https://aria2.github.io/manual/en/html/aria2c.html#rpc-interface) running as root to download and overwrite system files
+• **SSH Key Injection**: Creating SSH key pairs and using aria2c to download authorized_keys to gain root access
 
-# References
-• [aria2c Documentation](https://aria2.github.io/manual/en/html/)
-• [JSON-RPC Specification](https://www.jsonrpc.org/specification)
-• [Zero-Width Steganography](https://null-byte.wonderhowto.com/how-to/use-zero-width-characters-hide-secret-messages-text-even-reveal-leaks-0198692/)
-• [File Upload Security Best Practices](https://owasp.org/www-community/vulnerabilities/Unrestricted_File_Upload)
-• [SSH Key Management](https://www.ssh.com/academy/ssh/key)
+**Tools Used**: Nmap, Burp Suite, Python, ffuf, chisel, curl, SSH
 
-`
+The machine highlights the critical importance of proper input validation, secure file handling, running services with minimal privileges, and protecting administrative interfaces. It demonstrates how a service running as root can be exploited for complete system compromise.`
   };
 
   return (

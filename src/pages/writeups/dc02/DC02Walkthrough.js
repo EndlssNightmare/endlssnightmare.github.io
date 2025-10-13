@@ -48,6 +48,57 @@ const DC02Walkthrough = () => {
     );
   };
 
+  // Function to parse inline markdown (bold, italic, inline code, links)
+  const parseInlineMarkdown = (text) => {
+    const parts = [];
+    let lastIndex = 0;
+    let key = 0;
+    
+    // Regex to match [text](url), **bold**, *italic*, and `code`
+    const regex = /(\[.*?\]\(.*?\)|\*\*.*?\*\*|\*.*?\*|`.*?`)/g;
+    let match;
+    
+    while ((match = regex.exec(text)) !== null) {
+      // Add text before the match
+      if (match.index > lastIndex) {
+        parts.push(text.substring(lastIndex, match.index));
+      }
+      
+      const matched = match[0];
+      
+      if (matched.startsWith('[') && matched.includes('](')) {
+        // Link [text](url)
+        const linkMatch = matched.match(/\[(.*?)\]\((.*?)\)/);
+        if (linkMatch) {
+          const [, linkText, linkUrl] = linkMatch;
+          parts.push(
+            <a key={key++} href={linkUrl} target="_blank" rel="noopener noreferrer" className="content-link">
+              {linkText}
+            </a>
+          );
+        }
+      } else if (matched.startsWith('**') && matched.endsWith('**')) {
+        // Bold text
+        parts.push(<strong key={key++}>{matched.slice(2, -2)}</strong>);
+      } else if (matched.startsWith('*') && matched.endsWith('*')) {
+        // Italic text
+        parts.push(<em key={key++}>{matched.slice(1, -1)}</em>);
+      } else if (matched.startsWith('`') && matched.endsWith('`')) {
+        // Inline code
+        parts.push(<code key={key++} className="inline-code">{matched.slice(1, -1)}</code>);
+      }
+      
+      lastIndex = regex.lastIndex;
+    }
+    
+    // Add remaining text
+    if (lastIndex < text.length) {
+      parts.push(text.substring(lastIndex));
+    }
+    
+    return parts.length > 0 ? parts : text;
+  };
+
   // DC02 Writeup data
   const writeup = {
     id: 'dc02-walkthrough',
@@ -243,30 +294,19 @@ evil-winrm -i 192.168.0.18 -u Administrator -H 8982<REDACTED>
 
 # Conclusion
 
-This machine demonstrated various Windows Active Directory exploitation techniques including:
-• SMB enumeration and share access exploitation
-• Active Directory user enumeration and password attacks
-• Kerberoasting attacks to extract service account credentials
-• Pass-the-hash attacks for lateral movement
-• Domain administrator privilege escalation through credential theft
+DC02 is a Windows Active Directory Domain Controller machine that demonstrates classic Active Directory enumeration and exploitation techniques. The machine provides excellent practice for understanding fundamental AD attack vectors commonly encountered in penetration testing.
 
-# Tools Used
-• Nmap - Port scanning and service enumeration
-• NetExec (nxc) - SMB enumeration and authentication testing
-• BloodHound - Active Directory enumeration and attack path analysis
-• John the Ripper - Password cracking for Kerberoasting hashes
-• Evil-WinRM - Remote management and shell access
-• Impacket - Kerberoasting and pass-the-hash attacks
-• Rpcclient - LDAP enumeration and user information extraction
+The initial access was achieved through SMB enumeration with guest credentials. The attack path involved:
 
-# References
-• HackTheBox DC02 machine
-• Active Directory enumeration techniques
-• Kerberoasting attack methods
-• Pass-the-hash attack vectors
-• SMB share exploitation techniques
-• Service account privilege escalation methods
-    `
+• **SMB Share Enumeration**: Discovering accessible SMB shares containing sensitive information
+• **AS-REP Roasting**: Exploiting accounts without Kerberos pre-authentication using [AS-REP Roasting technique](https://attack.mitre.org/techniques/T1558/004/)
+• **Backup Operators Abuse**: Leveraging membership in the privileged [Backup Operators group](https://www.bordergate.co.uk/backup-operator-privilege-escalation/) for credential extraction
+• **DCSync Attack**: Performing [DCSync](https://attack.mitre.org/techniques/T1003/006/) to dump domain administrator hashes
+• **Pass-the-Hash**: Using stolen NTLM hashes for authentication without password
+
+**Tools Used**: Nmap, NetExec (nxc), BloodHound, John the Ripper, Evil-WinRM, Impacket, Rpcclient
+
+The machine emphasizes the importance of proper SMB share permissions, disabling Kerberos pre-authentication only when necessary, and carefully managing membership in privileged groups like Backup Operators.`
   };
 
 
@@ -378,11 +418,11 @@ This machine demonstrated various Windows Active Directory exploitation techniqu
                 const line = lines[i];
                 
                 if (line.startsWith('# ')) {
-                  elements.push(<h1 key={i}>{line.substring(2)}</h1>);
+                  elements.push(<h1 key={i}>{parseInlineMarkdown(line.substring(2))}</h1>);
                 } else if (line.startsWith('## ')) {
-                  elements.push(<h2 key={i}>{line.substring(3)}</h2>);
+                  elements.push(<h2 key={i}>{parseInlineMarkdown(line.substring(3))}</h2>);
                 } else if (line.startsWith('### ')) {
-                  elements.push(<h3 key={i}>{line.substring(4)}</h3>);
+                  elements.push(<h3 key={i}>{parseInlineMarkdown(line.substring(4))}</h3>);
                 } else if (line.startsWith('```')) {
                   // Handle code blocks with CodeBlock component
                   const language = line.substring(3).trim();
@@ -411,15 +451,7 @@ This machine demonstrated various Windows Active Directory exploitation techniqu
                     );
                   }
                 } else if (line.trim()) {
-                  // Process inline markdown
-                  const processedLine = line
-                    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') // Bold
-                    .replace(/\*(.*?)\*/g, '<em>$1</em>') // Italic
-                    .replace(/`(.*?)`/g, '<code class="inline-code">$1</code>'); // Inline code
-                  
-                  elements.push(
-                    <p key={i} dangerouslySetInnerHTML={{ __html: processedLine }} />
-                  );
+                  elements.push(<p key={i}>{parseInlineMarkdown(line)}</p>);
                 } else {
                   elements.push(<br key={i} />);
                 }

@@ -49,6 +49,57 @@ const WcorpWalkthrough = () => {
     );
   };
 
+  // Function to parse inline markdown (bold, italic, inline code, links)
+  const parseInlineMarkdown = (text) => {
+    const parts = [];
+    let lastIndex = 0;
+    let key = 0;
+    
+    // Regex to match [text](url), **bold**, *italic*, and `code`
+    const regex = /(\[.*?\]\(.*?\)|\*\*.*?\*\*|\*.*?\*|`.*?`)/g;
+    let match;
+    
+    while ((match = regex.exec(text)) !== null) {
+      // Add text before the match
+      if (match.index > lastIndex) {
+        parts.push(text.substring(lastIndex, match.index));
+      }
+      
+      const matched = match[0];
+      
+      if (matched.startsWith('[') && matched.includes('](')) {
+        // Link [text](url)
+        const linkMatch = matched.match(/\[(.*?)\]\((.*?)\)/);
+        if (linkMatch) {
+          const [, linkText, linkUrl] = linkMatch;
+          parts.push(
+            <a key={key++} href={linkUrl} target="_blank" rel="noopener noreferrer" className="content-link">
+              {linkText}
+            </a>
+          );
+        }
+      } else if (matched.startsWith('**') && matched.endsWith('**')) {
+        // Bold text
+        parts.push(<strong key={key++}>{matched.slice(2, -2)}</strong>);
+      } else if (matched.startsWith('*') && matched.endsWith('*')) {
+        // Italic text
+        parts.push(<em key={key++}>{matched.slice(1, -1)}</em>);
+      } else if (matched.startsWith('`') && matched.endsWith('`')) {
+        // Inline code
+        parts.push(<code key={key++} className="inline-code">{matched.slice(1, -1)}</code>);
+      }
+      
+      lastIndex = regex.lastIndex;
+    }
+    
+    // Add remaining text
+    if (lastIndex < text.length) {
+      parts.push(text.substring(lastIndex));
+    }
+    
+    return parts.length > 0 ? parts : text;
+  };
+
   // Wcorp Walkthrough data
   const writeup = {
     id: 'wcorp-walkthrough',
@@ -317,31 +368,20 @@ evil-winrm -i wcorp.hc -u 'Administrator' -H 'bca9<REDACTED>'
 ![Kerbrute User Enumeration](/images/writeups/wcorp/22.png)
 
 # Conclusion
-This machine demonstrated various Windows Active Directory exploitation techniques including:
-• AS-REP Roasting attacks to obtain user credentials
-• Kerberoasting to extract service account hashes
-• Certificate theft and abuse for lateral movement
-• Shadow credentials and certificate-based attacks
-• DCSync privilege escalation to gain domain administrator access
 
-# Tools Used
-• Nmap - Port scanning and service enumeration
-• NetExec (nxc) - SMB enumeration and authentication testing
-• BloodHound - Active Directory enumeration and attack path analysis
-• John the Ripper - Password cracking for AS-REP and Kerberoasting hashes
-• Evil-WinRM - Remote management and shell access
-• Impacket - Certificate theft and shadow credential attacks
-• Certipy - Certificate-based attacks and shadow credentials
-• Rpcclient - LDAP enumeration and user information extraction
+Wcorp is a Windows Active Directory machine that demonstrates a comprehensive attack chain combining classic Kerberos attacks with modern certificate-based exploitation techniques. The machine provides excellent practice for understanding how multiple AD vulnerabilities can be chained together for domain compromise.
 
-# References
-• HackTheBox Wcorp machine
-• Active Directory Certificate Services exploitation
-• AS-REP Roasting attack techniques
-• Kerberoasting attack methods
-• Shadow credentials and certificate theft
-• DCSync attack vectors
-• Certificate-based lateral movement techniques`
+The initial access was achieved through Active Directory enumeration. The attack path involved:
+
+• **AS-REP Roasting**: Exploiting accounts without Kerberos pre-authentication using [AS-REP Roasting](https://attack.mitre.org/techniques/T1558/004/) to obtain initial credentials
+• **Kerberoasting**: Extracting and cracking [service account TGS tickets](https://attack.mitre.org/techniques/T1558/003/) for lateral movement
+• **Shadow Credentials**: Using [shadow credentials technique](https://posts.specterops.io/shadow-credentials-abusing-key-trust-account-mapping-for-takeover-8ee1a53566ab) to impersonate privileged accounts
+• **Certificate-Based Authentication**: Leveraging stolen certificates for authentication bypass
+• **DCSync Attack**: Performing [DCSync](https://adsecurity.org/?p=1729) to dump domain administrator credentials
+
+**Tools Used**: Nmap, NetExec (nxc), BloodHound, John the Ripper, Evil-WinRM, Impacket, Certipy, Rpcclient
+
+The machine emphasizes the importance of enabling Kerberos pre-authentication for all accounts, using strong passwords for service accounts, and properly configuring certificate-based authentication mechanisms to prevent shadow credential attacks.`
   };
 
   return (
@@ -452,11 +492,11 @@ This machine demonstrated various Windows Active Directory exploitation techniqu
                 const line = lines[i];
                 
                 if (line.startsWith('# ')) {
-                  elements.push(<h1 key={i}>{line.substring(2)}</h1>);
+                  elements.push(<h1 key={i}>{parseInlineMarkdown(line.substring(2))}</h1>);
                 } else if (line.startsWith('## ')) {
-                  elements.push(<h2 key={i}>{line.substring(3)}</h2>);
+                  elements.push(<h2 key={i}>{parseInlineMarkdown(line.substring(3))}</h2>);
                 } else if (line.startsWith('### ')) {
-                  elements.push(<h3 key={i}>{line.substring(4)}</h3>);
+                  elements.push(<h3 key={i}>{parseInlineMarkdown(line.substring(4))}</h3>);
                 } else if (line.startsWith('```')) {
                   // Handle code blocks with CodeBlock component
                   const language = line.substring(3).trim();
@@ -485,15 +525,7 @@ This machine demonstrated various Windows Active Directory exploitation techniqu
                     );
                   }
                 } else if (line.trim()) {
-                  // Process inline markdown
-                  const processedLine = line
-                    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') // Bold
-                    .replace(/\*(.*?)\*/g, '<em>$1</em>') // Italic
-                    .replace(/`(.*?)`/g, '<code class="inline-code">$1</code>'); // Inline code
-                  
-                  elements.push(
-                    <p key={i} dangerouslySetInnerHTML={{ __html: processedLine }} />
-                  );
+                  elements.push(<p key={i}>{parseInlineMarkdown(line)}</p>);
                 } else {
                   elements.push(<br key={i} />);
                 }
