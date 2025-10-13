@@ -36,6 +36,7 @@ jobs:
       - name: Generate static SEO files for Discord previews
         run: |
           python3 generate_static_seo.py
+          python3 create_writeup_pages.py
           
       - name: Create static files for SPA routes
         run: |
@@ -48,6 +49,9 @@ jobs:
           cp build/index.html build/writeups/index.html
           cp build/index.html build/projects/index.html
           cp build/index.html build/tags/index.html
+          
+          # Copy writeup-specific SEO HTML files for direct Discord/crawler access
+          cp public/writeups/*.html build/writeups/
           
           # Create specific writeup directories for GitHub Pages routing
           mkdir -p build/writeups/wcorp-walkthrough
