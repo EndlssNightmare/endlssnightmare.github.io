@@ -51,16 +51,64 @@
       <p>Redirecting to the correct page...</p>
     </div>
     <script>
-      // SPA redirect for GitHub Pages - redirect to index.html with the path
-      var pathSegmentsToKeep = 0;
-      var l = window.location;
-      l.replace(
-        l.protocol + '//' + l.hostname + (l.port ? ':' + l.port : '') +
-        l.pathname.split('/').slice(0, 1 + pathSegmentsToKeep).join('/') + '/?/' +
-        l.pathname.slice(1).split('/').slice(pathSegmentsToKeep).join('/').replace(/&/g, '~and~') +
-        (l.search ? '&' + l.search.slice(1).replace(/&/g, '~and~') : '') +
-        l.hash
-      );
+      // Check if this is a social media crawler
+      const userAgent = navigator.userAgent.toLowerCase();
+      const isCrawler = userAgent.includes('facebookexternalhit') || 
+                       userAgent.includes('twitterbot') || 
+                       userAgent.includes('linkedinbot') || 
+                       userAgent.includes('whatsapp') || 
+                       userAgent.includes('telegrambot') || 
+                       userAgent.includes('discordbot') ||
+                       userAgent.includes('slackbot') ||
+                       userAgent.includes('crawler') ||
+                       userAgent.includes('bot');
+      
+      // If it's a crawler, try to serve SEO content for writeups
+      if (isCrawler) {
+        const path = window.location.pathname;
+        const writeupMatch = path.match(/^\/([^\/]+)-walkthrough\/?$/);
+        
+        if (writeupMatch) {
+          const writeupId = writeupMatch[1] + '-walkthrough';
+          
+          // Fetch the SEO content for this writeup
+          fetch(`/seo/${writeupId}.html`)
+            .then(response => {
+              if (response.ok) {
+                return response.text();
+              }
+              throw new Error('SEO file not found');
+            })
+            .then(html => {
+              document.open();
+              document.write(html);
+              document.close();
+            })
+            .catch(() => {
+              // If SEO file not found, continue with normal redirect
+              performSPARedirect();
+            });
+        } else {
+          // Not a writeup URL, perform normal redirect
+          performSPARedirect();
+        }
+      } else {
+        // Not a crawler, perform normal SPA redirect
+        performSPARedirect();
+      }
+      
+      function performSPARedirect() {
+        // SPA redirect for GitHub Pages - redirect to index.html with the path
+        var pathSegmentsToKeep = 0;
+        var l = window.location;
+        l.replace(
+          l.protocol + '//' + l.hostname + (l.port ? ':' + l.port : '') +
+          l.pathname.split('/').slice(0, 1 + pathSegmentsToKeep).join('/') + '/?/' +
+          l.pathname.slice(1).split('/').slice(pathSegmentsToKeep).join('/').replace(/&/g, '~and~') +
+          (l.search ? '&' + l.search.slice(1).replace(/&/g, '~and~') : '') +
+          l.hash
+        );
+      }
     </script>
   </body>
 </html>

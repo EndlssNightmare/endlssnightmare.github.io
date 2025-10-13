@@ -175,26 +175,34 @@ def generate_static_html(writeup):
 def main():
     """Generate static HTML files for all writeups"""
     
-    # Create public directory if it doesn't exist
+    # Create directories if they don't exist
     os.makedirs("public", exist_ok=True)
+    os.makedirs("public/seo", exist_ok=True)
     
     for writeup in writeups:
         # Generate HTML content
         html_content = generate_static_html(writeup)
         
-        # Write HTML file in public directory
-        filename = f"public/{writeup['id']}.html"
-        with open(filename, 'w', encoding='utf-8') as f:
+        # Write HTML file in public/seo directory for crawlers
+        seo_filename = f"public/seo/{writeup['id']}.html"
+        with open(seo_filename, 'w', encoding='utf-8') as f:
             f.write(html_content)
         
-        print(f"Generated: {filename}")
+        # Also create a copy in public root with seo prefix for direct access
+        root_filename = f"public/seo-{writeup['id']}.html"
+        with open(root_filename, 'w', encoding='utf-8') as f:
+            f.write(html_content)
+        
+        print(f"Generated: {seo_filename} and {root_filename}")
     
     print(f"\nGenerated {len(writeups)} static SEO pages!")
     print("These files will provide proper meta tags for Discord and other social media platforms.")
     print("Files use User-Agent detection to redirect users to React app while serving meta tags to crawlers.")
+    print("Files are stored in public/seo/ and public/seo-* to avoid interfering with GitHub Pages routing.")
     print("\nFiles created:")
     for writeup in writeups:
-        print(f"  - public/{writeup['id']}.html")
+        print(f"  - public/seo/{writeup['id']}.html")
+        print(f"  - public/seo-{writeup['id']}.html")
 
 if __name__ == "__main__":
     main()
