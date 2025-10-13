@@ -37,6 +37,7 @@ jobs:
         run: |
           python3 generate_static_seo.py
           python3 create_writeup_pages.py
+          python3 create_simple_seo.py
           
       - name: Create static files for SPA routes
         run: |
