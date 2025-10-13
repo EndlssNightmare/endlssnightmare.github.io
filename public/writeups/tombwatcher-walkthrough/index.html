@@ -1,12 +1,11 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#3D0000" />
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>TombWatcher Walkthrough - V01 Cybersecurity Portfolio</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     
-    <!-- Basic Meta Tags -->
-    <title>TombWatcher Walkthrough - V01 Cybersecurity Writeup</title>
+    <!-- SEO Meta Tags -->
     <meta name="description" content="TombWatcher is a medium-difficulty Windows Active Directory machine that demonstrates advanced ADCS exploitation techniques. Starting with provided credentials (henry / H3nry_987TGV!), the machine showcases GMSA enumeration, Kerberoasting attacks, and ESC15 vulnerability exploitation through Certipy. The walkthrough covers tombstone object abuse, certificate template manipulation, and privilege escalation to Domain Administrator through ADCS certificate abuse." />
     <meta name="keywords" content="htb, ad, adcs, password-cracking, gmsa, kerberoasting, kerberos, tombstone, esc15, writeup, walkthrough, cybersecurity, windows, medium" />
     <meta name="author" content="V01" />
@@ -23,12 +22,6 @@
     <meta property="og:image:alt" content="TombWatcher Walkthrough" />
     <meta property="og:site_name" content="V01 Notes" />
     <meta property="og:locale" content="en_US" />
-    <meta property="og:updated_time" content="2025-10-11T00:00:00Z" />
-    <meta property="article:published_time" content="2025-10-11T00:00:00Z" />
-    <meta property="article:author" content="V01" />
-    <meta property="article:section" content="Cybersecurity" />
-    <meta property="article:tag" content="HackTheBox" />
-    <meta property="article:tag" content="Windows" />
     
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image" />
@@ -38,25 +31,57 @@
     <meta name="twitter:image" content="https://endlssightmare.com/images/writeups/tombwatcher/machine.png" />
     <meta name="twitter:creator" content="@v01_cyber" />
     <meta name="twitter:site" content="@v01_cyber" />
-    <meta name="twitter:domain" content="endlssightmare.com" />
     
-    <!-- Additional Meta Tags -->
-    <meta name="robots" content="index, follow" />
-    <link rel="canonical" href="https://endlssightmare.com/writeups/tombwatcher-walkthrough" />
-    
-    <!-- Cache busting for link previews -->
-    <meta property="og:image:secure_url" content="https://endlssightmare.com/images/writeups/tombwatcher/machine.png" />
-    <meta name="twitter:image:alt" content="TombWatcher Walkthrough" />
-    
-    <!-- Auto redirect after preview is scraped (3 seconds delay) -->
-    <meta http-equiv="refresh" content="3;url=https://endlssightmare.com/" />
-</head>
-<body style="font-family: Arial, sans-serif; max-width: 800px; margin: 50px auto; padding: 20px; background-color: #0a0a0a; color: #e0e0e0;">
-    <h1 style="color: #ff6b6b;">TombWatcher Walkthrough</h1>
-    <p style="font-size: 16px; line-height: 1.6;">TombWatcher is a medium-difficulty Windows Active Directory machine that demonstrates advanced ADCS exploitation techniques. Starting with provided credentials (henry / H3nry_987TGV!), the machine showcases GMSA enumeration, Kerberoasting attacks, and ESC15 vulnerability exploitation through Certipy. The walkthrough covers tombstone object abuse, certificate template manipulation, and privilege escalation to Domain Administrator through ADCS certificate abuse.</p>
-    <p style="margin-top: 30px;">
-        <a href="https://endlssightmare.com/" style="color: #ff6b6b; text-decoration: none; font-weight: bold;">← Back to V01 Notes</a>
-    </p>
-    <p style="color: #666; font-size: 14px; margin-top: 20px;">You will be redirected to the homepage in a few seconds...</p>
-</body>
+    <style>
+      body {
+        font-family: 'Space Grotesk', sans-serif;
+        background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+        color: #ffffff;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        text-align: center;
+      }
+      .container {
+        max-width: 800px;
+        padding: 2rem;
+      }
+      h1 {
+        color: #ff6b6b;
+        margin-bottom: 1rem;
+      }
+      p {
+        margin-bottom: 1rem;
+        line-height: 1.6;
+      }
+      .loading {
+        display: inline-block;
+        width: 20px;
+        height: 20px;
+        border: 3px solid #ff6b6b;
+        border-radius: 50%;
+        border-top-color: transparent;
+        animation: spin 1s ease-in-out infinite;
+        margin-right: 10px;
+      }
+      @keyframes spin {
+        to { transform: rotate(360deg); }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>TombWatcher Walkthrough</h1>
+      <p><span class="loading"></span>Loading the full writeup...</p>
+      <p>This page provides SEO meta tags for social media previews.</p>
+      <p><a href="/" style="color: #ff6b6b; text-decoration: none; font-weight: bold;">← Back to V01 Notes</a></p>
+    </div>
+    <noscript>
+      <p>Please enable JavaScript to view this content.</p>
+      <p><a href="/">Click here to go to the homepage</a></p>
+    </noscript>
+  </body>
 </html>

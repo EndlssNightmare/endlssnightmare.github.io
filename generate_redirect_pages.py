@@ -1,11 +1,10 @@
 #!/usr/bin/env python3
 """
-Script to generate static HTML preview pages for writeups
-This ensures Discord and other social media platforms can generate proper link previews
+Script to generate redirect pages for GitHub Pages SPA routing
+This ensures direct links to writeups work correctly
 """
 
 import os
-import json
 from datetime import datetime
 
 # Writeup data (same as in your React components)
@@ -65,32 +64,27 @@ writeups = [
         "title": "DC02 Walkthrough",
         "excerpt": "This Windows Domain Controller (DC01) in the SOUPEDECODE.LOCAL domain was discovered via internal network scanning. Enumeration revealed multiple Active Directory services and valid SMB credentials (charlie:charlie). AS-REP roasting against zximena448 yielded the password internet, granting Backup Operators group privileges.",
         "date": "2025-08-20",
-        "tags": ["Hmv", "Windows", "Ad", "Asreproast", "Dcsync", "Backup-Operators", "Password-Cracking", "Smb", "Ldap"],
+        "tags": ["Hmv", "Windows", "Ad", "Asreproast", "Dcsync", "Backup-operators", "Password-Cracking", "Smb", "Ldap"],
         "image": "/images/writeups/dc02/machine.png",
         "difficulty": "Medium",
         "os": "Windows"
     }
 ]
 
-def generate_html_preview(writeup):
-    """Generate HTML preview page for a writeup"""
-    
-    # Convert date to ISO format
-    date_obj = datetime.strptime(writeup["date"], "%Y-%m-%d")
-    iso_date = date_obj.isoformat() + "Z"
+def generate_html_page(writeup):
+    """Generate HTML page for a writeup"""
     
     # Convert tags to lowercase for keywords
     keywords = ", ".join([tag.lower() for tag in writeup["tags"]]) + f", writeup, walkthrough, cybersecurity, {writeup['os'].lower()}, {writeup['difficulty'].lower()}"
     
     html_content = f'''<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#3D0000" />
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>{writeup["title"]} - V01 Cybersecurity Portfolio</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     
-    <!-- Basic Meta Tags -->
-    <title>{writeup["title"]} - V01 Cybersecurity Writeup</title>
+    <!-- SEO Meta Tags -->
     <meta name="description" content="{writeup["excerpt"]}" />
     <meta name="keywords" content="{keywords}" />
     <meta name="author" content="V01" />
@@ -107,12 +101,6 @@ def generate_html_preview(writeup):
     <meta property="og:image:alt" content="{writeup["title"]}" />
     <meta property="og:site_name" content="V01 Notes" />
     <meta property="og:locale" content="en_US" />
-    <meta property="og:updated_time" content="{iso_date}" />
-    <meta property="article:published_time" content="{iso_date}" />
-    <meta property="article:author" content="V01" />
-    <meta property="article:section" content="Cybersecurity" />
-    <meta property="article:tag" content="HackTheBox" />
-    <meta property="article:tag" content="{writeup["os"]}" />
     
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image" />
@@ -122,49 +110,84 @@ def generate_html_preview(writeup):
     <meta name="twitter:image" content="https://endlssightmare.com{writeup["image"]}" />
     <meta name="twitter:creator" content="@v01_cyber" />
     <meta name="twitter:site" content="@v01_cyber" />
-    <meta name="twitter:domain" content="endlssightmare.com" />
     
-    <!-- Additional Meta Tags -->
-    <meta name="robots" content="index, follow" />
-    <link rel="canonical" href="https://endlssightmare.com/writeups/{writeup["id"]}" />
-    
-    <!-- Cache busting for link previews -->
-    <meta property="og:image:secure_url" content="https://endlssightmare.com{writeup["image"]}" />
-    <meta name="twitter:image:alt" content="{writeup["title"]}" />
-    
-    <!-- Auto redirect after preview is scraped (3 seconds delay) -->
-    <meta http-equiv="refresh" content="3;url=https://endlssightmare.com/" />
-</head>
-<body style="font-family: Arial, sans-serif; max-width: 800px; margin: 50px auto; padding: 20px; background-color: #0a0a0a; color: #e0e0e0;">
-    <h1 style="color: #ff6b6b;">{writeup["title"]}</h1>
-    <p style="font-size: 16px; line-height: 1.6;">{writeup["excerpt"]}</p>
-    <p style="margin-top: 30px;">
-        <a href="https://endlssightmare.com/" style="color: #ff6b6b; text-decoration: none; font-weight: bold;">← Back to V01 Notes</a>
-    </p>
-    <p style="color: #666; font-size: 14px; margin-top: 20px;">You will be redirected to the homepage in a few seconds...</p>
-</body>
+    <style>
+      body {{
+        font-family: 'Space Grotesk', sans-serif;
+        background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+        color: #ffffff;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        text-align: center;
+      }}
+      .container {{
+        max-width: 800px;
+        padding: 2rem;
+      }}
+      h1 {{
+        color: #ff6b6b;
+        margin-bottom: 1rem;
+      }}
+      p {{
+        margin-bottom: 1rem;
+        line-height: 1.6;
+      }}
+      .loading {{
+        display: inline-block;
+        width: 20px;
+        height: 20px;
+        border: 3px solid #ff6b6b;
+        border-radius: 50%;
+        border-top-color: transparent;
+        animation: spin 1s ease-in-out infinite;
+        margin-right: 10px;
+      }}
+      @keyframes spin {{
+        to {{ transform: rotate(360deg); }}
+      }}
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>{writeup["title"]}</h1>
+      <p><span class="loading"></span>Loading the full writeup...</p>
+      <p>This page provides SEO meta tags for social media previews.</p>
+      <p><a href="/" style="color: #ff6b6b; text-decoration: none; font-weight: bold;">← Back to V01 Notes</a></p>
+    </div>
+    <noscript>
+      <p>Please enable JavaScript to view this content.</p>
+      <p><a href="/">Click here to go to the homepage</a></p>
+    </noscript>
+  </body>
 </html>'''
     
     return html_content
 
 def main():
-    """Generate HTML preview pages for all writeups"""
-    
-    # Create writeups directory if it doesn't exist
-    os.makedirs("public/writeups", exist_ok=True)
+    """Generate redirect pages for all writeups"""
     
     for writeup in writeups:
-        html_content = generate_html_preview(writeup)
+        # Create directory for writeup
+        writeup_dir = f"public/writeups/{writeup['id']}"
+        os.makedirs(writeup_dir, exist_ok=True)
         
-        # Write HTML file
-        filename = f"public/writeups/{writeup['id']}.html"
+        # Generate HTML content
+        html_content = generate_html_page(writeup)
+        
+        # Write index.html file
+        filename = f"{writeup_dir}/index.html"
         with open(filename, 'w', encoding='utf-8') as f:
             f.write(html_content)
         
         print(f"Generated: {filename}")
     
-    print(f"\nGenerated {len(writeups)} preview pages!")
-    print("These files will provide proper link previews for Discord and other social media platforms.")
+    print(f"\nGenerated {len(writeups)} redirect pages!")
+    print("These pages will provide SEO meta tags for social media previews")
+    print("and redirect users to the main React application.")
 
 if __name__ == "__main__":
     main()
