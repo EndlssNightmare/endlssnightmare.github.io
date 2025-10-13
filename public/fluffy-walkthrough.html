@@ -50,8 +50,22 @@
     
     <!-- Redirect to React app for users, but crawlers see meta tags first -->
     <script type="text/javascript">
-        // Redirect to React app immediately
-        window.location.replace('/writeups/fluffy-walkthrough');
+        // Check if this is a social media crawler
+        const userAgent = navigator.userAgent.toLowerCase();
+        const isCrawler = userAgent.includes('facebookexternalhit') || 
+                         userAgent.includes('twitterbot') || 
+                         userAgent.includes('linkedinbot') || 
+                         userAgent.includes('whatsapp') || 
+                         userAgent.includes('telegrambot') || 
+                         userAgent.includes('discordbot') ||
+                         userAgent.includes('slackbot') ||
+                         userAgent.includes('crawler') ||
+                         userAgent.includes('bot');
+        
+        // Only redirect if it's not a crawler
+        if (!isCrawler) {
+            window.location.replace('/writeups/fluffy-walkthrough');
+        }
     </script>
     <noscript>
         <meta http-equiv="refresh" content="0; url=/writeups/fluffy-walkthrough" />

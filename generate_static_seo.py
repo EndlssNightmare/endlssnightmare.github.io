@@ -133,8 +133,22 @@ def generate_static_html(writeup):
     
     <!-- Redirect to React app for users, but crawlers see meta tags first -->
     <script type="text/javascript">
-        // Redirect to React app immediately
-        window.location.replace('/writeups/{writeup["id"]}');
+        // Check if this is a social media crawler
+        const userAgent = navigator.userAgent.toLowerCase();
+        const isCrawler = userAgent.includes('facebookexternalhit') || 
+                         userAgent.includes('twitterbot') || 
+                         userAgent.includes('linkedinbot') || 
+                         userAgent.includes('whatsapp') || 
+                         userAgent.includes('telegrambot') || 
+                         userAgent.includes('discordbot') ||
+                         userAgent.includes('slackbot') ||
+                         userAgent.includes('crawler') ||
+                         userAgent.includes('bot');
+        
+        // Only redirect if it's not a crawler
+        if (!isCrawler) {{
+            window.location.replace('/writeups/{writeup["id"]}');
+        }}
     </script>
     <noscript>
         <meta http-equiv="refresh" content="0; url=/writeups/{writeup["id"]}" />
@@ -168,7 +182,7 @@ def main():
         # Generate HTML content
         html_content = generate_static_html(writeup)
         
-        # Write HTML file directly in public directory
+        # Write HTML file in public directory
         filename = f"public/{writeup['id']}.html"
         with open(filename, 'w', encoding='utf-8') as f:
             f.write(html_content)
@@ -177,6 +191,7 @@ def main():
     
     print(f"\nGenerated {len(writeups)} static SEO pages!")
     print("These files will provide proper meta tags for Discord and other social media platforms.")
+    print("Files use User-Agent detection to redirect users to React app while serving meta tags to crawlers.")
     print("\nFiles created:")
     for writeup in writeups:
         print(f"  - public/{writeup['id']}.html")
