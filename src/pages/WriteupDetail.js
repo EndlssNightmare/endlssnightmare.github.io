@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
@@ -19,13 +18,13 @@ const WriteupDetail = () => {
 
   // Map of available writeups
   const writeupComponents = {
-  'dc02-walkthrough': DC02Walkthrough,
+    'dc02-walkthrough': DC02Walkthrough,
     'wcorp-walkthrough': WcorpWalkthrough,
     'fluffy-walkthrough': FluffyWalkthrough,
-      'puppy-walkthrough': PuppyWalkthrough,
-      'aria-walkthrough': AriaWalkthrough,
-      'tombwatcher-walkthrough': TombwatcherWalkthrough
-};
+    'puppy-walkthrough': PuppyWalkthrough,
+    'aria-walkthrough': AriaWalkthrough,
+    'tombwatcher-walkthrough': TombwatcherWalkthrough
+  };
 
   // Get the component for this writeup
   const WriteupComponent = writeupComponents[normalizedId];
