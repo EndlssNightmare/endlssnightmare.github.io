@@ -2,11 +2,42 @@
   publish = "build"
   command = "npm run build"
 
+# Redirect writeup HTML files to React app for regular users
+[[redirects]]
+  from = "/tombwatcher-walkthrough.html"
+  to = "/writeups/tombwatcher-walkthrough"
+  status = 302
+
+[[redirects]]
+  from = "/aria-walkthrough.html"
+  to = "/writeups/aria-walkthrough"
+  status = 302
+
+[[redirects]]
+  from = "/puppy-walkthrough.html"
+  to = "/writeups/puppy-walkthrough"
+  status = 302
+
+[[redirects]]
+  from = "/fluffy-walkthrough.html"
+  to = "/writeups/fluffy-walkthrough"
+  status = 302
+
+[[redirects]]
+  from = "/wcorp-walkthrough.html"
+  to = "/writeups/wcorp-walkthrough"
+  status = 302
+
+[[redirects]]
+  from = "/dc02-walkthrough.html"
+  to = "/writeups/dc02-walkthrough"
+  status = 302
+
+# Default SPA redirect for everything else
 [[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200
-  force = true
 
 [build.environment]
   NODE_VERSION = "20"

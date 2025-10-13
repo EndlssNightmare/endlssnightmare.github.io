@@ -13,7 +13,7 @@ Criamos arquivos HTML estáticos para cada writeup que contêm:
 - ✅ Todas as meta tags Open Graph (Facebook/Discord)
 - ✅ Todas as meta tags Twitter Cards
 - ✅ Meta tags básicas de SEO
-- ✅ Redirect automático via JavaScript para a aplicação React
+- ✅ Redirect automático via Netlify para a aplicação React
 
 ### 2. Como Funciona
 
@@ -24,7 +24,7 @@ Criamos arquivos HTML estáticos para cada writeup que contêm:
 
 **Para Usuários Reais:**
 - Acessam o arquivo HTML estático
-- São redirecionados INSTANTANEAMENTE via JavaScript para a aplicação React
+- Netlify redireciona automaticamente (302) para a aplicação React (`/writeups/tombwatcher-walkthrough`)
 - Veem o writeup completo e interativo
 
 ### 3. Arquivos Gerados

@@ -131,28 +131,13 @@ def generate_static_html(writeup):
     <meta property="og:image:secure_url" content="https://endlssightmare.com{writeup["image"]}" />
     <meta name="twitter:image:alt" content="{writeup["title"]}" />
     
-    <!-- Instant redirect for users, but crawlers see meta tags first -->
-    <script type="text/javascript">
-        // Redirect to React app immediately
-        window.location.replace('/writeups/{writeup["id"]}');
-    </script>
-    <noscript>
-        <meta http-equiv="refresh" content="0; url=/writeups/{writeup["id"]}" />
-    </noscript>
+    <!-- Netlify will handle redirect via _redirects file -->
 </head>
 <body style="font-family: Arial, sans-serif; max-width: 800px; margin: 50px auto; padding: 20px; background-color: #0a0a0a; color: #e0e0e0; text-align: center;">
     <h1 style="color: #ff6b6b;">{writeup["title"]}</h1>
     <p style="font-size: 16px; line-height: 1.6;">{writeup["excerpt"]}</p>
-    <div style="margin: 30px 0;">
-        <div style="display: inline-block; width: 40px; height: 40px; border: 4px solid #ff6b6b; border-radius: 50%; border-top-color: transparent; animation: spin 1s linear infinite;"></div>
-    </div>
-    <p style="color: #888; font-size: 14px;">Redirecting to full writeup...</p>
-    <p><a href="/writeups/{writeup["id"]}" style="color: #ff6b6b; text-decoration: none; font-weight: bold;">Click here if not redirected automatically</a></p>
-    <style>
-        @keyframes spin {{
-            to {{ transform: rotate(360deg); }}
-        }}
-    </style>
+    <p style="color: #888; font-size: 14px; margin-top: 20px;">Loading the full writeup...</p>
+    <p><a href="/writeups/{writeup["id"]}" style="color: #ff6b6b; text-decoration: none; font-weight: bold;">← View Full Writeup</a></p>
 </body>
 </html>'''
     

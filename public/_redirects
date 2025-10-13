@@ -1,2 +1,10 @@
-# Netlify redirects for SPA
+# Redirect writeup HTML files to React app for regular users
+/tombwatcher-walkthrough.html    /writeups/tombwatcher-walkthrough    302
+/aria-walkthrough.html    /writeups/aria-walkthrough    302
+/puppy-walkthrough.html    /writeups/puppy-walkthrough    302
+/fluffy-walkthrough.html    /writeups/fluffy-walkthrough    302
+/wcorp-walkthrough.html    /writeups/wcorp-walkthrough    302
+/dc02-walkthrough.html    /writeups/dc02-walkthrough    302
+
+# Default SPA redirect for everything else
 /*    /index.html   200
