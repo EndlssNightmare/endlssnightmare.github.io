@@ -16,6 +16,10 @@ const WriteupDetail = () => {
   const { id } = useParams();
   const normalizedId = (id || '').toLowerCase();
 
+  // Debug logging
+  console.log('WriteupDetail - id:', id);
+  console.log('WriteupDetail - normalizedId:', normalizedId);
+
   // Map of available writeups
   const writeupComponents = {
     'dc02-walkthrough': DC02Walkthrough,
@@ -28,6 +32,9 @@ const WriteupDetail = () => {
 
   // Get the component for this writeup
   const WriteupComponent = writeupComponents[normalizedId];
+  
+  console.log('WriteupDetail - WriteupComponent:', WriteupComponent);
+  console.log('WriteupDetail - Available components:', Object.keys(writeupComponents));
 
   // If writeup not found, show error
   if (!WriteupComponent) {

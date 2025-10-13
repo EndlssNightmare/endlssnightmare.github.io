@@ -48,12 +48,27 @@
     <meta property="og:image:secure_url" content="https://endlssightmare.com/images/writeups/tombwatcher/machine.png" />
     <meta name="twitter:image:alt" content="TombWatcher Walkthrough" />
     
-    <!-- Netlify will handle redirect via _redirects file -->
+    <!-- Redirect to React app for users, but crawlers see meta tags first -->
+    <script type="text/javascript">
+        // Redirect to React app immediately
+        window.location.replace('/writeups/tombwatcher-walkthrough');
+    </script>
+    <noscript>
+        <meta http-equiv="refresh" content="0; url=/writeups/tombwatcher-walkthrough" />
+    </noscript>
 </head>
 <body style="font-family: Arial, sans-serif; max-width: 800px; margin: 50px auto; padding: 20px; background-color: #0a0a0a; color: #e0e0e0; text-align: center;">
     <h1 style="color: #ff6b6b;">TombWatcher Walkthrough</h1>
     <p style="font-size: 16px; line-height: 1.6;">TombWatcher is a medium-difficulty Windows Active Directory machine that demonstrates advanced ADCS exploitation techniques. Starting with provided credentials (henry / H3nry_987TGV!), the machine showcases GMSA enumeration, Kerberoasting attacks, and ESC15 vulnerability exploitation through Certipy. The walkthrough covers tombstone object abuse, certificate template manipulation, and privilege escalation to Domain Administrator through ADCS certificate abuse.</p>
-    <p style="color: #888; font-size: 14px; margin-top: 20px;">Loading the full writeup...</p>
-    <p><a href="/writeups/tombwatcher-walkthrough" style="color: #ff6b6b; text-decoration: none; font-weight: bold;">← View Full Writeup</a></p>
+    <div style="margin: 30px 0;">
+        <div style="display: inline-block; width: 40px; height: 40px; border: 4px solid #ff6b6b; border-radius: 50%; border-top-color: transparent; animation: spin 1s linear infinite;"></div>
+    </div>
+    <p style="color: #888; font-size: 14px;">Redirecting to full writeup...</p>
+    <p><a href="/writeups/tombwatcher-walkthrough" style="color: #ff6b6b; text-decoration: none; font-weight: bold;">Click here if not redirected automatically</a></p>
+    <style>
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
 </body>
 </html>

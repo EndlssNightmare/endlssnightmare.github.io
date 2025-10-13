@@ -48,12 +48,27 @@
     <meta property="og:image:secure_url" content="https://endlssightmare.com/images/writeups/puppy/machine.png" />
     <meta name="twitter:image:alt" content="Puppy Walkthrough" />
     
-    <!-- Netlify will handle redirect via _redirects file -->
+    <!-- Redirect to React app for users, but crawlers see meta tags first -->
+    <script type="text/javascript">
+        // Redirect to React app immediately
+        window.location.replace('/writeups/puppy-walkthrough');
+    </script>
+    <noscript>
+        <meta http-equiv="refresh" content="0; url=/writeups/puppy-walkthrough" />
+    </noscript>
 </head>
 <body style="font-family: Arial, sans-serif; max-width: 800px; margin: 50px auto; padding: 20px; background-color: #0a0a0a; color: #e0e0e0; text-align: center;">
     <h1 style="color: #ff6b6b;">Puppy Walkthrough</h1>
     <p style="font-size: 16px; line-height: 1.6;">Puppy is an medium-difficulty Windows Active Directory machine built around an assumed-breach scenario where credentials for a low-privileged user are provided (levi.james / KingofAkron2025!). Initial SMB/BloodHound enumeration reveals GenericWrite on the Developers group, allowing the attacker to add the user and access the DEV share. A KeePass file harvested from DEV is cracked to recover additional credentials. A password-spraying and further enumeration lead to steph.cooper and extraction of DPAPI-protected secrets. Using steph.cooper_adm recovered credentials the box allows DCSync to dump the Administrator hash, enabling remote authentication and full domain compromise.</p>
-    <p style="color: #888; font-size: 14px; margin-top: 20px;">Loading the full writeup...</p>
-    <p><a href="/writeups/puppy-walkthrough" style="color: #ff6b6b; text-decoration: none; font-weight: bold;">← View Full Writeup</a></p>
+    <div style="margin: 30px 0;">
+        <div style="display: inline-block; width: 40px; height: 40px; border: 4px solid #ff6b6b; border-radius: 50%; border-top-color: transparent; animation: spin 1s linear infinite;"></div>
+    </div>
+    <p style="color: #888; font-size: 14px;">Redirecting to full writeup...</p>
+    <p><a href="/writeups/puppy-walkthrough" style="color: #ff6b6b; text-decoration: none; font-weight: bold;">Click here if not redirected automatically</a></p>
+    <style>
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
 </body>
 </html>

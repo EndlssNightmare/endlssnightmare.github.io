@@ -48,12 +48,27 @@
     <meta property="og:image:secure_url" content="https://endlssightmare.com/images/writeups/fluffy/machine.png" />
     <meta name="twitter:image:alt" content="Fluffy Walkthrough" />
     
-    <!-- Netlify will handle redirect via _redirects file -->
+    <!-- Redirect to React app for users, but crawlers see meta tags first -->
+    <script type="text/javascript">
+        // Redirect to React app immediately
+        window.location.replace('/writeups/fluffy-walkthrough');
+    </script>
+    <noscript>
+        <meta http-equiv="refresh" content="0; url=/writeups/fluffy-walkthrough" />
+    </noscript>
 </head>
 <body style="font-family: Arial, sans-serif; max-width: 800px; margin: 50px auto; padding: 20px; background-color: #0a0a0a; color: #e0e0e0; text-align: center;">
     <h1 style="color: #ff6b6b;">Fluffy Walkthrough</h1>
     <p style="font-size: 16px; line-height: 1.6;">Fluffy is an easy-difficulty Windows machine designed around an assumed breach scenario, where credentials for a low-privileged user are provided. By exploiting CVE-2025-24071, the credentials of another low-privileged user can be obtained. Further enumeration reveals the existence of ACLs over the winrm_svc and ca_svc accounts. WinRM can then be used to log in to the target using the winrc_svc account. Exploitation of an Active Directory Certificate service (ESC15) using the ca_svc account is required to obtain access to the Administrator account.</p>
-    <p style="color: #888; font-size: 14px; margin-top: 20px;">Loading the full writeup...</p>
-    <p><a href="/writeups/fluffy-walkthrough" style="color: #ff6b6b; text-decoration: none; font-weight: bold;">← View Full Writeup</a></p>
+    <div style="margin: 30px 0;">
+        <div style="display: inline-block; width: 40px; height: 40px; border: 4px solid #ff6b6b; border-radius: 50%; border-top-color: transparent; animation: spin 1s linear infinite;"></div>
+    </div>
+    <p style="color: #888; font-size: 14px;">Redirecting to full writeup...</p>
+    <p><a href="/writeups/fluffy-walkthrough" style="color: #ff6b6b; text-decoration: none; font-weight: bold;">Click here if not redirected automatically</a></p>
+    <style>
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
 </body>
 </html>
