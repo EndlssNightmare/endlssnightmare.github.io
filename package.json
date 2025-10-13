@@ -50,5 +50,6 @@
     "@types/react": "^18.2.15",
     "@types/react-dom": "^18.2.7",
     "gh-pages": "^6.3.0"
-  }
+  },
+  "homepage": "https://endlssnightmare.github.io"
 }
