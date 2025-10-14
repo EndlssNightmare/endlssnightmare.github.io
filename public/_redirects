@@ -1,2 +1,14 @@
-# Netlify redirects for SPA
-/*    /index.html   200
+# Redirect users to React app, but allow Discord bots to access static HTML
+# Discord bot user agents will access the .html files directly
+# Regular users will be redirected to the React app
+
+# Redirect static HTML files to React routes (for regular users)
+/tombwatcher-walkthrough.html /writeups/tombwatcher-walkthrough 302
+/aria-walkthrough.html /writeups/aria-walkthrough 302
+/puppy-walkthrough.html /writeups/puppy-walkthrough 302
+/fluffy-walkthrough.html /writeups/fluffy-walkthrough 302
+/wcorp-walkthrough.html /writeups/wcorp-walkthrough 302
+/dc02-walkthrough.html /writeups/dc02-walkthrough 302
+
+# Fallback for SPA routing
+/* /index.html 200
