@@ -253,7 +253,7 @@ find / -type f -perm -04000 -ls 2>/dev/null
 It is discovered that \`/opt/netdata/usr/libexec/netdata/plugins.d/ndsudo\` is a SUID binary. This binary is part of the Netdata monitoring system and is vulnerable to an untrusted search path attack.
 ![Service Enumeration](/images/writeups/editor/12.png)
 
-The vulnerability [Netdata SUID Exploit](https://github.com/netdata/netdata/security/advisories/GHSA-pmhq-4cxq-wj93) allows us to exploit the PATH environment variable. When \`ndsudo\` executes, it searches for binaries in the PATH. If we can control the PATH and place a malicious binary with a name that \`ndsudo\` tries to execute, we can achieve code execution as root.
+The vulnerability [Netdata SUID Exploit](https://github.com/netdata/netdata/security/advisories/GHSA-pmhq-4cxq-wj93) allows us to exploit the PATH environment variable. When \`ndsudo\` executes, it searches for binaries in the PATH. We can control the PATH and place a malicious binary with a name that \`ndsudo\` tries to execute, it can achieve code execution as root.
 ![Service Enumeration](/images/writeups/editor/13.png)
 
 ### Root Flag
