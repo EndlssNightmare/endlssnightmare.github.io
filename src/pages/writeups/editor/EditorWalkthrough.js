@@ -244,14 +244,13 @@ ssh oliver@10.129.141.193
 ![Service Enumeration](/images/writeups/editor/10.png)
 
 ## Privilege Escalation
-We search for SUID binaries that could be exploited for privilege escalation:
-
+Searching for SUID binaries that could be exploited for privilege escalation:
 \`\`\`bash
 find / -type f -perm -04000 -ls 2>/dev/null
 \`\`\`
 ![Service Enumeration](/images/writeups/editor/11.png)
 
-We discover that \`/opt/netdata/usr/libexec/netdata/plugins.d/ndsudo\` is a SUID binary. This binary is part of the Netdata monitoring system and is vulnerable to an untrusted search path attack.
+It is discovered that \`/opt/netdata/usr/libexec/netdata/plugins.d/ndsudo\` is a SUID binary. This binary is part of the Netdata monitoring system and is vulnerable to an untrusted search path attack.
 ![Service Enumeration](/images/writeups/editor/12.png)
 
 The vulnerability [Netdata SUID Exploit](https://github.com/netdata/netdata/security/advisories/GHSA-pmhq-4cxq-wj93) allows us to exploit the PATH environment variable. When \`ndsudo\` executes, it searches for binaries in the PATH. If we can control the PATH and place a malicious binary with a name that \`ndsudo\` tries to execute, we can achieve code execution as root.
