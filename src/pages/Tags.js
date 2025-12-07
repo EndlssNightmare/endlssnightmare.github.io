@@ -9,7 +9,13 @@ const Tags = () => {
 
   // All available posts data for counting
   const allPosts = [
+    
     {
+      id: 12,
+      title: 'Editor Walkthrough',
+      category: 'writeup',
+      tags: ['htb', 'linux', 'xwiki', 'ndsudo']
+    },{
       id: 11,
       title: 'TombWatcher Walkthrough',
       category: 'writeup',

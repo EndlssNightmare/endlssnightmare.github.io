@@ -12,7 +12,18 @@ const Home = () => {
 
   // Recent posts data
   const recentPosts = useMemo(() => [
+    
     {
+      id: 12,
+      title: 'Editor Walkthrough',
+      excerpt: 'Full Nmap reconnaissance exposed SSH, nginx and a vulnerable XWiki on Jetty. XWiki RCE gave an xwiki reverse shell, revealed plaintext DB credentials in /etc/xwiki to SSH as oliver, and a writable SUID ndsudo binary was abused via an untrusted-search-path exploit to escalate to root.',
+      date: 'Dec 07, 2025',
+      category: 'writeup',
+      tags: ['htb', 'linux', 'xwiki', 'ndsudo'],
+      image: '/images/writeups/editor/machine.png',
+      link: '/writeups/editor-walkthrough',
+      os: 'Linux'
+    },{
       id: 11,
       title: 'TombWatcher Walkthrough',
       excerpt: 'TombWatcher is a medium-difficulty Windows Active Directory machine that demonstrates advanced ADCS exploitation techniques. Starting with provided credentials (henry / H3nry_987TGV!), the machine showcases GMSA enumeration, Kerberoasting attacks, and ESC15 vulnerability exploitation through Certipy. The walkthrough covers tombstone object abuse, certificate template manipulation, and privilege escalation to Domain Administrator through ADCS certificate abuse.',
