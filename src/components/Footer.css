@@ -1,4 +1,6 @@
 .footer {
+  position: relative;
+  z-index: 150;
   background-color: var(--navbar-bg) !important;
   color: var(--text-primary);
   padding: 1rem 0;

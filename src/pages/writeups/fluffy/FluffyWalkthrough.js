@@ -107,13 +107,11 @@ const FluffyWalkthrough = () => {
     title: 'Fluffy Walkthrough',
     excerpt: 'Fluffy is an easy-difficulty Windows machine designed around an assumed breach scenario, where credentials for a low-privileged user are provided. By exploiting [CVE-2025-24071](https://nvd.nist.gov/vuln/detail/CVE-2025-24071), the credentials of another low-privileged user can be obtained. Further enumeration reveals the existence of ACLs over the winrm_svc and ca_svc accounts. WinRM can then be used to log in to the target using the winrc_svc account. Exploitation of an Active Directory Certificate service (ESC15) using the ca_svc account is required to obtain access to the Administrator account.',
     date: 'Sep 20, 2025',
-    tags: ['Htb', 'Ad', 'Smb', 'Ldap', 'Windows', 'Password-Cracking', 'Kerberoasting'],
+    tags: ['Htb', 'Ad', 'Adcs', 'Smb', 'Ldap', 'Windows', 'Password-Cracking', 'Kerberoasting'],
     difficulty: 'Easy',
     os: 'Windows',
     ip: '10.129.202.248',
-    content: `# Fluffy Walkthrough
-
-## Overview
+    content: `## Overview
 Fluffy is an easy-difficulty Windows machine designed around an assumed breach scenario, where credentials for a low-privileged user are provided. By exploiting [CVE-2025-24071](https://nvd.nist.gov/vuln/detail/CVE-2025-24071), the credentials of another low-privileged user can be obtained. Further enumeration reveals the existence of ACLs over the \`winrm_svc\` and \`ca_svc\` accounts. \`WinRM\` can then be used to log in to the target using the \`winrc_svc\` account. Exploitation of an Active Directory Certificate service (\`ESC15\`) using the \`ca_svc\` account is required to obtain access to the \`Administrator\` account.
 <InfoStatus title="Info Status:" message="As is common in real life Windows pentests, you will start the Fluffy box with credentials for the following account: j.fleischman / J0elTHEM4n1990!" />
 
@@ -584,7 +582,7 @@ The machine emphasizes the importance of patching vulnerabilities like CVE-2025-
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2, duration: 0.6 }}
         >
-          <h1>{writeup.title}</h1>
+          <h1 id="writeup-title">{writeup.title}</h1>
           
           <div className="writeup-meta">
             <div className="meta-item">
@@ -640,16 +638,7 @@ The machine emphasizes the importance of patching vulnerabilities like CVE-2025-
               </div>
             </div>
           </div>
-        </motion.div>
-      </div>
 
-      <div className="writeup-layout">
-        <motion.div 
-          className="writeup-content"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.4, duration: 0.6 }}
-        >
           <div className="markdown-content">
             {(() => {
               const lines = writeup.content.split('\n');
@@ -714,8 +703,9 @@ The machine emphasizes the importance of patching vulnerabilities like CVE-2025-
             })()}
           </div>
         </motion.div>
-        <TableOfContents content={writeup.content} />
       </div>
+
+      <TableOfContents content={writeup.content} title={writeup.title} />
       
       <ScrollToTop />
     </motion.div>

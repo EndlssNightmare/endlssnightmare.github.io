@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
-import { FaBookOpen } from 'react-icons/fa';
+import { motion, AnimatePresence } from 'framer-motion';
+import { FaBookOpen, FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 import './TableOfContents.css';
 
-const TableOfContents = ({ content }) => {
+const TableOfContents = ({ content, title }) => {
   const [headings, setHeadings] = useState([]);
   const [activeSection, setActiveSection] = useState('');
+  const [collapsed, setCollapsed] = useState(true);
 
   useEffect(() => {
     // Extract headings from content
@@ -36,22 +37,28 @@ const TableOfContents = ({ content }) => {
         });
       }
     });
+
+    // Prepend writeup title as first TOC item (links to id="writeup-title" in header)
+    const withTitle = title
+      ? [{ id: 'writeup-title', text: title, level: 1 }, ...extractedHeadings]
+      : extractedHeadings;
     
-    setHeadings(extractedHeadings);
-  }, [content]);
+    setHeadings(withTitle);
+  }, [content, title]);
 
   useEffect(() => {
-    // Add IDs to headings in the content
+    // Add IDs to headings in the content (title is outside .markdown-content, so offset by 1 when title exists)
     const contentElement = document.querySelector('.markdown-content');
     if (contentElement) {
       const headingElements = contentElement.querySelectorAll('h1, h2, h3');
+      const offset = title ? 1 : 0;
       headingElements.forEach((heading, index) => {
-        if (headings[index]) {
-          heading.id = headings[index].id;
+        if (headings[index + offset]) {
+          heading.id = headings[index + offset].id;
         }
       });
     }
-  }, [headings]);
+  }, [headings, title]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -75,59 +82,60 @@ const TableOfContents = ({ content }) => {
   const scrollToSection = (id) => {
     const element = document.getElementById(id);
     if (element) {
+      window.dispatchEvent(new CustomEvent('toc-programmatic-scroll-start'));
       element.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
-  };
-
-  const containerVariants = {
-    hidden: { opacity: 0, x: 50 },
-    visible: {
-      opacity: 1,
-      x: 0,
-      transition: {
-        duration: 0.6,
-        staggerChildren: 0.1
-      }
-    }
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, x: 20 },
-    visible: {
-      opacity: 1,
-      x: 0,
-      transition: { duration: 0.3 }
+      // Navbar will ignore "scroll up" until this ends (smooth scroll ~1s)
+      setTimeout(() => {
+        window.dispatchEvent(new CustomEvent('toc-programmatic-scroll-end'));
+      }, 1500);
     }
   };
 
   return (
-    <motion.div
-      className="table-of-contents"
-      initial="hidden"
-      animate="visible"
-      variants={containerVariants}
-    >
-      <div className="toc-header">
-        <FaBookOpen className="toc-icon" />
-        <h3>Table of Contents</h3>
+    <>
+      <button
+        className={`toc-toggle ${collapsed ? 'toc-toggle--collapsed' : ''}`}
+        onClick={() => setCollapsed(prev => !prev)}
+        title={collapsed ? 'Show table of contents' : 'Hide table of contents'}
+      >
+        {collapsed ? <FaChevronLeft /> : <FaChevronRight />}
+      </button>
+
+      <div
+        className={`table-of-contents ${collapsed ? 'toc--collapsed' : ''}`}
+      >
+        <AnimatePresence>
+          {!collapsed && (
+            <motion.div
+              className="toc-inner"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1, transition: { delay: 0.6, duration: 0.5 } }}
+              exit={{ opacity: 0, transition: { delay: 0, duration: 0.15 } }}
+            >
+              <div className="toc-header">
+                <FaBookOpen className="toc-icon" />
+                <h3>Table of Contents</h3>
+              </div>
+              
+              <div className="toc-content">
+                {headings.map((heading) => (
+                  <div
+                    key={heading.id}
+                    className={`toc-item toc-level-${heading.level} ${
+                      activeSection === heading.id ? 'active' : ''
+                    }`}
+                    onClick={() => scrollToSection(heading.id)}
+                  >
+                    {heading.level > 1 && <span className="toc-arrow">›</span>}
+                    <span className="toc-text">{heading.text}</span>
+                  </div>
+                ))}
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
-      
-      <div className="toc-content">
-        {headings.map((heading, index) => (
-          <motion.div
-            key={heading.id}
-            className={`toc-item toc-level-${heading.level} ${
-              activeSection === heading.id ? 'active' : ''
-            }`}
-            variants={itemVariants}
-            onClick={() => scrollToSection(heading.id)}
-          >
-            {heading.level > 1 && <span className="toc-arrow">›</span>}
-            <span className="toc-text">{heading.text}</span>
-          </motion.div>
-        ))}
-      </div>
-    </motion.div>
+    </>
   );
 };
 

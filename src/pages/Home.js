@@ -14,16 +14,27 @@ const Home = () => {
   const recentPosts = useMemo(() => [
     
     {
+      id: 13,
+      title: 'Active Walkthrough',
+      excerpt: 'Active is an easy to medium difficulty machine, which features two very prevalent techniques to gain privileges within an Active Directory environment.',
+      date: 'Feb 15, 2026',
+      category: 'writeup',
+      tags: ['htb', 'ad', 'gpp', 'kerberoasting', 'kerberos', 'windows', 'smb', 'password-cracking'],
+      image: '/images/writeups/active/machine.png',
+      link: '/writeups/active-walkthrough',
+      os: 'Windows'
+    },{
       id: 12,
       title: 'Editor Walkthrough',
       excerpt: 'Full Nmap reconnaissance exposed SSH, nginx and a vulnerable XWiki on Jetty. XWiki RCE gave an xwiki reverse shell, revealed plaintext DB credentials in /etc/xwiki to SSH as oliver, and a writable SUID ndsudo binary was abused via an untrusted-search-path exploit to escalate to root.',
-      date: 'Dec 07, 2025',
+      date: 'Dec 06, 2025',
       category: 'writeup',
       tags: ['htb', 'linux', 'xwiki', 'ndsudo'],
       image: '/images/writeups/editor/machine.png',
       link: '/writeups/editor-walkthrough',
       os: 'Linux'
-    },{
+    },
+    {
       id: 11,
       title: 'TombWatcher Walkthrough',
       excerpt: 'TombWatcher is a medium-difficulty Windows Active Directory machine that demonstrates advanced ADCS exploitation techniques. Starting with provided credentials (henry / H3nry_987TGV!), the machine showcases GMSA enumeration, Kerberoasting attacks, and ESC15 vulnerability exploitation through Certipy. The walkthrough covers tombstone object abuse, certificate template manipulation, and privilege escalation to Domain Administrator through ADCS certificate abuse.',
@@ -62,7 +73,7 @@ const Home = () => {
       excerpt: 'Fluffy is an easy-difficulty Windows machine designed around an assumed breach scenario, where credentials for a low-privileged user are provided. By exploiting CVE-2025-24071, the credentials of another low-privileged user can be obtained. Further enumeration reveals the existence of ACLs over the winrm_svc and ca_svc accounts. WinRM can then be used to log in to the target using the winrc_svc account. Exploitation of an Active Directory Certificate service (ESC15) using the ca_svc account is required to obtain access to the Administrator account.',
       date: 'Sep 20, 2025',
       category: 'writeup',
-      tags: ['htb', 'ad', 'smb', 'ldap', 'windows', 'password-cracking', 'kerberoasting'],
+      tags: ['htb', 'ad', 'adcs', 'smb', 'ldap', 'windows', 'password-cracking', 'kerberoasting'],
       image: '/images/writeups/fluffy/machine.png',
       link: '/writeups/fluffy-walkthrough',
       os: 'Windows'

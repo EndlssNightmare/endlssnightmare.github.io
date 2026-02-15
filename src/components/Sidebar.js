@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
-import { FaGithub, FaKey, FaBox, FaServer, FaUsers } from 'react-icons/fa';
+import { motion, AnimatePresence } from 'framer-motion';
+import { FaGithub, FaKey, FaBox, FaServer, FaUsers, FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 import './Sidebar.css';
 
-const Sidebar = () => {
+const Sidebar = ({ collapsed, onToggle }) => {
   const [displayedText, setDisplayedText] = useState('');
   
   const targetName = 'V01';
@@ -68,113 +68,141 @@ const Sidebar = () => {
 
 
   return (
-    <motion.aside 
-      className="sidebar"
-      initial={{ x: -300, opacity: 0 }}
-      animate={{ x: 0, opacity: 1 }}
-      transition={{ duration: 0.6, ease: "easeOut" }}
-    >
+    <>
+      <button
+        className={`sidebar-toggle ${collapsed ? 'sidebar-toggle--collapsed' : ''}`}
+        onClick={onToggle}
+        title={collapsed ? 'Show profile' : 'Hide profile'}
+      >
+        {collapsed ? <FaChevronRight /> : <FaChevronLeft />}
+      </button>
 
-      <div className="sidebar-content">
-        <motion.div 
-          className="profile-section"
-          initial={{ y: 20, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ delay: 0.2, duration: 0.6 }}
-        >
-          <motion.div 
-            className="profile-avatar-container"
-            whileHover={{ scale: 1.05 }}
-            transition={{ type: "spring", stiffness: 300 }}
+      <motion.aside 
+        className={`sidebar ${collapsed ? 'sidebar--collapsed' : ''}`}
+        initial={false}
+        animate={{ width: collapsed ? 0 : 280 }}
+        transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
+      >
+      <AnimatePresence>
+        {!collapsed && (
+          <motion.div
+            className="sidebar-content"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1, transition: { delay: 0.6, duration: 0.5 } }}
+            exit={{ opacity: 0, transition: { delay: 0, duration: 0.15 } }}
           >
-            
-            <img 
-              src="/images/profile/profile.jpg" 
-              alt="V01" 
-              className="profile-avatar"
-            />
-          </motion.div>
-          
-          <motion.h2 
-            className="profile-name"
-            initial={{ y: 20, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            transition={{ delay: 0.3, duration: 0.6 }}
-          >
-            <div className="hash-crack-container">
-              <span className="hash-crack-text">
-                {displayedText}
-              </span>
-            </div>
-          </motion.h2>
-          
-          <motion.p 
-            className="profile-title"
-            initial={{ y: 20, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            transition={{ delay: 0.4, duration: 0.6 }}
-          >
-            Pentester, CTF player
-          </motion.p>
-          
-          <motion.p 
-            className="profile-team"
-            initial={{ y: 20, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            transition={{ delay: 0.5, duration: 0.6 }}
-          >
-            ACCH Team
-          </motion.p>
-        </motion.div>
-
-        <motion.div 
-          className="social-links"
-          initial={{ y: 20, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ delay: 0.6, duration: 0.6 }}
-        >
-          {socialLinks.map((social, index) => {
-            const Icon = social.icon;
-            return (
-              <motion.a
-                key={social.label}
-                href={social.url}
+            <motion.div 
+              className="profile-section"
+              initial={{ y: 20, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ delay: 0.2, duration: 0.6 }}
+            >
+              <motion.div 
+                className="profile-avatar-container"
+                whileHover={{ scale: 1.05 }}
+                transition={{ type: "spring", stiffness: 300 }}
+              >
+                
+                <img 
+                  src="/images/profile/profile.jpg" 
+                  alt="V01" 
+                  className="profile-avatar"
+                />
+              </motion.div>
+              
+              <motion.h2 
+                className="profile-name"
+                initial={{ y: 20, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                transition={{ delay: 0.3, duration: 0.6 }}
+              >
+                <div className="hash-crack-container">
+                  <span className="hash-crack-text">
+                    {displayedText}
+                  </span>
+                </div>
+              </motion.h2>
+              
+              <motion.p 
+                className="profile-title"
+                initial={{ y: 20, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                transition={{ delay: 0.4, duration: 0.6 }}
+              >
+                Pentester, CTF player
+              </motion.p>
+              
+              <motion.a 
+                href="https://acch.dog/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="social-link"
-                        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-                transition={{ 
-                  delay: 0.7 + index * 0.1, 
-                  duration: 0.5,
-                  type: "spring",
-                  stiffness: 400,
-                  damping: 25
-                }}
-                whileHover={{ 
-                  color: 'var(--primary-color)',
-                  y: -5,
-                  scale: 1.05,
-                  rotateX: 5,
-                  transition: {
-                    duration: 0.2,
-                    type: "spring",
-                    stiffness: 400
-                  }
-                }}
-                whileTap={{ 
-                  scale: 0.95,
-                  rotateX: -5
-                }}
+                className="profile-team"
+                initial={{ y: 20, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                transition={{ delay: 0.5, duration: 0.6 }}
+                whileHover={{ scale: 1.05 }}
               >
-                <Icon />
-                <span className="social-label">{social.label}</span>
+                <img src="/images/acch-icon.png" alt="ACCH" className="acch-icon" />
+                ACCH Team
               </motion.a>
-            );
-          })}
-        </motion.div>
-      </div>
+            </motion.div>
+
+            <motion.div 
+              className="social-links"
+              initial={{ y: 20, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ delay: 0.6, duration: 0.6 }}
+            >
+              {socialLinks.map((social, index) => {
+                const Icon = social.icon;
+                return (
+                  <motion.a
+                    key={social.label}
+                    href={social.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="social-link"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ 
+                      delay: 0.7 + index * 0.1, 
+                      duration: 0.5,
+                      type: "spring",
+                      stiffness: 400,
+                      damping: 25
+                    }}
+                    whileHover={{ 
+                      color: 'var(--primary-color)',
+                      y: -5,
+                      scale: 1.05,
+                      rotateX: 5,
+                      transition: {
+                        duration: 0.2,
+                        type: "spring",
+                        stiffness: 400
+                      }
+                    }}
+                    whileTap={{ 
+                      scale: 0.95,
+                      rotateX: -5
+                    }}
+                  >
+                    <Icon />
+                    <span className="social-label">{social.label}</span>
+                  </motion.a>
+                );
+              })}
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </motion.aside>
+      <div
+        className="sidebar-spacer"
+        style={{ width: collapsed ? 0 : 280 }}
+        aria-hidden="true"
+      />
+    </>
   );
 };
 

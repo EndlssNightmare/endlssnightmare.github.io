@@ -109,8 +109,6 @@ const DC02Walkthrough = () => {
     os: 'Windows',
     ip: '192.168.0.18',
     content: `
-# DC02 Walkthrough
-
 ## Overview
 This Windows Domain Controller (DC01) in the SOUPEDECODE.LOCAL domain was discovered via internal network scanning. Enumeration revealed multiple Active Directory services and valid SMB credentials (charlie:charlie). AS-REP roasting against zximena448 yielded the password internet, granting Backup Operators group privileges. Registry hives (SAM, SYSTEM, SECURITY) were extracted remotely and cracked to obtain administrator-level hashes. Pass-the-Hash via WinRM provided full domain compromise and access to the root flag.
 
@@ -342,7 +340,7 @@ The machine emphasizes the importance of proper SMB share permissions, disabling
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2, duration: 0.6 }}
         >
-          <h1>{writeup.title}</h1>
+          <h1 id="writeup-title">{writeup.title}</h1>
           
           <div className="writeup-meta">
             <div className="meta-item">
@@ -398,16 +396,7 @@ The machine emphasizes the importance of proper SMB share permissions, disabling
               </div>
             </div>
           </div>
-        </motion.div>
-      </div>
 
-      <div className="writeup-layout">
-        <motion.div 
-          className="writeup-content"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.4, duration: 0.6 }}
-        >
           <div className="markdown-content">
             {(() => {
               const lines = writeup.content.split('\n');
@@ -463,8 +452,9 @@ The machine emphasizes the importance of proper SMB share permissions, disabling
             })()}
           </div>
         </motion.div>
-        <TableOfContents content={writeup.content} />
       </div>
+
+      <TableOfContents content={writeup.content} title={writeup.title} />
       
       <ScrollToTop />
     </motion.div>

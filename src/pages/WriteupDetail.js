@@ -12,6 +12,7 @@ import FluffyWalkthrough from './writeups/fluffy/FluffyWalkthrough';
 import WcorpWalkthrough from './writeups/Wcorp/WcorpWalkthrough';
 import DC02Walkthrough from './writeups/dc02/DC02Walkthrough';
 import EditorWalkthrough from './writeups/editor/EditorWalkthrough';
+import ActiveWalkthrough from './writeups/active/ActiveWalkthrough';
 
 const WriteupDetail = () => {
   const { id } = useParams();
@@ -25,7 +26,8 @@ const WriteupDetail = () => {
     'puppy-walkthrough': PuppyWalkthrough,
     'aria-walkthrough': AriaWalkthrough,
     'tombwatcher-walkthrough': TombwatcherWalkthrough,
-    'editor-walkthrough': EditorWalkthrough
+    'editor-walkthrough': EditorWalkthrough,  
+    'active-walkthrough': ActiveWalkthrough
   };
 
   // Get the component for this writeup

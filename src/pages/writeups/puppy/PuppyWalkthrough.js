@@ -112,9 +112,7 @@ const PuppyWalkthrough = () => {
     difficulty: 'Medium',
     os: 'Windows',
     ip: '10.129.194.51',
-    content: `# Puppy Walkthrough
-
-## Overview
+    content: `## Overview
 Puppy is an medium-difficulty Windows Active Directory machine built around an assumed-breach scenario where credentials for a low-privileged user are provided (levi.james / KingofAkron2025!). Initial SMB/BloodHound enumeration reveals \`GenericWrite\` on the Developers group, allowing the attacker to add the user and access the \`DEV\` share. A KeePass file harvested from \`DEV\` is cracked to recover additional credentials. A password-spraying and further enumeration lead to \`steph.cooper\` and extraction of DPAPI-protected secrets. Using \`steph.cooper_adm\` recovered credentials the box allows \`DCSync\` to dump the Administrator hash, enabling remote authentication and full domain compromise.
 <InfoStatus title="Info Status:" message="As is common in real life pentests, you will start the Puppy box with credentials for the following account: levi.james / KingofAkron2025!" />
 
@@ -415,7 +413,7 @@ The machine emphasizes the importance of proper credential storage, secure passw
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2, duration: 0.6 }}
         >
-          <h1>{writeup.title}</h1>
+          <h1 id="writeup-title">{writeup.title}</h1>
           
           <div className="writeup-meta">
             <div className="meta-item">
@@ -471,16 +469,7 @@ The machine emphasizes the importance of proper credential storage, secure passw
               </div>
             </div>
           </div>
-        </motion.div>
-      </div>
 
-      <div className="writeup-layout">
-        <motion.div 
-          className="writeup-content"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.4, duration: 0.6 }}
-        >
           <div className="markdown-content">
             {(() => {
               const lines = writeup.content.split('\n');
@@ -545,8 +534,9 @@ The machine emphasizes the importance of proper credential storage, secure passw
             })()}
           </div>
         </motion.div>
-        <TableOfContents content={writeup.content} />
       </div>
+
+      <TableOfContents content={writeup.content} title={writeup.title} />
       
       <ScrollToTop />
     </motion.div>

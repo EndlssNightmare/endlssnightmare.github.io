@@ -60,9 +60,7 @@ const AriaWalkthrough = () => {
     difficulty: 'Easy',
     os: 'Linux',
     ip: '192.168.0.11',
-    content: `# Aria Walkthrough
-
-## Overview
+    content: `## Overview
 Aria is a Linux machine that demonstrates file upload bypass techniques, zero-width steganography, and JSON-RPC exploitation through aria2c. The machine showcases how improper input validation and services running with elevated privileges can lead to complete system compromise.
 
 ## Enumeration
@@ -426,7 +424,7 @@ The machine highlights the critical importance of proper input validation, secur
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2, duration: 0.6 }}
         >
-          <h1>{writeup.title}</h1>
+          <h1 id="writeup-title">{writeup.title}</h1>
           
           <div className="writeup-meta">
             <div className="meta-item">
@@ -482,16 +480,7 @@ The machine highlights the critical importance of proper input validation, secur
               </div>
             </div>
           </div>
-        </motion.div>
-      </div>
 
-      <div className="writeup-layout">
-        <motion.div 
-          className="writeup-content"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.4, duration: 0.6 }}
-        >
           <div className="markdown-content">
             {(() => {
               const lines = writeup.content.split('\n');
@@ -697,8 +686,9 @@ The machine highlights the critical importance of proper input validation, secur
             })()}
           </div>
         </motion.div>
-        <TableOfContents content={writeup.content} />
       </div>
+
+      <TableOfContents content={writeup.content} title={writeup.title} />
       
       <ScrollToTop />
     </motion.div>

@@ -111,9 +111,7 @@ const EditorWalkthrough = () => {
     difficulty: 'Easy',
     os: 'Linux',
     ip: '10.129.136.86',
-    content: `# Editor Walkthrough
-
-## Overview
+    content: `## Overview
 Full Nmap reconnaissance exposed SSH, nginx and a vulnerable XWiki on Jetty. XWiki RCE gave an xwiki reverse shell, revealed plaintext DB credentials in \`/etc/xwiki\` to SSH as oliver, and a writable SUID ndsudo binary was abused via an untrusted-search-path exploit to escalate to root.
 
 ## Enumeration
@@ -336,7 +334,7 @@ The machine emphasizes the importance of keeping web applications and frameworks
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2, duration: 0.6 }}
         >
-          <h1>{writeup.title}</h1>
+          <h1 id="writeup-title">{writeup.title}</h1>
           
           <div className="writeup-meta">
             <div className="meta-item">
@@ -389,19 +387,10 @@ The machine emphasizes the importance of keeping web applications and frameworks
               </div>
               <div className="machine-info-right">
                 <img src="/images/writeups/editor/machine.png" alt="Editor" className="machine-image" />
-              </div>
-            </div>
           </div>
-        </motion.div>
+        </div>
       </div>
 
-      <div className="writeup-layout">
-        <motion.div 
-          className="writeup-content"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.4, duration: 0.6 }}
-        >
           <div className="markdown-content">
             {(() => {
               const lines = writeup.content.split('\n');
@@ -470,8 +459,9 @@ The machine emphasizes the importance of keeping web applications and frameworks
             })()}
           </div>
         </motion.div>
-        <TableOfContents content={writeup.content} />
       </div>
+
+      <TableOfContents content={writeup.content} title={writeup.title} />
       
       <ScrollToTop />
       </motion.div>

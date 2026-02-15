@@ -111,9 +111,7 @@ const TombwatcherWalkthrough = () => {
     difficulty: 'Medium',
     os: 'Windows',
     ip: '10.129.192.159',
-    content: `# TombWatcher
-
-## Overview
+    content: `## Overview
 TombWatcher is a medium-difficulty Windows Active Directory machine that demonstrates advanced ADCS exploitation techniques. Starting with provided credentials (henry / H3nry_987TGV!), the machine showcases GMSA enumeration, Kerberoasting attacks, and ESC15 vulnerability exploitation through Certipy. The walkthrough covers tombstone object abuse, certificate template manipulation, and privilege escalation to Domain Administrator through ADCS certificate abuse.
 <InfoStatus title="Info Status:" message="As is common in real life Windows pentests, you will start the TombWatcher box with credentials for the following account: henry / H3nry_987TGV!" />
 
@@ -580,7 +578,7 @@ The machine emphasizes the importance of proper Active Directory security harden
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2, duration: 0.6 }}
         >
-          <h1>{writeup.title}</h1>
+          <h1 id="writeup-title">{writeup.title}</h1>
           
           <div className="writeup-meta">
             <div className="meta-item">
@@ -636,16 +634,7 @@ The machine emphasizes the importance of proper Active Directory security harden
               </div>
             </div>
           </div>
-        </motion.div>
-      </div>
 
-      <div className="writeup-layout">
-        <motion.div 
-          className="writeup-content"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.4, duration: 0.6 }}
-        >
           <div className="markdown-content">
             {(() => {
               const lines = writeup.content.split('\n');
@@ -714,8 +703,9 @@ The machine emphasizes the importance of proper Active Directory security harden
             })()}
           </div>
         </motion.div>
-        <TableOfContents content={writeup.content} />
       </div>
+
+      <TableOfContents content={writeup.content} title={writeup.title} />
       
       <ScrollToTop />
       </motion.div>

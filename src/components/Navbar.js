@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { FaHome, FaFileAlt, FaCode, FaTags, FaSun, FaMoon } from 'react-icons/fa';
@@ -11,6 +11,18 @@ const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
+  const programmaticScrollRef = useRef(false);
+
+  useEffect(() => {
+    const onTocScrollStart = () => { programmaticScrollRef.current = true; };
+    const onTocScrollEnd = () => { programmaticScrollRef.current = false; };
+    window.addEventListener('toc-programmatic-scroll-start', onTocScrollStart);
+    window.addEventListener('toc-programmatic-scroll-end', onTocScrollEnd);
+    return () => {
+      window.removeEventListener('toc-programmatic-scroll-start', onTocScrollStart);
+      window.removeEventListener('toc-programmatic-scroll-end', onTocScrollEnd);
+    };
+  }, []);
 
   useEffect(() => {
     let ticking = false;
@@ -20,16 +32,21 @@ const Navbar = () => {
         requestAnimationFrame(() => {
           const scrollTop = window.scrollY;
           const isScrollingDown = scrollTop > lastScrollY && scrollTop > 80;
-          
+
           setIsScrolled(scrollTop > 50);
-          
-          // Only hide navbar when scrolling down significantly
-          if (isScrollingDown && scrollTop > 120) {
-            setIsVisible(false);
-          } else if (scrollTop < 80 || scrollTop < lastScrollY) {
+
+          // Always show navbar when user is at the top of the page
+          if (scrollTop < 80) {
             setIsVisible(true);
+          } else if (isScrollingDown && scrollTop > 120) {
+            setIsVisible(false);
+          } else if (scrollTop < lastScrollY) {
+            // Show navbar when scrolling up (unless TOC triggered the scroll)
+            if (!programmaticScrollRef.current) {
+              setIsVisible(true);
+            }
           }
-          
+
           setLastScrollY(scrollTop);
           ticking = false;
         });

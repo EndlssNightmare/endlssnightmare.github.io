@@ -110,9 +110,7 @@ const WcorpWalkthrough = () => {
     difficulty: 'Hard',
     os: 'Windows',
     ip: '172.16.13.103',
-    content: `# Wcorp Walkthrough
-
-## Overview
+    content: `## Overview
 Wcorp is a Windows-based Active Directory machine that involves enumerating user accounts, exploiting Kerberos vulnerabilities (AS-REP Roasting and Kerberoasting), performing lateral movement via certificate theft and abuse, and escalating privileges through DCSync to gain domain administrator access.
 
 ## Enumeration
@@ -416,7 +414,7 @@ The machine emphasizes the importance of enabling Kerberos pre-authentication fo
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2, duration: 0.6 }}
         >
-          <h1>{writeup.title}</h1>
+          <h1 id="writeup-title">{writeup.title}</h1>
           
           <div className="writeup-meta">
             <div className="meta-item">
@@ -472,16 +470,7 @@ The machine emphasizes the importance of enabling Kerberos pre-authentication fo
               </div>
             </div>
           </div>
-        </motion.div>
-      </div>
 
-      <div className="writeup-layout">
-        <motion.div 
-          className="writeup-content"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.4, duration: 0.6 }}
-        >
           <div className="markdown-content">
             {(() => {
               const lines = writeup.content.split('\n');
@@ -537,8 +526,9 @@ The machine emphasizes the importance of enabling Kerberos pre-authentication fo
             })()}
           </div>
         </motion.div>
-        <TableOfContents content={writeup.content} />
       </div>
+
+      <TableOfContents content={writeup.content} title={writeup.title} />
       
       <ScrollToTop />
     </motion.div>
