@@ -104,7 +104,7 @@ const Sidebar = ({ collapsed, onToggle }) => {
               >
                 
                 <img 
-                  src="/images/profile/profile.jpg" 
+                  src="/images/profile/profile.gif" 
                   alt="V01" 
                   className="profile-avatar"
                 />

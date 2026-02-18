@@ -8,7 +8,7 @@ const DynamicSEO = ({ type, data }) => {
         // Convert relative image URLs to absolute URLs
         const imageUrl = data.image_url?.startsWith('/') 
           ? `https://endlssightmare.com${data.image_url}` 
-          : data.image_url || 'https://endlssightmare.com/images/profile/profile.jpg';
+          : data.image_url || 'https://endlssightmare.com/images/profile/profile.gif';
         
         return {
           title: `${data.title} - V01 Cybersecurity Writeup`,
@@ -22,7 +22,7 @@ const DynamicSEO = ({ type, data }) => {
         return {
           title: `${data.title} - V01 Cybersecurity Project`,
           description: data.excerpt || `Cybersecurity project: ${data.title}`,
-          image: data.image || 'https://endlssightmare.com/images/profile/profile.jpg',
+          image: data.image || 'https://endlssightmare.com/images/profile/profile.gif',
           url: `https://endlssightmare.com/projects/${data.id}`,
           keywords: `${data.tags?.join(', ')}, project, cybersecurity, github, open source`
         };
@@ -31,7 +31,7 @@ const DynamicSEO = ({ type, data }) => {
         return {
           title: `${data.tag} - V01 Cybersecurity Content`,
           description: `Explore all ${data.tag} related content on V01's cybersecurity notes`,
-          image: 'https://endlssightmare.com/images/profile/profile.jpg',
+          image: 'https://endlssightmare.com/images/profile/profile.gif',
           url: `https://endlssightmare.com/tags/${data.tag}`,
           keywords: `${data.tag}, cybersecurity, content, notes`
         };
@@ -40,7 +40,7 @@ const DynamicSEO = ({ type, data }) => {
         return {
           title: "V01 - Cybersecurity Notes",
           description: "V01's Cybersecurity Notes - Pentester, CTF player, ACCH Team",
-          image: "https://endlssightmare.com/images/profile/profile.jpg",
+          image: "https://endlssightmare.com/images/profile/profile.gif",
           url: "https://endlssightmare.com/",
           keywords: "cybersecurity, pentesting, CTF, hacking, security, notes, V01, ACCH"
         };

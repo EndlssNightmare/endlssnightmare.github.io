@@ -4,7 +4,7 @@ import { Helmet } from 'react-helmet-async';
 const SEO = ({ 
   title = "V01 - Cybersecurity Notes", 
   description = "V01's Cybersecurity Notes - Pentester, CTF player, ACCH Team",
-  image = "https://endlssightmare.com/images/profile/profile.jpg",
+  image = "https://endlssightmare.com/images/profile/profile.gif",
   url = "https://endlssightmare.com/",
   type = "website",
   keywords = "cybersecurity, pentesting, CTF, hacking, security, notes, V01, ACCH"

@@ -26,7 +26,7 @@
 ```javascript
 // Em qualquer componente
 <SEO 
-  image="https://endlssightmare.com/images/profile/profile.jpg"
+  image="https://endlssightmare.com/images/profile/profile.gif"
 />
 ```
 
