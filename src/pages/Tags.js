@@ -9,7 +9,13 @@ const Tags = () => {
 
   // All available posts data for counting
   const allPosts = [
-    
+    {
+      id: 15,
+      title: 'Umz Walkthrough',
+      excerpt: 'Umz is an easy Hack My VM machine featuring a DDoS-triggered backend, OS command injection via a ping form, sudo md5sum, rainbow table recovery, and SUID dd for root.',
+      category: 'writeup',
+      tags: ['hmv', 'linux', 'ddos', 'command-injection', 'sudo_md5sum', 'rainbowlist', 'dd']
+    },
     {
       id: 14,
       title: 'Active Walkthrough',

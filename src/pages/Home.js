@@ -12,7 +12,17 @@ const Home = () => {
 
   // Recent posts data
   const recentPosts = useMemo(() => [
-    
+    {
+      id: 15,
+      title: 'Umz Walkthrough',
+      excerpt: 'Umz is an easy Hack My VM machine featuring a DDoS-triggered backend, OS command injection via a ping form, sudo md5sum, rainbow table recovery, and SUID dd for root.',
+      date: 'Feb 25, 2026',
+      category: 'writeup',
+      tags: ['hmv', 'linux', 'ddos', 'command-injection', 'sudo_md5sum', 'rainbowlist', 'dd'],
+      image: '/images/writeups/umz/machine.png',
+      link: '/writeups/umz-walkthrough',
+      os: 'Linux'
+    },
     {
       id: 13,
       title: 'Active Walkthrough',
@@ -23,7 +33,8 @@ const Home = () => {
       image: '/images/writeups/active/machine.png',
       link: '/writeups/active-walkthrough',
       os: 'Windows'
-    },{
+    },
+    {
       id: 12,
       title: 'Editor Walkthrough',
       excerpt: 'Full Nmap reconnaissance exposed SSH, nginx and a vulnerable XWiki on Jetty. XWiki RCE gave an xwiki reverse shell, revealed plaintext DB credentials in /etc/xwiki to SSH as oliver, and a writable SUID ndsudo binary was abused via an untrusted-search-path exploit to escalate to root.',

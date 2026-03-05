@@ -13,6 +13,18 @@ const Writeups = () => {
   const writeups = useMemo(() => [
     
     {
+      id: 15,
+      title: 'Umz Walkthrough',
+      excerpt: 'Umz is an easy Hack My VM machine featuring a DDoS-triggered backend, OS command injection via a ping form, sudo md5sum, rainbow table recovery, and SUID dd for root.',
+      date: 'Feb 25, 2026',
+      tags: ['Hmv', 'Linux', 'DDOS', 'Command-Injection', 'Sudo_Md5sum', 'Rainbowlist', 'DD'],
+      image: '/images/writeups/umz/machine.png',
+      link: '/writeups/umz-walkthrough',
+      difficulty: 'Easy',
+      category: 'writeup',
+      os: 'Linux'
+    },
+    {
       id: 14,
       title: 'Active Walkthrough',
       excerpt: 'Active is an easy to medium difficulty machine, which features two very prevalent techniques to gain privileges within an Active Directory environment.',
