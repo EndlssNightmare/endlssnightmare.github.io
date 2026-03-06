@@ -1,13 +1,12 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { motion } from 'framer-motion';
-import { FaClock, FaSearch, FaFilter } from 'react-icons/fa';
+import { FaClock, FaSearch } from 'react-icons/fa';
 import Card from '../components/Card';
 import SEO from '../components/SEO';
 import './Home.css';
 
 const Home = () => {
   const [searchTerm, setSearchTerm] = useState('');
-  const [filterCategory, setFilterCategory] = useState('');
   const [filteredPosts, setFilteredPosts] = useState([]);
 
   // Recent posts data
@@ -16,7 +15,7 @@ const Home = () => {
       id: 15,
       title: 'Umz Walkthrough',
       excerpt: 'Umz is an easy Hack My VM machine featuring a DDoS-triggered backend, OS command injection via a ping form, sudo md5sum, rainbow table recovery, and SUID dd for root.',
-      date: 'Feb 25, 2026',
+      date: 'Mar 05, 2026',
       category: 'writeup',
       tags: ['hmv', 'linux', 'ddos', 'command-injection', 'sudo_md5sum', 'rainbowlist', 'dd'],
       image: '/images/writeups/umz/machine.png',
@@ -160,8 +159,7 @@ const Home = () => {
     const filtered = recentPosts.filter(post => {
       const matchesSearch = post.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
                            post.excerpt.toLowerCase().includes(searchTerm.toLowerCase());
-      const matchesCategory = !filterCategory || post.category === filterCategory;
-      return matchesSearch && matchesCategory;
+      return matchesSearch;
     });
     
     // Remove duplicates based on ID
@@ -170,7 +168,7 @@ const Home = () => {
     );
     
     setFilteredPosts(uniqueFiltered);
-  }, [searchTerm, filterCategory, recentPosts]);
+  }, [searchTerm, recentPosts]);
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -225,19 +223,6 @@ const Home = () => {
               className="search-input"
             />
           </div>
-          
-          <div className="filter-container">
-            <FaFilter className="filter-icon" />
-            <select
-              value={filterCategory}
-              onChange={(e) => setFilterCategory(e.target.value)}
-              className="filter-select"
-            >
-              <option value="">All Categories</option>
-              <option value="writeup">Writeups</option>
-              <option value="project">Projects</option>
-            </select>
-          </div>
         </div>
       </motion.div>
 
@@ -276,10 +261,7 @@ const Home = () => {
               <p>Try adjusting your search or filter criteria.</p>
               <button 
                 className="clear-filters-btn"
-                onClick={() => {
-                  setSearchTerm('');
-                  setFilterCategory('');
-                }}
+                onClick={() => setSearchTerm('')}
               >
                 Clear Filters
               </button>

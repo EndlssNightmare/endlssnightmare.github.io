@@ -1,12 +1,11 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { motion } from 'framer-motion';
-import { FaFileAlt, FaSearch, FaFilter } from 'react-icons/fa';
+import { FaFileAlt, FaSearch } from 'react-icons/fa';
 import Card from '../components/Card';
 import './Writeups.css';
 
 const Writeups = () => {
   const [searchTerm, setSearchTerm] = useState('');
-  const [filterTag, setFilterTag] = useState('');
   const [filteredWriteups, setFilteredWriteups] = useState([]);
 
   // Writeups data
@@ -16,7 +15,7 @@ const Writeups = () => {
       id: 15,
       title: 'Umz Walkthrough',
       excerpt: 'Umz is an easy Hack My VM machine featuring a DDoS-triggered backend, OS command injection via a ping form, sudo md5sum, rainbow table recovery, and SUID dd for root.',
-      date: 'Feb 25, 2026',
+      date: 'Mar 05, 2026',
       tags: ['Hmv', 'Linux', 'DDOS', 'Command-Injection', 'Sudo_Md5sum', 'Rainbowlist', 'DD'],
       image: '/images/writeups/umz/machine.png',
       link: '/writeups/umz-walkthrough',
@@ -120,14 +119,11 @@ const Writeups = () => {
     os: 'Windows'
     }], []);
 
-  const allTags = [...new Set(writeups.flatMap(writeup => writeup.tags))];
-
   useEffect(() => {
     const filtered = writeups.filter(writeup => {
       const matchesSearch = writeup.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
                            writeup.excerpt.toLowerCase().includes(searchTerm.toLowerCase());
-      const matchesTag = !filterTag || writeup.tags.includes(filterTag);
-      return matchesSearch && matchesTag;
+      return matchesSearch;
     });
     
     // Remove duplicates based on ID
@@ -136,7 +132,7 @@ const Writeups = () => {
     );
     
     setFilteredWriteups(uniqueFiltered);
-  }, [searchTerm, filterTag, writeups]);
+  }, [searchTerm, writeups]);
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -188,20 +184,6 @@ const Writeups = () => {
               className="search-input"
             />
           </div>
-          
-          <div className="filter-container">
-            <FaFilter className="filter-icon" />
-            <select
-              value={filterTag}
-              onChange={(e) => setFilterTag(e.target.value)}
-              className="filter-select"
-            >
-              <option value="">All Tags</option>
-              {allTags.map(tag => (
-                <option key={tag} value={tag}>{tag}</option>
-              ))}
-            </select>
-          </div>
         </div>
       </motion.div>
 
@@ -240,10 +222,7 @@ const Writeups = () => {
               <p>Try adjusting your search or filter criteria.</p>
               <button 
                 className="clear-filters-btn"
-                onClick={() => {
-                  setSearchTerm('');
-                  setFilterTag('');
-                }}
+                onClick={() => setSearchTerm('')}
               >
                 Clear Filters
               </button>

@@ -1,12 +1,11 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { motion } from 'framer-motion';
-import { FaCode, FaSearch, FaFilter } from 'react-icons/fa';
+import { FaCode, FaSearch } from 'react-icons/fa';
 import Card from '../components/Card';
 import './Projects.css';
 
 const Projects = () => {
   const [searchTerm, setSearchTerm] = useState('');
-  const [filterTech, setFilterTech] = useState('');
   const [filteredProjects, setFilteredProjects] = useState([]);
 
   const projects = useMemo(() => [
@@ -60,14 +59,11 @@ const Projects = () => {
     }
   ], []);
 
-  const allTechs = [...new Set(projects.flatMap(project => project.tags))];
-
   useEffect(() => {
     const filtered = projects.filter(project => {
       const matchesSearch = project.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
                            project.excerpt.toLowerCase().includes(searchTerm.toLowerCase());
-      const matchesTech = !filterTech || project.tags.includes(filterTech);
-      return matchesSearch && matchesTech;
+      return matchesSearch;
     });
     
     // Remove duplicates based on ID
@@ -76,7 +72,7 @@ const Projects = () => {
     );
     
     setFilteredProjects(uniqueFiltered);
-  }, [searchTerm, filterTech, projects]);
+  }, [searchTerm, projects]);
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -124,20 +120,6 @@ const Projects = () => {
               className="search-input"
             />
           </div>
-          
-          <div className="filter-container">
-            <FaFilter className="filter-icon" />
-            <select
-              value={filterTech}
-              onChange={(e) => setFilterTech(e.target.value)}
-              className="filter-select"
-            >
-              <option value="">All Technologies</option>
-              {allTechs.map(tech => (
-                <option key={tech} value={tech}>{tech}</option>
-              ))}
-            </select>
-          </div>
         </div>
       </motion.div>
 
@@ -176,10 +158,7 @@ const Projects = () => {
               <p>Try adjusting your search or filter criteria.</p>
               <button 
                 className="clear-filters-btn"
-                onClick={() => {
-                  setSearchTerm('');
-                  setFilterTech('');
-                }}
+                onClick={() => setSearchTerm('')}
               >
                 Clear Filters
               </button>
