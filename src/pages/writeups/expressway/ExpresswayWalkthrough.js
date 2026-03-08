@@ -122,7 +122,7 @@ sudo nmap -vv -sS -sV -sC -Pn -p- 10.129.172.229 -oN nmap/nmap.log
 Discovered open port 22/tcp on 10.129.172.229
 \`\`\`
 
-UDP scanning on port 500 reveals an **IKE/ISAKMP** service with XAUTH and Dead Peer Detection attributes — a strong indicator of an IPsec VPN endpoint.
+UDP scanning on port 500 reveals an **IKE/ISAKMP** service with XAUTH and Dead Peer Detection attributes, a strong indicator of an IPsec VPN endpoint.
 \`\`\`bash
 sudo nmap -vv -sU -p500 -sV -sC --min-rate=10000 10.129.172.229
 
@@ -133,6 +133,10 @@ PORT    STATE SERVICE REASON       VERSION
 |     XAUTH
 |_    Dead Peer Detection v1.0
 \`\`\`
+
+Some important open ports are discovered:
+• **TCP Port 22**: OpenSSH
+• **UDP Port 500**: IKE/ISAKMP — IPsec VPN endpoint with XAUTH and Dead Peer Detection
 
 ## Foothold
 ### IKE Enumeration
@@ -203,6 +207,7 @@ sudo -R woot woot
 rm -rf \${STAGE?}
 \`\`\`
 
+### Root Flag
 Executing the exploit script escalates privileges to **root** and allows retrieving the root flag.
 \`\`\`
 bash sudo.sh
