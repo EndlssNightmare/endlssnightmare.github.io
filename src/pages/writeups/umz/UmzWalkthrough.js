@@ -81,7 +81,7 @@ const UmzWalkthrough = () => {
     tags: ['Hmv', 'Linux', 'DDOS', 'Command-Injection', 'Sudo_Md5sum', 'Rainbowlist', 'DD'],
     difficulty: 'Easy',
     os: 'Linux',
-    ip: '192.168.0.12',
+    ip: '192.168.0.13',
     content: `## Overview
 Umz is an **easy** Linux machine from **Hack My VM** with an unusual entry path. The main web server is built to resist DDoS, and when overloaded it triggers a *security protocol* that brings up a hidden debug service on port 8080. From there, command injection in a ping utility leads to a reverse shell. Lateral movement comes from abusing \`sudo md5sum\` to read a root-only password file via its MD5 hash and a rainbow table, and privilege escalation is done by exploiting a SUID binary that wraps \`dd\` to overwrite \`/etc/passwd\` and gain root.
 

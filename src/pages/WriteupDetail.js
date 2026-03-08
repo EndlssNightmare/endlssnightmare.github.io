@@ -14,6 +14,7 @@ import DC02Walkthrough from './writeups/dc02/DC02Walkthrough';
 import EditorWalkthrough from './writeups/editor/EditorWalkthrough';
 import ActiveWalkthrough from './writeups/active/ActiveWalkthrough';
 import UmzWalkthrough from './writeups/umz/UmzWalkthrough';
+import ExpresswayWalkthrough from './writeups/expressway/ExpresswayWalkthrough';
 
 const WriteupDetail = () => {
   const { id } = useParams();
@@ -29,7 +30,9 @@ const WriteupDetail = () => {
     'tombwatcher-walkthrough': TombwatcherWalkthrough,
     'editor-walkthrough': EditorWalkthrough,
     'active-walkthrough': ActiveWalkthrough,
-    'umz-walkthrough': UmzWalkthrough
+    'umz-walkthrough': UmzWalkthrough,
+  
+    'expressway-walkthrough': ExpresswayWalkthrough
   };
 
   // Get the component for this writeup

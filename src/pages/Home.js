@@ -11,7 +11,18 @@ const Home = () => {
 
   // Recent posts data
   const recentPosts = useMemo(() => [
+    
     {
+      id: 16,
+      title: 'Expressway Walkthrough',
+      excerpt: 'Expressway is an easy-difficulty Linux machine that demonstrates enumeration and exploits the IKE service, a component of the IPsec framework. Upon leaking the Pre-Shared key of the service and cracking it, the retrieved clear-text credentials are used to access the target via SSH. For privilege escalation, CVE-2025-32462 is exploited to get a privileged shell as the root user.',
+      date: 'Mar 07, 2026',
+      category: 'writeup',
+      tags: ['ike', 'htb', 'linux', 'ipsec', 'sudo_chwoot'],
+      image: '/images/writeups/expressway/machine.png',
+      link: '/writeups/expressway-walkthrough',
+      os: 'Linux'
+    },{
       id: 15,
       title: 'Umz Walkthrough',
       excerpt: 'Umz is an easy Hack My VM machine featuring a DDoS-triggered backend, OS command injection via a ping form, sudo md5sum, rainbow table recovery, and SUID dd for root.',

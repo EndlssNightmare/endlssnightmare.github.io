@@ -12,7 +12,18 @@ const TagDetail = () => {
   // All available posts data
   const allPosts = [
     
+    
     {
+      id: 16,
+      title: 'Expressway Walkthrough',
+      excerpt: 'Expressway is an easy-difficulty Linux machine that demonstrates enumeration and exploits the IKE service, a component of the IPsec framework. Upon leaking the Pre-Shared key of the service and cracking it, the retrieved clear-text credentials are used to access the target via SSH. For privilege escalation, CVE-2025-32462 is exploited to get a privileged shell as the root user.',
+      date: 'Mar 07, 2026',
+      tags: ['ike', 'htb', 'linux', 'ipsec', 'sudo_chwoot'],
+      image: '/images/writeups/expressway/machine.png',
+      link: '/writeups/expressway-walkthrough',
+      category: 'writeup',
+      os: 'Linux'
+    },{
       id: 14,
       title: 'Active Walkthrough',
       excerpt: 'Active is an easy to medium difficulty machine, which features two very prevalent techniques to gain privileges within an Active Directory environment.',
