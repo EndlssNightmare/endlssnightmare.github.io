@@ -12,7 +12,18 @@ const Home = () => {
   // Recent posts data
   const recentPosts = useMemo(() => [
     
+    
     {
+      id: 17,
+      title: 'Principal Walkthrough',
+      excerpt: 'Principal is a medium difficulty machine that is themed around misplaced cryptographic trust. The foothold exploits CVE-2026-29000, an authentication bypass in pac4j-jwts JwtAuthenticator where a PlainJWT wrapped inside a valid JWE envelope bypasses signature verification entirely. After forging an admin token and extracting SSH credentials from the corporate dashboard, privilege escalation abuses an SSH CA configuration that trusts any certificate signed by the CA without validating the principal (username) claim, allowing us to forge a certificate for root. Both attack stages exploit the same class of flaw: a system that verifies the cryptographic envelope but never validates the identity claim inside it.',
+      date: 'Mar 16, 2026',
+      category: 'writeup',
+      tags: ['htb', 'linux', 'jwt', 'pac4j', 'ca'],
+      image: '/images/writeups/principal/machine.png',
+      link: '/writeups/principal-walkthrough',
+      os: 'Linux'
+    },{
       id: 16,
       title: 'Expressway Walkthrough',
       excerpt: 'Expressway is an easy-difficulty Linux machine that demonstrates enumeration and exploits the IKE service, a component of the IPsec framework. Upon leaking the Pre-Shared key of the service and cracking it, the retrieved clear-text credentials are used to access the target via SSH. For privilege escalation, CVE-2025-32462 is exploited to get a privileged shell as the root user.',

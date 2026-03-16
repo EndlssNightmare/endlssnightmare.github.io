@@ -15,6 +15,7 @@ import EditorWalkthrough from './writeups/editor/EditorWalkthrough';
 import ActiveWalkthrough from './writeups/active/ActiveWalkthrough';
 import UmzWalkthrough from './writeups/umz/UmzWalkthrough';
 import ExpresswayWalkthrough from './writeups/expressway/ExpresswayWalkthrough';
+import PrincipalWalkthrough from './writeups/principal/PrincipalWalkthrough';
 
 const WriteupDetail = () => {
   const { id } = useParams();
@@ -32,7 +33,9 @@ const WriteupDetail = () => {
     'active-walkthrough': ActiveWalkthrough,
     'umz-walkthrough': UmzWalkthrough,
   
-    'expressway-walkthrough': ExpresswayWalkthrough
+    'expressway-walkthrough': ExpresswayWalkthrough,
+  
+    'principal-walkthrough': PrincipalWalkthrough
   };
 
   // Get the component for this writeup
