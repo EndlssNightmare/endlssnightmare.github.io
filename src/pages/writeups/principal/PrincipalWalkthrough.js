@@ -164,7 +164,6 @@ from jwcrypto import jwt, jwk
 
 TARGET = "http://10.129.244.220"
 
-# RSA public key obtained from /api/auth/jwks
 JWKS = {
     "keys": [{
         "kty": "RSA",
@@ -225,7 +224,7 @@ curl -s -H "Authorization: Bearer $TOKEN" http://10.129.244.220:8080/api/setting
 Using the recovered credentials to SSH into the machine as \`svc-deploy\` grants access and the user flag.
 \`\`\`bash
 ssh svc-deploy@10.129.244.220
-# Password: D3pl0y_$$H_Now42!
+Password: D3pl0y_$$H_Now42!
 \`\`\`
 ![SSH login as svc-deploy and user flag](/images/writeups/principal/11.png)
 
