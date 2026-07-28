@@ -205,9 +205,34 @@ smbclient '//10.129.64.171/Departments Share' -U ibryant
 ## Foothold
 
 ### Cracking the VeraCrypt Container
-The VeraCrypt container is cracked using hashcat with mode 13721 (VeraCrypt SHA512 + XTS 512 bit legacy). A custom wordlist based on variations of "Phantom" is used. Hashcat successfully recovers the password: \`Phantom2023!\`:
+The VeraCrypt container uses VeraCrypt SHA512 + XTS 512 bit (legacy), which corresponds to hashcat mode 13721. Since the default password followed the pattern \`Ph4nt0m@5t4rt!\` (word + symbols + digits), a custom wordlist is generated recognizing this pattern, combining variations of the machine name with years and special characters:
 \`\`\`bash
-hashcat -m 13721 IT_BACKUP_201123.hc phantom_custom.txt
+#!/bin/bash
+
+WORDS=("Phantom" "phantom" "Ph4nt0m" "ph4nt0m")
+YEARS=("2023" "2024" "2025")
+SYMBOLS=("!" "@" "#" "_" "$")
+OUTPUT="phantom_custom.txt"
+
+> $OUTPUT
+
+for w in "\${WORDS[@]}"; do
+    for y in "\${YEARS[@]}"; do
+        for s in "\${SYMBOLS[@]}"; do
+            echo "\${w}\${y}\${s}" >> $OUTPUT
+            echo "\${w}\${s}\${y}" >> $OUTPUT
+            echo "\${y}\${w}\${s}" >> $OUTPUT
+            echo "\${y}\${s}\${w}" >> $OUTPUT
+            echo "\${s}\${w}\${y}" >> $OUTPUT
+            echo "\${s}\${y}\${w}" >> $OUTPUT
+        done
+    done
+done
+\`\`\`
+
+Running hashcat with the generated wordlist cracks the container in seconds, recovering the password \`Phantom2023!\`:
+\`\`\`bash
+hashcat -m 13721 -a 0 IT_BACKUP_201123.hc phantom_custom.txt
 \`\`\`
 ![hashcat cracking the VeraCrypt container with password Phantom2023!](/images/writeups/phantom/9.png)
 
