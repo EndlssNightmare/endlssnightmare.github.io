@@ -1,0 +1,24 @@
+# Headers for static HTML files to be served to Discord bots
+/tombwatcher-walkthrough.html
+  X-Robots-Tag: noindex
+  Cache-Control: no-cache
+
+/aria-walkthrough.html
+  X-Robots-Tag: noindex
+  Cache-Control: no-cache
+
+/puppy-walkthrough.html
+  X-Robots-Tag: noindex
+  Cache-Control: no-cache
+
+/fluffy-walkthrough.html
+  X-Robots-Tag: noindex
+  Cache-Control: no-cache
+
+/wcorp-walkthrough.html
+  X-Robots-Tag: noindex
+  Cache-Control: no-cache
+
+/dc02-walkthrough.html
+  X-Robots-Tag: noindex
+  Cache-Control: no-cache

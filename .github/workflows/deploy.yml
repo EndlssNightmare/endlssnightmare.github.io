@@ -1,0 +1,86 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          
+      - name: Install dependencies
+        run: npm ci
+        
+      - name: Build
+        run: npm run build
+        
+      - name: Generate static SEO files for Discord previews
+        run: |
+          # The simple SEO files are already in public/ directory
+          echo "Simple SEO files are already created in public/"
+          
+      - name: Create static files for SPA routes
+        run: |
+          # Create directories and copy index.html for each route
+          mkdir -p build/writeups
+          mkdir -p build/projects
+          mkdir -p build/tags
+          
+          # Copy index.html to each route directory for GitHub Pages SPA routing
+          cp build/index.html build/writeups/index.html
+          cp build/index.html build/projects/index.html
+          cp build/index.html build/tags/index.html
+          
+          # Create specific writeup directories for GitHub Pages routing
+          mkdir -p build/writeups/wcorp-walkthrough
+          mkdir -p build/writeups/dc02-walkthrough
+          mkdir -p build/writeups/tombwatcher-walkthrough
+          mkdir -p build/writeups/aria-walkthrough
+          mkdir -p build/writeups/puppy-walkthrough
+          mkdir -p build/writeups/fluffy-walkthrough
+          
+          # Copy index.html to each writeup directory (GitHub Pages will handle routing via 404.html)
+          cp build/index.html build/writeups/wcorp-walkthrough/index.html
+          cp build/index.html build/writeups/dc02-walkthrough/index.html
+          cp build/index.html build/writeups/tombwatcher-walkthrough/index.html
+          cp build/index.html build/writeups/aria-walkthrough/index.html
+          cp build/index.html build/writeups/puppy-walkthrough/index.html
+          cp build/index.html build/writeups/fluffy-walkthrough/index.html
+          
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
+        
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: './build'
+
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

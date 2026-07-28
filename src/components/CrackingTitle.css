@@ -1,0 +1,122 @@
+/* Cracking Title Effect */
+.cracking-title {
+  display: inline-block;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.cracking-char {
+  display: inline-block;
+  transition: all 0.1s ease;
+  position: relative;
+}
+
+.cracking-char.cracking {
+  animation: crack 0.1s infinite;
+  font-weight: bold;
+  transform: scale(1.1);
+}
+
+@keyframes crack {
+  0% {
+    transform: scale(1.1) rotate(0deg);
+    color: #ff6b6b;
+    text-shadow: 0 0 15px #ff6b6b;
+  }
+  16% {
+    transform: scale(1.3) rotate(2deg);
+    color: #4ecdc4;
+    text-shadow: 0 0 20px #4ecdc4;
+  }
+  32% {
+    transform: scale(1.2) rotate(-1deg);
+    color: #45b7d1;
+    text-shadow: 0 0 25px #45b7d1;
+  }
+  48% {
+    transform: scale(1.4) rotate(1deg);
+    color: #f9ca24;
+    text-shadow: 0 0 20px #f9ca24;
+  }
+  64% {
+    transform: scale(1.1) rotate(-2deg);
+    color: #ff9ff3;
+    text-shadow: 0 0 18px #ff9ff3;
+  }
+  80% {
+    transform: scale(1.3) rotate(0.5deg);
+    color: #54a0ff;
+    text-shadow: 0 0 22px #54a0ff;
+  }
+  100% {
+    transform: scale(1.1) rotate(0deg);
+    color: #ff6b6b;
+    text-shadow: 0 0 15px #ff6b6b;
+  }
+}
+
+/* Enhanced cracking effect for more dramatic appearance */
+.cracking-title:hover .cracking-char {
+  transition: all 0.3s ease;
+}
+
+.cracking-char.cracking::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(45deg, transparent 30%, rgba(255, 107, 107, 0.3) 50%, transparent 70%);
+  animation: glitch-scan 0.2s infinite;
+  pointer-events: none;
+}
+
+@keyframes glitch-scan {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+/* Add some digital noise effect */
+.cracking-char.cracking::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: 
+    radial-gradient(circle at 20% 50%, rgba(255, 107, 107, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(78, 205, 196, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 40% 80%, rgba(69, 183, 209, 0.1) 0%, transparent 50%);
+  animation: digital-noise 0.1s infinite;
+  pointer-events: none;
+  opacity: 0.6;
+}
+
+@keyframes digital-noise {
+  0%, 100% {
+    opacity: 0.6;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.8;
+    transform: scale(1.05);
+  }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .cracking-char.cracking {
+    transform: scale(1.05);
+  }
+  
+  .cracking-char.cracking::before,
+  .cracking-char.cracking::after {
+    display: none; /* Disable complex effects on mobile for performance */
+  }
+}
