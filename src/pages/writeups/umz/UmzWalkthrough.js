@@ -78,7 +78,7 @@ const UmzWalkthrough = () => {
     title: 'Umz Walkthrough',
     excerpt: 'Umz is an easy Hack My VM machine featuring a DDoS-triggered backend, OS command injection via a ping form, sudo md5sum for lateral movement, rainbow table for password recovery, and SUID dd for root.',
     date: 'Mar 05, 2026',
-    tags: ['Hmv', 'Linux', 'DDOS', 'Command-Injection', 'Sudo_Md5sum', 'Rainbowlist', 'DD'],
+    tags: ['Hmv', 'Linux', 'DDOS', 'Command-Injection', 'Sudo-Md5sum', 'Rainbowlist', 'DD'],
     difficulty: 'Easy',
     os: 'Linux',
     ip: '192.168.0.13',

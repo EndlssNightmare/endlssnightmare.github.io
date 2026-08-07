@@ -11,6 +11,7 @@ import Projects from './pages/Projects';
 import Tags from './pages/Tags';
 import WriteupDetail from './pages/WriteupDetail';
 import TagDetail from './pages/TagDetail';
+import ScrollToTop from './components/ScrollToTop';
 import './App.css';
 
 function AppContent() {
@@ -18,6 +19,18 @@ function AppContent() {
   const location = useLocation();
 
   useEffect(() => {
+    if ('scrollRestoration' in window.history) {
+      window.history.scrollRestoration = 'manual';
+    }
+  }, []);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
+    const content = document.querySelector('.content');
+    if (content) content.scrollTop = 0;
+
     const isWriteupDetail = /^\/writeups\/[^/]+$/.test(location.pathname);
     if (isWriteupDetail) {
       setSidebarCollapsed(true);
@@ -43,6 +56,7 @@ function AppContent() {
         </main>
       </div>
       <Footer />
+      <ScrollToTop />
     </div>
   );
 }

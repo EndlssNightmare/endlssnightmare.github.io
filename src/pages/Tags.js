@@ -2,140 +2,20 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { FaTags, FaSearch } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
+import posts from '../data/posts';
 import './Tags.css';
 
 const Tags = () => {
   const [searchTerm, setSearchTerm] = useState('');
 
-  // All available posts data for counting
-  const allPosts = [
-    
-    {
-      id: 19,
-      title: 'Phantom Walkthrough',
-      category: 'writeup',
-      tags: ['htb', 'windows', 'ad', 'smb', 'password-spraying', 'password-cracking', 'rbcd', 'veracrypt', 'kerberos']
-    },{
-      id: 18,
-      title: 'Pycrt Walkthrough',
-      category: 'writeup',
-      tags: ['hmv', 'linux', 'irc', 'lfi', 'path-traversal', 'sudo-weechat', 'sudo-gtkwave']
-    },
-    {
-      id: 17,
-      title: 'Principal Walkthrough',
-      category: 'writeup',
-      tags: ['htb', 'linux', 'jwt', 'pac4j', 'ca']
-    },{
-      id: 16,
-      title: 'Expressway Walkthrough',
-      category: 'writeup',
-      tags: ['ike', 'htb', 'linux', 'ipsec', 'sudo_chwoot']
-    },{
-      id: 15,
-      title: 'Umz Walkthrough',
-      excerpt: 'Umz is an easy Hack My VM machine featuring a DDoS-triggered backend, OS command injection via a ping form, sudo md5sum, rainbow table recovery, and SUID dd for root.',
-      category: 'writeup',
-      tags: ['hmv', 'linux', 'ddos', 'command-injection', 'sudo_md5sum', 'rainbowlist', 'dd']
-    },
-    {
-      id: 14,
-      title: 'Active Walkthrough',
-      category: 'writeup',
-      tags: ['htb', 'ad', 'gpp', 'kerberoasting', 'kerberos', 'windows', 'smb', 'password-cracking']
-    },{
-      id: 12,
-      title: 'Editor Walkthrough',
-      category: 'writeup',
-      tags: ['htb', 'linux', 'xwiki', 'ndsudo']
-    },
-    {
-      id: 13,
-      title: 'TombWatcher Walkthrough',
-      category: 'writeup',
-      tags: ['htb', 'ad', 'adcs', 'password-cracking', 'gmsa', 'kerberoasting', 'kerberos', 'tombstone', 'esc15']
-    },
-    {
-      id: 10,
-      title: 'Aria Walkthrough',
-      category: 'writeup',
-      tags: ['linux', 'hmv', 'steg', 'aria2c', 'json-rpc']
-    },
-    {
-      id: 9,
-      title: 'Puppy Walkthrough',
-      category: 'writeup',
-      tags: ['htb', 'ad', 'dpapi', 'password-cracking', 'kerberos', 'smb', 'ldap', 'windows', 'dcsync']
-    },
-    {
-      id: 8,
-      title: 'Fluffy Walkthrough',
-      category: 'writeup',
-      tags: ['htb', 'ad', 'adcs', 'smb', 'ldap', 'windows', 'password-cracking', 'kerberoasting']
-    },
-    {
-    id: 7,
-    title: 'Wcorp Walkthrough',
-    category: 'writeup',
-    tags: ['hc', 'smb', 'ad', 'windows', 'asreproast', 'dcsync', 'kerberoasting', 'password-cracking']
-    },
-    {
-    id: 1,
-    title: 'DC02 Walkthrough',
-    category: 'writeup',
-    tags: ['hmv', 'windows', 'ad', 'asreproast', 'dcsync', 'backup-operators', 'password-cracking', 'smb', 'ldap']
-    },
-    {
-    id: 1,
-    title: 'Knock-Tool',
-    excerpt: 'A network reconnaissance tool designed for port knocking techniques and stealthy network enumeration. Features advanced scanning capabilities with customizable timing and protocol support.',
-    date: 'Aug 20, 2025',
-    tags: ['python', 'network', 'security'],
-    image: '/images/projects/Knock-Tool.png',
-    link: 'https://github.com/EndlssNightmare/Knock-Tool',
-    category: 'project'
-    },
-    {
-    id: 4,
-    title: 'Digispark Scripts',
-    excerpt: 'Collection of Arduino Digispark payloads and scripts for penetration testing and security research. Includes various USB attack vectors and automation scripts for ethical hacking assessments.',
-    date: 'Aug 5, 2025',
-    tags: ['arduino', 'usb', 'pentesting'],
-    image: '/images/projects/digispark_scripts.png',
-    link: 'https://github.com/EndlssNightmare/Digispark-scripts',
-    category: 'project'
-    },
-    {
-    id: 5,
-    title: 'MullvScript',
-    excerpt: 'Automated VPN configuration and management script for Mullvad VPN. Streamlines the setup process and provides enhanced privacy features for secure network connections.',
-    date: 'Feb 27, 2025',
-    tags: ['bash', 'vpn'],
-    image: '/images/projects/MullvScript.png',
-    link: 'https://github.com/EndlssNightmare/MullvScript',
-    category: 'project'
-    },
-    {
-    id: 6,
-    title: 'zsh-configs',
-    excerpt: 'Custom zsh configuration files and aliases optimized for penetration testing workflows. Includes specialized functions for common security tools and enhanced terminal productivity features.',
-    date: 'Jul 28, 2025',
-    tags: ['zsh', 'shell', 'pentesting'],
-    image: '/images/projects/zshconf.png',
-    link: 'https://github.com/EndlssNightmare/zsh-configs',
-    category: 'project'
-    }];
-
-  // Calculate actual tag counts
   const calculateTagCount = (tagName) => {
-    return allPosts.filter(post => 
+    return posts.filter(post =>
       Array.isArray(post.tags) && post.tags.some(postTag => postTag.toLowerCase() === tagName.toLowerCase())
     ).length;
   };
 
-  // Generate tags dynamically from all posts
-  const allTagNames = [...new Set(allPosts.flatMap(post => Array.isArray(post.tags) ? post.tags : []))];
-  
+  const allTagNames = [...new Set(posts.flatMap(post => Array.isArray(post.tags) ? post.tags : []))];
+
   const tags = allTagNames.map(tagName => ({
     name: tagName.toLowerCase(),
     count: calculateTagCount(tagName),
@@ -164,7 +44,7 @@ const Tags = () => {
   };
 
   return (
-    <motion.div 
+    <motion.div
       className="tags-page"
       initial="hidden"
       animate="visible"
@@ -198,7 +78,7 @@ const Tags = () => {
           <motion.div
             key={tag.name}
             variants={itemVariants}
-            whileHover={{ 
+            whileHover={{
               scale: 1.05,
               transition: { duration: 0.2 }
             }}
@@ -209,7 +89,7 @@ const Tags = () => {
                 <h3 className="tag-name">{tag.name}</h3>
                 <span className="tag-count">{tag.count} posts</span>
               </div>
-              <motion.div 
+              <motion.div
                 className="tag-hover-effect"
                 initial={{ opacity: 0 }}
                 whileHover={{ opacity: 1 }}
@@ -221,7 +101,7 @@ const Tags = () => {
       </motion.div>
 
       {filteredTags.length === 0 && (
-        <motion.div 
+        <motion.div
           className="no-results"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -230,7 +110,7 @@ const Tags = () => {
             <FaTags className="no-results-icon" />
             <h3>No tags found</h3>
             <p>Try adjusting your search criteria.</p>
-            <button 
+            <button
               className="clear-filters-btn"
               onClick={() => setSearchTerm('')}
             >

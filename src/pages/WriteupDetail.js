@@ -18,6 +18,7 @@ import ExpresswayWalkthrough from './writeups/expressway/ExpresswayWalkthrough';
 import PrincipalWalkthrough from './writeups/principal/PrincipalWalkthrough';
 import PycrtWalkthrough from './writeups/pycrt/PycrtWalkthrough';
 import PhantomWalkthrough from './writeups/phantom/PhantomWalkthrough';
+import RedelegateWalkthrough from './writeups/redelegate/RedelegateWalkthrough';
 
 const WriteupDetail = () => {
   const { id } = useParams();
@@ -40,7 +41,9 @@ const WriteupDetail = () => {
     'principal-walkthrough': PrincipalWalkthrough,
     'pycrt-walkthrough': PycrtWalkthrough,
   
-    'phantom-walkthrough': PhantomWalkthrough
+    'phantom-walkthrough': PhantomWalkthrough,
+  
+    'redelegate-walkthrough': RedelegateWalkthrough
   };
 
   // Get the component for this writeup

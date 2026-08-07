@@ -106,7 +106,7 @@ const ExpresswayWalkthrough = () => {
     title: 'Expressway Walkthrough',
     excerpt: 'Expressway is an easy-difficulty Linux machine that demonstrates enumeration and exploitation of the IKE service, a component of the IPsec framework. Upon leaking the Pre-Shared Key of the service and cracking it, the retrieved clear-text credentials are used to access the target via SSH. For privilege escalation, CVE-2025-32463 is exploited to get a privileged shell as the root user.',
     date: 'Mar 07, 2026',
-    tags: ['Ike', 'Htb', 'Linux', 'Ipsec', 'Sudo_chwoot'],
+    tags: ['Ike', 'Htb', 'Linux', 'Ipsec', 'Sudo-Chwoot'],
     difficulty: 'Easy',
     os: 'Linux',
     ip: '10.129.172.229',
