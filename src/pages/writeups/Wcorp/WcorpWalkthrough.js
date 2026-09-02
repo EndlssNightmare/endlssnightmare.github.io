@@ -106,7 +106,7 @@ const WcorpWalkthrough = () => {
     title: 'Wcorp Walkthrough',
     excerpt: 'Wcorp Walkthrough - Wcorp is a Windows-based Active Directory machine that involves enumerating user accounts, exploiting Kerberos vulnerabilities (AS-REP Roasting and Kerberoasting), performing lateral movement via certificate theft and abuse, and escalating privileges through DCSync to gain domain administrator access.',
     date: 'Sep 05, 2025',
-    tags: ['hc', 'smb', 'ad', 'windows', 'asreproast', 'dcsync', 'kerberoasting', 'password-cracking'],
+    tags: ['hc', 'smb', 'ldap', 'ad', 'windows', 'asreproast', 'dcsync', 'kerberoasting', 'password-cracking'],
     difficulty: 'Hard',
     os: 'Windows',
     ip: '172.16.13.103',

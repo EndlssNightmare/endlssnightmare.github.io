@@ -107,7 +107,7 @@ const RedelegateWalkthrough = () => {
     title: 'Redelegate Walkthrough',
     excerpt: 'Redelegate is a hard difficulty Windows Active Directory machine. Anonymous FTP access exposes a KeePass database and password pattern hints, which are cracked with hashcat. MSSQL guest credentials found in KeePass allow RID brute-forcing to enumerate domain users. Password spraying with a seasonal pattern yields credentials for Marie.Curie, whose Helpdesk group membership grants ForceChangePassword on all users. BloodHound reveals that Helen.Frost (IT group) has GenericAll on FS01$ and WinRM access to the DC. Combined with SeEnableDelegationPrivilege, constrained delegation is configured on FS01$ to impersonate a Domain Admin via S4U2Self/S4U2Proxy, bypassing the Administrator sensitive flag to achieve DCSync and full domain compromise.',
     date: 'Aug 06, 2026',
-    tags: ['Htb', 'Vulnlab', 'Ad', 'Windows', 'Smb', 'FTP', 'MSSQL', 'KeePass', 'Password-Cracking', 'Password-Spraying', 'KCD', 'Dcsync', 'Kerberos'],
+    tags: ['Htb', 'Vulnlab', 'Ad', 'Windows', 'Smb', 'Ldap', 'FTP', 'MSSQL', 'KeePass', 'Password-Cracking', 'Password-Spraying', 'KCD', 'Dcsync', 'Kerberos'],
     difficulty: 'Hard',
     os: 'Windows',
     ip: '10.129.45.145',

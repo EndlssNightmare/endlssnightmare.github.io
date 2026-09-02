@@ -107,7 +107,7 @@ const PhantomWalkthrough = () => {
     title: 'Phantom Walkthrough',
     excerpt: 'Phantom is a medium difficulty Windows Active Directory machine. Guest SMB access reveals a PDF containing a default password, which is sprayed to gain initial credentials. A VeraCrypt-encrypted backup is cracked with hashcat, exposing a VyOS configuration with service account credentials. WinRM access as svc_sspr allows resetting a user password via SSPR, enabling a Resource Based Constrained Delegation (RBCD) attack to impersonate Administrator and achieve full domain compromise.',
     date: 'Jul 28, 2026',
-    tags: ['Htb', 'Windows', 'Ad', 'Smb', 'Password-Spraying', 'Password-Cracking', 'RBCD', 'VeraCrypt', 'Kerberos'],
+    tags: ['Htb', 'Windows', 'Ad', 'Smb', 'Ldap', 'Password-Spraying', 'Password-Cracking', 'RBCD', 'VeraCrypt', 'Kerberos'],
     difficulty: 'Medium',
     os: 'Windows',
     ip: '10.129.64.171',
