@@ -105,7 +105,6 @@ const WalnutWalkthrough = () => {
 Walnut is an **easy** difficulty Linux machine from **HackSmarter**, presented as an assumed-breach scenario with provided credentials for \`larryburns\`. The attack begins by authenticating against SMB, where the user is mapped as Guest. RPC null session enumeration reveals an \`automation\` service account, and an authenticated LDAP query with the provided credentials exposes this account's old password stored in the directory. Using this password to access the \`automation\` SMB share yields an SSH private key, granting shell access. On the machine, a custom bash script (\`runScript.sh\`) executes \`su\` for local users with passwords stored in files named by the MD5 hash of each username. Reading these files and authenticating as \`localjob3\` reveals \`sudo\` access to restart the NFS server. Combined with an ACL granting write permission on \`/etc/exports\`, this allows adding a \`no_root_squash\` export of \`/root\` and mounting it from the attacker machine as root for full compromise.
 
 ## Enumeration
-
 ### Port Scanning
 Running \`Nmap\` against the target reveals several services typical of a Linux server providing directory and file sharing services, including SSH (22), RPC (111), Samba (139/445), LDAP (389), and NFS (2049):
 \`\`\`bash
@@ -196,7 +195,6 @@ ldapsearch -x -H ldap://10.1.161.112 -D "uid=larryburns,ou=People,dc=walnut,dc=l
 ![LDAP search revealing automation old password in description field](/images/writeups/walnut/5.png)
 
 ## Foothold
-
 ### Accessing the Automation Share
 The old password found in LDAP still works for SMB access. A quick netexec check confirms valid credentials for the \`automation\` account against the \`automation\` share:
 \`\`\`bash
@@ -242,7 +240,6 @@ echo -n "localjob4" | md5sum
 \`\`\`
 
 The password files reveal credentials for all four accounts. Notably, \`localjob3\`'s main password file is empty, but a \`.bak\` backup file contains the actual password:
-
 | User      | Password             |
 |-----------|----------------------|
 | localjob1 | brYfZknjTirtrPgM8V65 |
@@ -265,7 +262,6 @@ sudo -l
 ![su to localjob3 and sudo -l showing NFS server restart privilege](/images/writeups/walnut/12.png)
 
 ## Privilege Escalation
-
 ### NFS Configuration Abuse
 The sudo privilege to restart NFS alone isn't enough for escalation. However, checking the ACL on \`/etc/exports\` reveals that \`localjob3\` has **write permission** on the NFS configuration file:
 \`\`\`bash

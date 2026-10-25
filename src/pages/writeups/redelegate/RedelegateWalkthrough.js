@@ -115,7 +115,6 @@ const RedelegateWalkthrough = () => {
 Redelegate is a **hard** difficulty Windows Active Directory machine from **Hack The Box** (originally from **Vulnlab**). The attack begins with anonymous FTP access that exposes a KeePass database and documents hinting at a \`SeasonYear!\` password pattern. Cracking the KeePass database reveals MSSQL guest credentials, which allow RID brute-forcing to enumerate all domain users. Password spraying with the seasonal pattern \`Fall2024!\` yields credentials for \`Marie.Curie\`, whose membership in the Helpdesk group grants **ForceChangePassword** over all users. BloodHound analysis reveals the full attack path: \`Helen.Frost\` (IT group) has **GenericAll** on the \`FS01$\` computer object and WinRM access to the DC. Helen also holds **SeEnableDelegationPrivilege**, which allows configuring Kerberos constrained delegation on \`FS01$\`. By impersonating a non-protected Domain Admin (\`Ryan.Cooper\`) via S4U2Self/S4U2Proxy, a service ticket for CIFS on the DC is obtained, enabling DCSync to dump all domain hashes and achieve full domain compromise.
 
 ## Enumeration
-
 ### Port Scanning
 Running \`Nmap\` port scanner to enumerate the services running on the target machine. The scan reveals several critical ports typical of a Windows Active Directory Domain Controller, including FTP (21), DNS (53), HTTP (80), Kerberos (88), LDAP (389, 636, 3268, 3269), SMB (445), MSSQL (1433), RDP (3389), and WinRM (5985):
 \`\`\`bash
@@ -263,7 +262,6 @@ BloodHound reveals the complete attack path:
 ![BloodHound expanded view showing GenericAll on FS01$ and PSRemote on DC](/images/writeups/redelegate/14.png)
 
 ## Foothold
-
 ### User Flag - ForceChangePassword + WinRM
 Since \`Marie.Curie\` (Helpdesk) has \`ForceChangePassword\` on users, we can reset \`Helen.Frost\`'s password. This ACL allows changing the target's password without knowing the current one:
 \`\`\`bash
@@ -278,7 +276,6 @@ evil-winrm -i 10.129.45.145 -u Helen.Frost -p 'P@ssw0rd!'
 ![evil-winrm shell as Helen.Frost with user flag](/images/writeups/redelegate/16.png)
 
 ## Privilege Escalation
-
 ### Constrained Delegation Abuse
 Checking privileges on Helen.Frost's session reveals **SeEnableDelegationPrivilege**:
 \`\`\`powershell

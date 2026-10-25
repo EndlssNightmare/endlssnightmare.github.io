@@ -115,7 +115,6 @@ const PhantomWalkthrough = () => {
 Phantom is a **medium** difficulty Windows Active Directory machine from **Hack The Box**. The attack begins with SMB guest access that reveals a Public share containing an email with a base64-encoded PDF attachment. The PDF is a welcome template disclosing a default password, which is sprayed across domain users to find valid credentials for \`ibryant\`. With authenticated access, a VeraCrypt-encrypted backup file is found in the Departments share. Cracking it with hashcat reveals a VyOS network configuration containing plaintext credentials for the \`svc_sspr\` service account. This account has WinRM access and, through BloodHound analysis, is found to have **ForceChangePassword** privileges over several users, including \`wsilva\`, who is a member of the **ICT_SECURITY** group. That group holds **AddAllowedToAct** rights on the Domain Controller, enabling a **Resource Based Constrained Delegation (RBCD)** attack. By resetting \`wsilva\`'s password, configuring RBCD delegation, and using **S4U2Self+U2U** Kerberos impersonation, the attacker obtains a ticket as Administrator. This ticket is used to dump the NTDS database via netexec, and the Administrator NTLM hash grants full domain compromise through WinRM.
 
 ## Enumeration
-
 ### Port Scanning
 Running \`Nmap\` port scanner to enumerate the services running on the target machine. The scan reveals several critical ports typical of a Windows Active Directory Domain Controller, including DNS (53), Kerberos (88), LDAP (389, 636, 3268, 3269), SMB (445), and WinRM (5985):
 \`\`\`bash
@@ -203,7 +202,6 @@ smbclient '//10.129.64.171/Departments Share' -U ibryant
 ![Departments Share contents showing IT/Backup with IT_BACKUP_201123.hc VeraCrypt container](/images/writeups/phantom/8.png)
 
 ## Foothold
-
 ### Cracking the VeraCrypt Container
 The VeraCrypt container uses VeraCrypt SHA512 + XTS 512 bit (legacy), which corresponds to hashcat mode 13721. Since the default password followed the pattern \`Ph4nt0m@5t4rt!\` (word + symbols + digits), a custom wordlist is generated recognizing this pattern, combining variations of the machine name with years and special characters:
 \`\`\`bash
@@ -268,7 +266,6 @@ evil-winrm -i 10.129.64.171 -u svc_sspr -p 'qB6XTcqVP5MLP7Rc'
 ![evil-winrm shell as svc_sspr with user flag](/images/writeups/phantom/13.png)
 
 ## Privilege Escalation
-
 ### BloodHound Analysis
 Running BloodHound collection with \`bloodhound-python\` to map out the Active Directory structure and identify potential attack paths:
 \`\`\`bash

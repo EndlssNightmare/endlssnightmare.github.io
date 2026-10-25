@@ -110,7 +110,6 @@ ranch -> ESC13 (Kitsune-User cert) -> HelpDesk privileges -> GenericAll -> schlo
 \`\`\`
 
 ## Enumeration
-
 ### Port Scanning
 Running a full TCP \`Nmap\` scan against the target reveals services typical of a Windows Active Directory domain controller. The SSL certificate on RDP (port 3389) leaks the hostname \`DC01.kitsune.local\`, confirming this is the domain controller:
 \`\`\`bash
@@ -155,7 +154,6 @@ netexec smb 10.0.28.182 -u 'guest' -p '' --rid-brute
 ![RID brute force revealing domain users](/images/writeups/kitsune/2.png)
 
 The discovered users:
-
 | User           | Type              |
 |----------------|-------------------|
 | Administrator  | Domain Admin      |
@@ -250,7 +248,6 @@ for e in entries:
 ![Password Safe decryption revealing three credential sets](/images/writeups/kitsune/6.png)
 
 The decrypted entries reveal:
-
 | Title               | User   | Password       |
 |---------------------|--------|----------------|
 | SQL Credentials     | root   | a%KlRhqbuRgL   |
@@ -279,7 +276,6 @@ In this case:
 - BloodHound reveals that HelpDesk has **GenericAll** over the user \`schlop\`
 
 ## Foothold
-
 ### ESC13 Certificate Exploitation
 Requesting a certificate from the vulnerable \`Kitsune-User\` template. The template requires a 4096-bit RSA key (\`-key-size 4096\`), which must be specified or the request will fail:
 \`\`\`bash
@@ -332,7 +328,6 @@ $cred.GetNetworkCredential().Password
 ![Password for pebble revealed as PebbleIs47!](/images/writeups/kitsune/16.png)
 
 ## Privilege Escalation
-
 ### gMSA Password Extraction
 \`pebble\` is a member of the \`IT\` group, which has [ReadGMSAPassword](https://www.hackingarticles.in/credential-dumping-gmsa) rights on \`svc_gmsa$\`. Group Managed Service Accounts (gMSA) are Active Directory accounts with automatically rotated, complex passwords stored in the \`msDS-ManagedPassword\` attribute. Users and groups with \`ReadGMSAPassword\` rights can read this attribute and extract the password hash:
 \`\`\`bash
