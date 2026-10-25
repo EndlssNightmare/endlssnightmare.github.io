@@ -1,5 +1,17 @@
 const posts = [
   {
+    id: 107,
+    title: 'Kitsune Walkthrough',
+    excerpt: 'Kitsune is an easy difficulty Windows Active Directory machine from HackSmarter. Guest SMB access reveals a Password Safe database on a custom share, which is cracked to recover domain credentials. ADCS enumeration discovers an ESC13 vulnerability on a custom certificate template linked to the HelpDesk group, which has GenericAll over a domain user. Exploiting the certificate chain grants access to DPAPI-encrypted credentials, a gMSA password, and ultimately Backup Operators privileges for full domain compromise via registry hive extraction.',
+    date: 'Oct 23, 2026',
+    tags: ['Hs', 'Windows', 'Ad', 'Smb', 'Adcs', 'ESC13', 'DPAPI', 'Gmsa', 'Backup-Operators', 'Password-Cracking'],
+    image: '/images/writeups/kitsune/machine.png',
+    link: '/writeups/kitsune-walkthrough',
+    difficulty: 'Easy',
+    category: 'writeup',
+    os: 'Windows'
+  },
+  {
     id: 106,
     title: 'Walnut Walkthrough',
     excerpt: 'Walnut is an easy difficulty Linux machine from HackSmarter. Provided credentials authenticate as Guest over SMB, revealing an automation share. LDAP enumeration with the assumed-breach account exposes an old password for the automation user, granting access to an SSH private key stored in the SMB share. On the machine, a custom script stores user passwords in MD5-hashed files, enabling lateral movement to localjob3. Privilege escalation exploits an ACL write on /etc/exports combined with sudo restart of the NFS server, allowing a no_root_squash mount of /root from the attacker machine.',

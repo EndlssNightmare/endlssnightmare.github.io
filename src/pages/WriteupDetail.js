@@ -20,6 +20,7 @@ import PycrtWalkthrough from './writeups/pycrt/PycrtWalkthrough';
 import PhantomWalkthrough from './writeups/phantom/PhantomWalkthrough';
 import RedelegateWalkthrough from './writeups/redelegate/RedelegateWalkthrough';
 import WalnutWalkthrough from './writeups/walnut/WalnutWalkthrough';
+import KitsuneWalkthrough from './writeups/kitsune/KitsuneWalkthrough';
 
 const WriteupDetail = () => {
   const { id } = useParams();
@@ -46,7 +47,9 @@ const WriteupDetail = () => {
   
     'redelegate-walkthrough': RedelegateWalkthrough,
 
-    'walnut-walkthrough': WalnutWalkthrough
+    'walnut-walkthrough': WalnutWalkthrough,
+
+    'kitsune-walkthrough': KitsuneWalkthrough
   };
 
   // Get the component for this writeup
