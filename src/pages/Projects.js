@@ -22,13 +22,13 @@ const Projects = () => {
     },
     {
       id: 4,
-      title: 'Digispark Scripts',
-      excerpt: 'Collection of Arduino Digispark payloads and scripts for penetration testing and security research. Includes various USB attack vectors and automation scripts for ethical hacking assessments.',
+      title: 'BadUSB Arsenal',
+      excerpt: 'Collection of BadUSB payloads for penetration testing and security research. Includes attack vectors for Digispark, Rubber Ducky, Flipper Zero and other HID devices, with automation scripts for ethical hacking assessments.',
       date: 'Feb 03, 2025',
       tags: ['arduino', 'usb', 'pentesting'],
       image: '/images/projects/digispark_scripts.png',
-      link: 'https://github.com/EndlssNightmare/Digispark-scripts',
-      github: 'https://github.com/EndlssNightmare/Digispark-scripts',
+      link: 'https://github.com/EndlssNightmare/BadUSB-Arsenal',
+      github: 'https://github.com/EndlssNightmare/BadUSB-Arsenal',
       demo: null,
       category: 'project'
     },
