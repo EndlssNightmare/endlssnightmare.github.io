@@ -1,0 +1,38 @@
+# Dependencies
+/node_modules
+
+# Build directory
+/build
+
+# Cache
+.cache
+__pycache__
+
+# Environment variables
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Scripts and tools
+htb_writeup.py
+switch-homepage.js
+requirements.txt
+req
+ret
+
+# Guides (not part of the site)
+INFO_STATUS_GUIDE.md
+INFOSTATUS_GUIDE.md
+LINK_PREVIEW_GUIDE.md
+MARKDOWN_CHEATSHEET.md
+ROUTING_FIX.md
+SOCIAL_MEDIA_PREVIEW_SOLUTION.md
+
+# Debug screenshots
+*.png
+!/public/**/*.png
+!/src/**/*.png
+
+# Playwright MCP
+.playwright-mcp/

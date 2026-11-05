@@ -1,0 +1,70 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build
+        run: npm run build
+
+      - name: Create static files for SPA routes
+        run: |
+          mkdir -p build/writeups
+          mkdir -p build/projects
+          mkdir -p build/tags
+
+          cp build/index.html build/writeups/index.html
+          cp build/index.html build/projects/index.html
+          cp build/index.html build/tags/index.html
+
+          for route in wcorp-walkthrough dc02-walkthrough tombwatcher-walkthrough aria-walkthrough puppy-walkthrough fluffy-walkthrough editor-walkthrough active-walkthrough expressway-walkthrough umz-walkthrough principal-walkthrough pycrt-walkthrough phantom-walkthrough; do
+            mkdir -p "build/writeups/$route"
+            cp build/index.html "build/writeups/$route/index.html"
+          done
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
+        with:
+          enablement: true
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: './build'
+
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
