@@ -215,14 +215,14 @@ const posts = [
   },
   {
     id: 102,
-    title: 'Digispark Scripts',
-    excerpt: 'Collection of Arduino Digispark payloads and scripts for penetration testing and security research. Includes various USB attack vectors and automation scripts for ethical hacking assessments.',
+    title: 'BadUSB Arsenal',
+    excerpt: 'Collection of BadUSB payloads for penetration testing and security research. Includes attack vectors for Digispark, Rubber Ducky, Flipper Zero and other HID devices, with automation scripts for ethical hacking assessments.',
     date: 'Feb 03, 2025',
     tags: ['Arduino', 'Usb', 'Pentesting'],
     image: '/images/projects/digispark_scripts.png',
-    link: 'https://github.com/EndlssNightmare/Digispark-scripts',
+    link: 'https://github.com/EndlssNightmare/BadUSB-Arsenal',
     category: 'project',
-    github: 'https://github.com/EndlssNightmare/Digispark-scripts'
+    github: 'https://github.com/EndlssNightmare/BadUSB-Arsenal'
   },
   {
     id: 101,
